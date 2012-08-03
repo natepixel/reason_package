@@ -69,11 +69,11 @@
 /** path constants */
 include_once 'paths.php';
 /** tidy functions */
-include_once CARL_UTIL_INC.'tidy/tidy.php';
+reason_package_include_once( 'carl_util/tidy/tidy.php' );
 /** trim_slashes(), prettify_string(), unhtmlentities() */
-include_once CARL_UTIL_INC.'basic/misc.php';
+reason_package_include_once( 'carl_util/basic/misc.php' );
 /** date functions */
-include_once CARL_UTIL_INC.'basic/date_funcs.php';
+reason_package_include_once( 'carl_util/basic/date_funcs.php' );
 
 if (!defined("PLASMATURE_TYPES_INC")) {
 	define("PLASMATURE_TYPES_INC", DISCO_INC."plasmature/types/");

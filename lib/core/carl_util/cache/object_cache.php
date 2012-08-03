@@ -9,7 +9,7 @@
  */
 require_once( 'paths.php');
 require_once(SETTINGS_INC.'object_cache_settings.php');
-require_once(CARL_UTIL_INC.'basic/misc.php');
+reason_package_include_once( 'carl_util/basic/misc.php');
 
 /**
  * Object cache system that fetches and sets serialized objects by id

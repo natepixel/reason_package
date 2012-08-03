@@ -7,7 +7,7 @@
 	 * Include dependencies
 	 */
 	include_once( 'reason_header.php' );
-	include_once(CARL_UTIL_INC.'basic/filesystem.php');
+	reason_package_include_once( 'carl_util/basic/filesystem.php');
 	reason_include_once( 'classes/entity_selector.php' );
 	reason_include_once( 'function_libraries/url_utils.php' );
 	reason_include_once( 'classes/module_sets.php' );

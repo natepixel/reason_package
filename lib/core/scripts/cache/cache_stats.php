@@ -39,7 +39,7 @@
 
 	if( $clear )
 	{
-		include_once( CARL_UTIL_INC . 'cache/cache.php' );
+		reason_package_include_once( 'carl_util/cache/cache.php' );
 		$c = new PageCache();
 		$c->dir = REASON_CACHE_DIR;
 		$c->clear( urldecode($clear) );
@@ -51,8 +51,8 @@
 	}
 	if( !empty( $key ) )
 	{
-		include_once( CARL_UTIL_INC . 'charts/charts.php' );
-		include_once( CARL_UTIL_INC . 'charts/chart_funcs.php' );
+		reason_package_include_once( 'carl_util/charts/charts.php' );
+		reason_package_include_once( 'carl_util/charts/chart_funcs.php' );
 
 		echo '<a href="javascript:history.back()">back to listing</a><br/>';
 		echo '<a href="'.$key.'">'.$key.'</a><br/><br/>';

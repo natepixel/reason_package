@@ -6,8 +6,8 @@
 	/**
 	 * Include image library
 	 */
-	require_once CARL_UTIL_INC.'basic/image_funcs.php';
-	require_once CARL_UTIL_INC . 'basic/misc.php';
+	reason_package_include_once( 'carl_util/basic/image_funcs.php ');
+	reason_package_include_once( 'carl_util/basic/misc.php' );
 	require_once DISCO_INC . 'plugins/input_limiter/input_limiter.php';
 	reason_include_once('classes/plasmature/upload.php');
 	reason_include_once('function_libraries/images.php');

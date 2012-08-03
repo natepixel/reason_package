@@ -14,7 +14,7 @@
 	 */
 	include_once( DISCO_INC .'disco.php' );
 	
-	require_once CARL_UTIL_INC.'basic/image_funcs.php';
+	reason_package_include_once( 'carl_util/basic/image_funcs.php ');
 
 	/**
 	 * Form to upload and add bulk metadata to images

@@ -93,7 +93,7 @@ class thorType extends defaultType
 		else
 		{
 			connectDB($this->thor_db_conn_name);
-			include_once( CARL_UTIL_INC .'db/sqler.php');
+			reason_package_include_once( 'carl_util/db/sqler.php' );
 			$sqler = new SQLER;
 			$sqler->insert('thor', Array('content' => $this->value));
 			$this->tmp_id = mysql_insert_id();
@@ -110,7 +110,7 @@ class thorType extends defaultType
 			trigger_error('thor needs a db connection name (thor_db_conn_name)');
 			return;
 		}
-		include_once(CARL_UTIL_INC.'db/db.php');
+		reason_package_include_once( 'carl_util/db/db.php');
 		$this->original_db_conn_name = get_current_db_connection_name();
 		$this->set($this->value);
 		return true;
@@ -132,7 +132,7 @@ class thorType extends defaultType
 		else
 		{
 			connectDB($this->thor_db_conn_name);
-			include_once(CARL_UTIL_INC . 'db/sqler.php');
+			reason_package_include_once( 'carl_util/db/sqler.php');
 			$sqler = new SQLER;
 			$sqler->insert('thor', Array('content' => $this->value));
 			$this->tmp_id = mysql_insert_id();

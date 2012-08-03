@@ -56,7 +56,7 @@
 				$this->set_display_name('password','Set Password');
 				$this->add_comments('password',form_comment('(This user does not currently have a password. They will not be able to log in until they have a password.)'));
 			}
-			include_once(CARL_UTIL_INC.'dir_service/directory.php');
+			reason_package_include_once( 'carl_util/dir_service/directory.php');
 			$dir_service = new directory_service();
 			$srvcs = $dir_service->get_available_services();
 			if(empty($srvcs))

@@ -8,12 +8,12 @@
  * @author Eric Naeseth <enaeseth+disco@gmail.com>
  */
 
-require_once CARL_UTIL_INC.'basic/image_funcs.php';
-require_once CARL_UTIL_INC.'basic/mime_types.php';
-require_once CARL_UTIL_INC.'basic/filesystem.php';
-require_once CARL_UTIL_INC.'basic/cleanup_funcs.php';
-require_once CARL_UTIL_INC.'basic/misc.php';
-require_once CARL_UTIL_INC.'cache/object_cache.php';
+reason_package_include_once( 'carl_util/basic/image_funcs.php' );
+reason_package_include_once( 'carl_util/basic/mime_types.php' );
+reason_package_include_once( 'carl_util/basic/filesystem.php' );
+reason_package_include_once( 'carl_util/basic/cleanup_funcs.php' );
+reason_package_include_once( 'carl_util/basic/misc.php' );
+reason_package_include_once( 'carl_util/cache/object_cache.php' );
 
 /**
  * Generic file upload type.

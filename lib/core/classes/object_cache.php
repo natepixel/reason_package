@@ -1,6 +1,6 @@
 <?php
 
-include_once(CARL_UTIL_INC . 'cache/object_cache.php');
+reason_package_include_once( 'carl_util/cache/object_cache.php');
 
 /**
  *	Reason Object Cache - Adds Reason specific functionality to carl_util/cache/object_cache.php

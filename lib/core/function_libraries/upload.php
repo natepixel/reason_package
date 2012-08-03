@@ -19,7 +19,7 @@
  * @author Eric Naeseth <enaeseth+reason@gmail.com>
  */
 
-require_once CARL_UTIL_INC.'/basic/filesystem.php';
+reason_package_include_once( 'carl_util/basic/filesystem.php' );
 reason_require_once('function_libraries/reason_session.php');
 reason_require_once('classes/uploaded_file.php');
 

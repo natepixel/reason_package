@@ -6,9 +6,9 @@
 
 include_once('paths.php');
 include_once ( SETTINGS_INC.'thor_settings.php' );
-include_once(CARL_UTIL_INC . 'dev/prp.php');
-include_once(CARL_UTIL_INC . 'db/db.php');
-include_once(CARL_UTIL_INC . 'db/sqler.php');
+reason_package_include_once( 'carl_util/dev/prp.php');
+reason_package_include_once( 'carl_util/db/db.php');
+reason_package_include_once( 'carl_util/db/sqler.php');
 
 $tmp_id = $_REQUEST["tmp_id"];
 $xml = $_REQUEST["xml"];

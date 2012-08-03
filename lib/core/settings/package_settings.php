@@ -116,9 +116,6 @@ define('HTML_SANITIZATION_FUNCTION','get_safer_html_html_purifier');
 // Define the path to the folder that contains Reason's lib and www folder
 define('REASON_INC',INCLUDE_PATH.'/');
 
-// Define the path to carl_util files
-define('CARL_UTIL_INC',INCLUDE_PATH.'carl_util/');
-
 // Define the path to disco files
 define('DISCO_INC',INCLUDE_PATH.'disco/');
 

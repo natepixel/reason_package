@@ -12,7 +12,7 @@
  * include dependencies
  */
 include_once('reason_header.php');
-include_once(CARL_UTIL_INC . 'basic/image_funcs.php');
+reason_package_include_once( 'carl_util/basic/image_funcs.php');
 reason_include_once('function_libraries/image_tools.php');
 
 /**

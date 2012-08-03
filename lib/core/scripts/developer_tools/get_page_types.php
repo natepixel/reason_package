@@ -21,7 +21,7 @@ reason_include_once( 'classes/entity_selector.php' );
 reason_include_once( 'function_libraries/user_functions.php' );
 reason_include_once( 'minisite_templates/page_types.php' );
 reason_include_once( 'classes/page_types.php' );
-include_once( CARL_UTIL_INC . 'db/table_admin.php' );
+reason_package_include_once( 'carl_util/db/table_admin.php' );
 
 if (reason_require_authentication() && !reason_check_privs( 'view_sensitive_data' ))
 {

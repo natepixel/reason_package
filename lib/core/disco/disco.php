@@ -6,11 +6,11 @@
 	 * Include the plasmature widgets and other dependencies
 	 */
 	include_once( 'paths.php');
-	include_once( CARL_UTIL_INC . 'dev/pray.php' );
-	include_once( CARL_UTIL_INC . 'basic/misc.php' );
-	include_once( CARL_UTIL_INC . 'basic/cleanup_funcs.php' );
-	include_once( CARL_UTIL_INC . 'dev/debug.php' );
-	include_once( CARL_UTIL_INC . 'error_handler/error_handler.php' );
+	reason_package_include_once( 'carl_util/dev/pray.php' );
+	reason_package_include_once( 'carl_util/basic/misc.php' );
+	reason_package_include_once( 'carl_util/basic/cleanup_funcs.php' );
+	reason_package_include_once( 'carl_util/dev/debug.php' );
+	reason_package_include_once( 'carl_util/error_handler/error_handler.php' );
 	include_once( DISCO_INC . 'plasmature/plasmature.php' );
 	include_once( DISCO_INC . 'boxes/boxes.php' );
 	

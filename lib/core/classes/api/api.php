@@ -10,7 +10,7 @@
  * Include dependencies
  */
 include_once('reason_header.php');
-include_once(CARL_UTIL_INC . 'api/api.php');
+reason_package_include_once( 'carl_util/api/api.php');
 
 /**
  * Reason API sets a few defaults on CarlUtilAPI - specifically:

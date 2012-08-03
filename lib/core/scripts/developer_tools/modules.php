@@ -33,7 +33,7 @@ reason_include_once( 'function_libraries/user_functions.php' );
 reason_include_once( 'classes/page_types.php' );
 reason_include_once( 'classes/entity_selector.php');
 reason_include_once( 'classes/url/page.php' );
-include_once( CARL_UTIL_INC . 'basic/misc.php' );
+reason_package_include_once( 'carl_util/basic/misc.php' );
 
 echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">'."\n";
 echo '<html><head><title>Reason: Modules</title><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /></head><body>';

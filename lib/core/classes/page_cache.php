@@ -13,8 +13,8 @@ include_once('reason_header.php');
 /**
  * Include the carl util page cache class
  */
-include_once( CARL_UTIL_INC . 'cache/cache.php' );
-include_once( CARL_UTIL_INC . 'basic/filesystem.php' );
+reason_package_include_once( 'carl_util/cache/cache.php' );
+reason_package_include_once( 'carl_util/basic/filesystem.php' );
 
 /**
  * Reason Page Cache

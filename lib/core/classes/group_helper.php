@@ -12,7 +12,7 @@
 	/**
 	 * Include the directory service
 	 */ 
-	include_once( CARL_UTIL_INC . 'dir_service/directory.php' );
+	reason_package_include_once( 'carl_util/dir_service/directory.php' );
 	reason_include_once( 'classes/entity_selector.php' );
 	reason_include_once( 'function_libraries/admin_actions.php');
 	

@@ -10,7 +10,7 @@
 	reason_include_once('classes/admin/modules/default.php');
 	reason_include_once('classes/user.php');
 	reason_include_once('function_libraries/util.php');
-	include_once (CARL_UTIL_INC .'db/table_admin.php');
+	reason_package_include_once( 'carl_util/db/table_admin.php');
 
 	/**
 	 * Allowable Relationship Manager

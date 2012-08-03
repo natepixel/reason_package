@@ -8,7 +8,7 @@
  * Include dependencies
  */
 include_once('reason_header.php');
-include_once(CARL_UTIL_INC . 'db/table_admin.php');
+reason_package_include_once( 'carl_util/db/table_admin.php');
 /**
  * Register view with Reason
  */

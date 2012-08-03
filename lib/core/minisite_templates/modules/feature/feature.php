@@ -14,8 +14,8 @@ reason_include_once( 'classes/av_display.php' );
 reason_include_once( 'classes/feature_helper.php' );
 reason_include_once( 'minisite_templates/modules/feature/views/default_feature_view.php' );
 
-include_once(CARL_UTIL_INC . 'basic/image_funcs.php');
-include_once(CARL_UTIL_INC . 'basic/url_funcs.php');
+reason_package_include_once( 'carl_util/basic/image_funcs.php');
+reason_package_include_once( 'carl_util/basic/url_funcs.php');
 
 if (!defined("FEATURE_VIEW_PATH"))
 {

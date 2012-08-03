@@ -20,7 +20,7 @@ reason_include_once('classes/plasmature/upload.php');
 reason_include_once('content_managers/default.php3');
 reason_include_once('function_libraries/url_utils.php');
 reason_include_once( 'function_libraries/image_tools.php' );
-include_once(CARL_UTIL_INC . 'basic/mime_types.php');
+reason_package_include_once( 'carl_util/basic/mime_types.php');
 
 /**
  * Define the class name so that the admin page can use this content manager

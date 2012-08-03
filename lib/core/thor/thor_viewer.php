@@ -11,7 +11,7 @@
  * @deprecated use ThorAdmin
  */
 include_once ( 'paths.php' );
-include_once ( CARL_UTIL_INC . 'db/table_admin.php' );
+reason_package_include_once( 'carl_util/db/table_admin.php' );
 
 class ThorViewer extends TableAdmin
 {

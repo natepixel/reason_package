@@ -9,8 +9,8 @@ include_once ( SETTINGS_INC.'thor_settings.php' );
 
 if ( !empty($_REQUEST['tmp_id']) )
 {
-	include_once( CARL_UTIL_INC . 'db/db.php' );
-	include_once( CARL_UTIL_INC . 'db/db_selector.php' );
+	reason_package_include_once( 'carl_util/db/db.php' );
+	reason_package_include_once( 'carl_util/db/db_selector.php' );
 	connectDB( THOR_FORM_DB_CONN );
 	$dbs = new DBSelector();
 	$dbs->add_table('thor');

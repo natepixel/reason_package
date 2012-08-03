@@ -10,9 +10,9 @@
  * Include dependencies
  */
 include_once('reason_header.php');
-include_once(CARL_UTIL_INC . 'cache/object_cache.php');
-include_once(CARL_UTIL_INC . 'basic/json.php');
-include_once(CARL_UTIL_INC . 'basic/url_funcs.php');
+reason_package_include_once( 'carl_util/cache/object_cache.php');
+reason_package_include_once( 'carl_util/basic/json.php');
+reason_package_include_once( 'carl_util/basic/url_funcs.php');
 
 /**
  * A class for geocoding with result caching.

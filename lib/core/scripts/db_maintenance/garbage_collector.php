@@ -15,7 +15,7 @@
  */
 	
 	include_once( 'reason_header.php' );
-	include_once( CARL_UTIL_INC . 'db/db.php' );
+	reason_package_include_once( 'carl_util/db/db.php' );
 	reason_include_once( 'function_libraries/admin_actions.php' );
 	reason_include_once( 'function_libraries/user_functions.php' );
 	connectDB( REASON_DB );

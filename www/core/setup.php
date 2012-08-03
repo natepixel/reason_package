@@ -63,7 +63,7 @@ if (isset($_POST['do_it_pass']) == false)
 	check_php_include_path();
 	echo '<h4>Checking package availability</h4>';
 	echo '...loading package_settings.php by including paths.php - a fatal error here probably means there is a misconfiguration within paths.php<br/>';
-	include_once('paths.php'); // paths loads the package_settings file
+	include_once('../../bootstrap.php'); // load our bootstrap file.
 	if (!defined('REASON_INC'))
 	{
 		$probable_path = get_reason_package_absolute_path();
@@ -79,16 +79,17 @@ if (isset($_POST['do_it_pass']) == false)
 	}
 	else
 	{
-		if (file_is_included(SETTINGS_INC.'package_settings.php'))
+		if ($path = reason_package_include_once( 'settings/package_settings.php' ))
 		{
-			echo '<p><strong>...loaded package settings</strong> (' . SETTINGS_INC . 'package_settings.php' . ')</p>';
+			echo '<p><strong>...loaded package settings</strong> (' . $path . ')</p>';
 		}
+		
 		force_error_handler_configuration();
 		check_error_handler_log_file_dir();	
-		include_once(CARL_UTIL_INC . 'error_handler/error_handler.php'); 
-		if (file_is_included(CARL_UTIL_INC . 'error_handler/error_handler.php'))
+		
+		if ($path = reason_package_include_once( 'carl_util/error_handler/error_handler.php')) 
 		{
-			echo '<p><strong>...loaded error handler</strong> (' . CARL_UTIL_INC . 'error_handler/error_handler.php' . ')</p>';
+			echo '<p><strong>...loaded error handler</strong> (' . $path . ')</p>';
 		}
 			
 		echo '<h4>Checking component availability</h4>';
@@ -109,14 +110,13 @@ if (isset($_POST['do_it_pass']) == false)
 			echo '<h4>Bootstrapping</h4>';
 
 			
-			include_once(SETTINGS_INC . 'reason_settings.php');
-			if (file_is_included(SETTINGS_INC . 'reason_settings.php'))
+			if ($path = reason_package_include_once( 'settings/reason_settings.php' ))
 			{
-				echo '<p><strong>...loaded reason settings</strong> (' . SETTINGS_INC.'reason_settings.php' . ')</p>';
+				echo '<p><strong>...loaded reason settings</strong> (' . $path . ')</p>';
 			}
 			
 			// connect to Reason DB - we do this right here to make sure we can load the reason_db
-			include_once(CARL_UTIL_INC . 'db/connectDB.php');
+			reason_package_include_once( 'carl_util/db/connectDB.php');
 			if ($db_info = get_db_credentials(REASON_DB, false))
 			{
 				echo '<p><strong>...loaded db credentials</strong> (the connection name is ' . REASON_DB . ')</p>';
@@ -155,7 +155,7 @@ if (isset($_POST['do_it_pass']) == false)
 	}
 }
 else include_once('reason_header.php');
-include_once( CARL_UTIL_INC . 'tidy/tidy.php' );
+reason_package_include_once( 'carl_util/tidy/tidy.php' );
 	
 if (isset($_POST['do_it_pass']) == false)
 {
@@ -176,7 +176,7 @@ if (isset($_POST['do_it_pass']) == false)
 	{
 		echo '<p>Creating login site</p>';
 		reason_include_once ('classes/url_manager.php');
-		include_once(CARL_UTIL_INC.'basic/filesystem.php');
+		reason_package_include_once( 'carl_util/basic/filesystem.php');
 		mkdir_recursive($path, 0775);
 		if (!is_dir($path)) die_with_message('<p>The login site folder at ' . $path.' could not be written. Check paths and permissions.</p>');
 		else echo '<p>The login site folder at ' . $path.' has been created.</p>';
@@ -1044,12 +1044,6 @@ function die_with_message($msg)
 {
 	echo $msg;
 	die;
-}
-
-// little test function makes sure a file was included
-function file_is_included($path)
-{
-	return array_search(realpath($path), get_included_files());
 }
 
 function get_reason_package_absolute_path()

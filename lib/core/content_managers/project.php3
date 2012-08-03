@@ -7,7 +7,7 @@
 /**
  * Register directory service
  */
-include_once( CARL_UTIL_INC . 'dir_service/directory.php' );
+reason_package_include_once( 'carl_util/dir_service/directory.php' );
 
 /**
  * Register content manager with Reason

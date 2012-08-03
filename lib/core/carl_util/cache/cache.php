@@ -17,8 +17,8 @@
 	 * require dependencies
 	 */
 	include_once('paths.php');
-	include_once( CARL_UTIL_INC . 'basic/url_funcs.php' );
-	include_once( CARL_UTIL_INC . 'basic/cleanup_funcs.php' );
+	reason_package_include_once( 'carl_util/basic/url_funcs.php' );
+	reason_package_include_once( 'carl_util/basic/cleanup_funcs.php' );
 	
 	/**
 	 * Set up necessary constants

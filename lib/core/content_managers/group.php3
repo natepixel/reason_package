@@ -113,7 +113,7 @@ relationship_id_of('group_to_audience'),'right','checkbox',REASON_USES_DISTRIBUT
 		function run_error_checks()
 		{
 			parent::run_error_checks();
-			include_once(CARL_UTIL_INC.'dir_service/directory.php');
+			reason_package_include_once( 'carl_util/dir_service/directory.php');
 			$ds = new directory_service();
 			if($this->get_value('arbitrary_ldap_query'))
 			{

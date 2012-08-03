@@ -35,7 +35,7 @@
 
 
 
-include_once(CARL_UTIL_INC . 'tidy/tidy.php');
+reason_package_include_once( 'carl_util/tidy/tidy.php');
 //define('MAGPIE_DEBUG',0);
 //define('MAGPIE_DIR', MAGPIERSS_INC);
 //define('DESCRIPTION_CHAR_LIMIT', '40');

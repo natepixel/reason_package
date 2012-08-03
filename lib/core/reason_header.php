@@ -7,5 +7,5 @@
  */
 	if (ob_get_level() == 0) ob_start();
 	include_once('paths.php');
-	include_once( REASON_INC.'header.php' );
+	rp_include_once( 'header.php' );
 ?>

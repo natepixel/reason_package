@@ -1,6 +1,6 @@
 <?php
 	include_once( 'paths.php');
-	include_once( CARL_UTIL_INC . 'basic/date_funcs.php' );
+	reason_package_include_once( 'carl_util/basic/date_funcs.php' );
 
 /**
 * Simple box class to facilitate quick creation of good-looking forms.

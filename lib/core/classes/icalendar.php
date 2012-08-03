@@ -10,8 +10,8 @@
  * Include the Reason libraries
  */
 include_once('reason_header.php');
-include_once(CARL_UTIL_INC.'basic/cleanup_funcs.php');
-include_once(CARL_UTIL_INC.'basic/date_funcs.php');
+reason_package_include_once( 'carl_util/basic/cleanup_funcs.php');
+reason_package_include_once( 'carl_util/basic/date_funcs.php');
   
 /**
  * A class for creating iCalendar-formatted data from Reason event entities

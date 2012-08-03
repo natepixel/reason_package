@@ -10,8 +10,8 @@ include_once('paths.php');
 /**
  * include the directory service so that usernames as well as email addresses can be sent to this class
  */
-include_once( CARL_UTIL_INC . 'dir_service/directory.php' );
-include_once( CARL_UTIL_INC . 'basic/misc.php' );
+reason_package_include_once( 'carl_util/dir_service/directory.php' );
+reason_package_include_once( 'carl_util/basic/misc.php' );
 
 /**
  * This class represents an email. Example usage:

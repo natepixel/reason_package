@@ -9,7 +9,7 @@
 /**
  * Include database connection library and parent class
  */
-include_once( CARL_UTIL_INC . 'db/connectDB.php' );
+reason_package_include_once( 'carl_util/db/connectDB.php' );
 include_once('ds_default.php');
 
 /**

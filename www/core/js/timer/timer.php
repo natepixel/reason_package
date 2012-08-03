@@ -14,7 +14,7 @@
  * Include dependencies
  */
 include_once('reason_header.php');
-include_once(CARL_UTIL_INC . 'basic/json.php');
+reason_package_include_once( 'carl_util/basic/json.php');
 
 /**
  * Right now all I do is return a bit of JSON that contains these settings:

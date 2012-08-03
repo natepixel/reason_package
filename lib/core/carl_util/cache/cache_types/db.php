@@ -1,7 +1,7 @@
 <?php
-include_once(CARL_UTIL_INC . 'cache/cache_types/default.php');
-include_once(CARL_UTIL_INC . 'db/connectDB.php');
-include_once(CARL_UTIL_INC . 'db/db_query.php');
+reason_package_include_once( 'carl_util/cache/cache_types/default.php' );
+reason_package_include_once( 'carl_util/db/connectDB.php' );
+reason_package_include_once( 'carl_util/db/db_query.php' );
 
 /**
  *	Cache type that uses a mysql database - the constants OBJECT_CACHE_DB_CONN and OBJECT_CACHE_DB_TABLE must be setup.

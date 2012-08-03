@@ -10,7 +10,7 @@
  */
 include_once('reason_header.php');
 reason_include_once('classes/entity_selector.php');
-require_once(CARL_UTIL_INC.'dir_service/services/ds_default.php');
+reason_package_include_once( 'carl_util/dir_service/services/ds_default.php');
 
 /**
 * Reason Directory Service -- Interface for access to directory info in Reason

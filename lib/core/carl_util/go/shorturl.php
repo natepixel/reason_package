@@ -33,7 +33,7 @@ class ShortURL
     
     function ShortURL()
     {
-        include_once( CARL_UTIL_INC . 'db/db.php' );
+        reason_package_include_once( 'carl_util/db/db.php' );
 	$this->db = @connectDB('go_carleton');
 	if (empty($this->db)) die ('Not able to connect to the server at this time. Please try again later.');
 

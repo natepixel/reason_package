@@ -10,7 +10,7 @@
  * Include dependencies
  */
 include_once('reason_header.php');
-include_once( CARL_UTIL_INC.'db/db_selector.php');
+reason_package_include_once( 'carl_util/db/db_selector.php');
 
 /*
 

@@ -21,7 +21,7 @@
 	reason_include_once( 'classes/disco.php' );
 	reason_include_once( 'classes/entity.php');
 	reason_include_once( 'function_libraries/admin_actions.php' );
-	include_once(CARL_UTIL_INC . 'api/api.php');
+	reason_package_include_once( 'carl_util/api/api.php');
 
 	//Form comment function
 	//moved to disco.php3

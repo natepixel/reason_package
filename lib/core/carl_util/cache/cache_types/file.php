@@ -1,6 +1,6 @@
 <?php
-include_once(CARL_UTIL_INC . 'cache/cache_types/default.php');
-include_once(CARL_UTIL_INC . 'basic/filesystem.php');
+reason_package_include_once( 'carl_util/cache/cache_types/default.php' );
+reason_package_include_once( 'carl_util/basic/filesystem.php' );
 
 /**
  *	Cache type that uses file system

@@ -25,6 +25,14 @@
 error_reporting(defined('E_STRICT') ? E_ALL | E_STRICT : E_ALL);
 
 /**
+ * Include the error handler's settings file.
+ * Settings defined there can override the defaults that were set above.
+ */
+reason_package_include_once ( 'settings/error_handler_settings.php' );
+reason_package_include_once ( 'carl_util/basic/misc.php' );
+reason_package_include_once ( 'carl_util/dev/pray.php' );
+
+/**
  * Provides access to the error handler configuration items.
  * 
  * If called with one argument, the value of the configuration item named
@@ -67,18 +75,6 @@ error_handler_config('display_context', true);
 error_handler_config('script_mode', false);
 error_handler_config('send_emails', false);
 error_handler_config('send_pages', false);
-
-if (!defined('SETTINGS_INC') || !defined('CARL_UTIL_INC'))
-	require_once 'paths.php';
-
-/**
- * Include the error handler's settings file.
- * Settings defined there can override the defaults that were set above.
- */
-require_once SETTINGS_INC.'error_handler_settings.php';
-
-include_once CARL_UTIL_INC.'basic/misc.php';
-include_once CARL_UTIL_INC.'dev/pray.php';
 
 /**
  * Returns the value of the "log_errors" error handler setting.

@@ -11,7 +11,7 @@ require_once( THOR_INC .'disco_thor.php');
 include_once(TYR_INC.'tyr.php');
 require_once( INCLUDE_PATH . 'xml/xmlparser.php' );
 include_once ( SETTINGS_INC.'thor_settings.php' );
-include_once( CARL_UTIL_INC . 'db/db.php'); // Requires ConnectDB Functionality
+reason_package_include_once( 'carl_util/db/db.php'); // Requires ConnectDB Functionality
 
 /**
  * ThorCore - essentially a thor replacement that does less than the old thor, but does it better.

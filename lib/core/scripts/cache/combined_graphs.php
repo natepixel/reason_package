@@ -12,9 +12,9 @@
 	//   Total hits and misses, last 30 days
 	//
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	include_once( CARL_UTIL_INC . 'charts/charts.php' );
+	reason_package_include_once( 'carl_util/charts/charts.php' );
 	
-	include_once( CARL_UTIL_INC . 'charts/chart_funcs.php' );
+	reason_package_include_once( 'carl_util/charts/chart_funcs.php' );
 	
 	reason_include_once( 'function_libraries/user_functions.php' );
 	force_secure_if_available();

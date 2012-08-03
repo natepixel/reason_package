@@ -10,8 +10,8 @@
  * include dependencies
  */
 include_once( 'paths.php' );
-include_once( CARL_UTIL_INC . 'db/db.php'); // Requires ConnectDB Functionality
-include_once( CARL_UTIL_INC . 'basic/misc.php'); // Requires carl_clean_vars
+reason_package_include_once( 'carl_util/db/db.php'); // Requires ConnectDB Functionality
+reason_package_include_once( 'carl_util/basic/misc.php'); // Requires carl_clean_vars
 include_once( DISCO_INC . 'disco_db.php'); // Requires Disco_DB
 
 /**

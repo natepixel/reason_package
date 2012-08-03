@@ -4,7 +4,7 @@
  * @subpackage function_libraries
  */
 
-require_once CARL_UTIL_INC."basic/filesystem.php";
+reason_package_include_once( 'carl_util/basic/filesystem.php' );
  
  /**
   * Build standardized markup for a list of assets

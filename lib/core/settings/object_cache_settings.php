@@ -38,14 +38,14 @@ class CacheTypeSettings
 		if (!isset($settings))
 		{
 			$cache_dir = (defined('REASON_CACHE_DIR')) ? REASON_CACHE_DIR : '/tmp/';
-			$settings = array ('file' => 	array('path' => CARL_UTIL_INC . 'cache/cache_types/file.php',
+			$settings = array ('file' => 	array('path' => 'carl_util/cache/cache_types/file.php',
 												  'constants' => array('OBJECT_CACHE_DIR' => $cache_dir)),
 							 						 
-							   'db' => 		array('path' => CARL_UTIL_INC . 'cache/cache_types/db.php',
+							   'db' => 		array('path' => 'carl_util/cache/cache_types/db.php',
 							 	 	 			  'constants' => array('OBJECT_CACHE_DB_CONN' => '',
 							 	 	 									  'OBJECT_CACHE_DB_TABLE' => '')),							 	 	 									  
 							   
-							   'memcached' => array('path' => CARL_UTIL_INC . 'cache/cache_types/memcached.php',
+							   'memcached' => array('path' => 'carl_util/cache/cache_types/memcached.php',
 							 	 	 				'constants' => array('OBJECT_CACHE_MEMCACHED_SERVER' => '',
 							 	 	 									  'OBJECT_CACHE_MEMCACHED_PORT' => '')));
 		}

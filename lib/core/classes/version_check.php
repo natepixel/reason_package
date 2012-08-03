@@ -10,8 +10,8 @@
  * Include necessary info
  */
 include_once('paths.php');
-include_once(CARL_UTIL_INC.'cache/object_cache.php');
-include_once(CARL_UTIL_INC.'basic/url_funcs.php');
+reason_package_include_once( 'carl_util/cache/object_cache.php');
+reason_package_include_once( 'carl_util/basic/url_funcs.php');
 
 /**
  * A class that encapsulates version checking -- both on the client (installed 

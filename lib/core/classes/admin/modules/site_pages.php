@@ -7,9 +7,9 @@
 /**
  * Include the default module and other needed utilities
  */
-reason_include_once('classes/admin/modules/default.php');
-reason_include_once('function_libraries/url_utils.php');
-include_once(CARL_UTIL_INC . 'db/table_admin.php');
+reason_include_once( 'classes/admin/modules/default.php' );
+reason_include_once( 'function_libraries/url_utils.php' );
+reason_package_include_once( 'carl_util/db/table_admin.php' );
 
 /**
  * An administrative module that displays summary information about all site pages.
