@@ -1,0 +1,5 @@
+We have an .htaccess file here than runs www/core/index.php, setup.php, etc etc.
+
+If that .htaccess file is ignored, we also have an index.php file in the repo which is a relative symlink to www/core/index.php
+
+

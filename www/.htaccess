@@ -1,0 +1,3 @@
+RewriteEngine On
+RewriteCond local/$0 -f
+RewriteRule ^(.*)$ ./core/$0
