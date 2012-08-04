@@ -19,7 +19,7 @@
 <body>
 <?php
 include ('reason_header.php');
-reason_package_include_once( 'carl_util/db/db_selector.php');
+include_once_lib( 'carl_util/db/db_selector.php');
 reason_include_once('function_libraries/user_functions.php');
 reason_include_once('function_libraries/admin_actions.php');
 reason_include_once( 'classes/entity_selector.php' );

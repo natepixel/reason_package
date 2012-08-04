@@ -8,7 +8,7 @@
  	 */
 	reason_include_once ( 'function_libraries/url_utils.php' );
 	$GLOBALS[ '_content_manager_class_names' ][ basename( __FILE__) ] = 'FormManager';
-	reason_package_include_once( 'carl_util/dir_service/directory.php' );
+	include_once_lib( 'carl_util/dir_service/directory.php' );
 
 	/**
 	 * @todo zap the php3 extension

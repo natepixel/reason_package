@@ -10,7 +10,7 @@
  * Include parent class and general util functions
  */
 include_once('ds_default.php');
-reason_package_include_once( 'carl_util/basic/misc.php');
+include_once_lib( 'carl_util/basic/misc.php');
 
 /**
  * General LDAP Directory Service -- Interface for access to LDAP directories

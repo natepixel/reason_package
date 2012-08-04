@@ -12,8 +12,8 @@
  */
 
 require 'common.inc.php';
-reason_package_include_once( 'carl_util/basic/cleanup_funcs.php ');
-reason_package_include_once( 'carl_util/basic/image_funcs.php ');
+include_once_lib( 'carl_util/basic/cleanup_funcs.php ');
+include_once_lib( 'carl_util/basic/image_funcs.php ');
 
 
 if (!function_exists('json_encode')) {

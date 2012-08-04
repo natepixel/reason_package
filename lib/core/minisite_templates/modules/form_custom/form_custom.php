@@ -8,7 +8,7 @@
 	 */
 	reason_include_once( 'minisite_templates/modules/default.php' );
 	reason_include_once( 'function_libraries/file_finders.php' );
-	reason_package_include_once( 'carl_util/db/table_admin.php' );
+	include_once_lib( 'carl_util/db/table_admin.php' );
 	
 	/**
 	 * Register module with Reason

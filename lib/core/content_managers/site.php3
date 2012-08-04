@@ -8,7 +8,7 @@
 	 */
 	$GLOBALS[ '_content_manager_class_names' ][ basename( __FILE__) ] = 'SiteManager';
 	
-	reason_package_include_once( 'carl_util/dir_service/directory.php' );
+	include_once_lib( 'carl_util/dir_service/directory.php' );
 	reason_include_once('classes/url_manager.php');
 	reason_include_once('classes/page_cache.php');
 	reason_include_once( 'function_libraries/root_finder.php');
@@ -294,7 +294,7 @@
 				$new_path = reason_get_site_web_path( $this->get_value('id') ).trim_slashes($new_base_dir);
 				if(!is_dir($new_path))
 				{
-					reason_package_include_once( 'carl_util/basic/filesystem.php');
+					include_once_lib( 'carl_util/basic/filesystem.php');
 					mkdir_recursive($new_path, 0775);
 				}
 				

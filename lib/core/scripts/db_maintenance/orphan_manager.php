@@ -10,7 +10,7 @@
  */
 
 include_once( 'reason_header.php' );
-reason_package_include_once( 'carl_util/basic/url_funcs.php' );
+include_once_lib( 'carl_util/basic/url_funcs.php' );
 $qs = carl_make_query_string(array('cur_module' => 'OrphanManager' ));
 $redir = (HTTPS_AVAILABLE) ? 'https://' . REASON_WEB_ADMIN_PATH . $qs : 'http://' . REASON_WEB_ADMIN_PATH . $qs;
 header('Location: ' . $redir);

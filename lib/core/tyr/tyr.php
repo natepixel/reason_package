@@ -16,7 +16,7 @@ include_once(SETTINGS_INC.'tyr_settings.php');
 /**
  * Include a debugging helper
  */
-reason_package_include_once( 'carl_util/dev/prp.php');
+include_once_lib( 'carl_util/dev/prp.php');
 
 /**
  * Include the emailer class

@@ -19,7 +19,7 @@ reason_include_once('scripts/developer_tools/publication_migrator/migrator_scree
 reason_include_once('scripts/developer_tools/publication_migrator/migrator_screen_5.php');
 reason_include_once('scripts/developer_tools/publication_migrator/migrator_screen_6.php');
 reason_include_once('scripts/developer_tools/publication_migrator/migrator_screen_7.php');
-reason_package_include_once( 'carl_util/basic/misc.php');
+include_once_lib( 'carl_util/basic/misc.php');
 
 /**
  * The publication migrator helps transition sites using old style news to use

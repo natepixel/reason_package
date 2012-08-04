@@ -71,7 +71,7 @@
 			$ret = '';
 			if($this->get_value('name'))
 			{
-				reason_package_include_once( 'carl_util/dir_service/directory.php');
+				include_once_lib( 'carl_util/dir_service/directory.php');
 				$dir = new directory_service();
 				if ($dir->search_by_attribute('ds_username',$this->get_value('name'),
 						array_keys($this->ldap_field_mapping)))

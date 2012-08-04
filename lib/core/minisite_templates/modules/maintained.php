@@ -9,7 +9,7 @@
 	 */
 	reason_include_once( 'minisite_templates/modules/default.php' );
 	reason_include_once( 'minisite_templates/nav_classes/default.php' );
-	reason_package_include_once( 'carl_util/dir_service/directory.php' );
+	include_once_lib( 'carl_util/dir_service/directory.php' );
 
 	$GLOBALS[ '_module_class_names' ][ basename( __FILE__, '.php' ) ] = 'MaintainedModule';
 	

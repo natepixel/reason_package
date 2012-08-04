@@ -251,7 +251,7 @@ class wysiwyg_disabledType extends textareaType
 	
 	function _get_javascript_block($element_id)
 	{
-		reason_package_include_once( 'carl_util/basic/json.php');
+		include_once_lib( 'carl_util/basic/json.php');
 		$prepped_id = trim(json_encode($element_id),'"');
 		$html_prepped_id = trim(json_encode(htmlspecialchars($element_id,ENT_QUOTES)),'"');
 		

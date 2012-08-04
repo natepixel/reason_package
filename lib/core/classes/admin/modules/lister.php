@@ -259,7 +259,7 @@
 			reason_include_once ( 'classes/entity_selector.php' );
 			reason_include_once ( 'content_listers/default.php3' );
 			$this->head_items->add_javascript(WEB_JAVASCRIPT_PATH.'lister_dropdown.js');
-			reason_package_include_once( 'carl_util/basic/misc.php' );
+			include_once_lib( 'carl_util/basic/misc.php' );
 			$this->admin_page->set_show( 'breadcrumbs' , false );
 
 			$type = new entity( $this->admin_page->type_id );

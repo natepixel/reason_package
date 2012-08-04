@@ -8,7 +8,7 @@
  * Include Reason library
  */
 include_once('reason_header.php');
-reason_package_include_once( 'carl_util/basic/html_funcs.php');
+include_once_lib( 'carl_util/basic/html_funcs.php');
 
 ?><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -20,7 +20,7 @@ reason_package_include_once( 'carl_util/basic/html_funcs.php');
 <body>
 <?php
 include ('reason_header.php');
-reason_package_include_once( 'carl_util/db/db_selector.php');
+include_once_lib( 'carl_util/db/db_selector.php');
 reason_include_once('function_libraries/user_functions.php');
 reason_include_once('function_libraries/admin_actions.php');
 

@@ -14,7 +14,7 @@ include_once( 'paths.php' );
 /**
  * include the error handler so that errors are logged, etc.
  */
-reason_package_include_once( 'carl_util/error_handler/error_handler.php' );
+include_once_lib( 'carl_util/error_handler/error_handler.php' );
 
 /**
  * Set up a spot in the $GLOBALS array to store the current database connection name

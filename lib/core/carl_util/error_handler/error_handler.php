@@ -28,9 +28,9 @@ error_reporting(defined('E_STRICT') ? E_ALL | E_STRICT : E_ALL);
  * Include the error handler's settings file.
  * Settings defined there can override the defaults that were set above.
  */
-reason_package_include_once ( 'settings/error_handler_settings.php' );
-reason_package_include_once ( 'carl_util/basic/misc.php' );
-reason_package_include_once ( 'carl_util/dev/pray.php' );
+include_once_lib ( 'settings/error_handler_settings.php' );
+include_once_lib ( 'carl_util/basic/misc.php' );
+include_once_lib ( 'carl_util/dev/pray.php' );
 
 /**
  * Provides access to the error handler configuration items.

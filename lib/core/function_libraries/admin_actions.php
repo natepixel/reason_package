@@ -13,7 +13,7 @@
 	 * get the SQLER object for simple queries
 	 */
 	include_once( 'reason_header.php' );
-	reason_package_include_once( 'carl_util/db/sqler.php' );
+	include_once_lib( 'carl_util/db/sqler.php' );
 	reason_include_once( 'classes/entity.php' );
 
 	/**

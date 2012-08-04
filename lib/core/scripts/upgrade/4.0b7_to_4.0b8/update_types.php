@@ -19,7 +19,7 @@
 <body>
 <?php
 include ('reason_header.php');
-reason_package_include_once( 'carl_util/db/db_selector.php');
+include_once_lib( 'carl_util/db/db_selector.php');
 reason_include_once('scripts/upgrade/4.0b7_to_4.0b8/update_types_lib.php');
 reason_include_once('function_libraries/user_functions.php');
 

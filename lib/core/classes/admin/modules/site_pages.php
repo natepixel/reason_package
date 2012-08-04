@@ -9,7 +9,7 @@
  */
 reason_include_once( 'classes/admin/modules/default.php' );
 reason_include_once( 'function_libraries/url_utils.php' );
-reason_package_include_once( 'carl_util/db/table_admin.php' );
+include_once_lib( 'carl_util/db/table_admin.php' );
 
 /**
  * An administrative module that displays summary information about all site pages.

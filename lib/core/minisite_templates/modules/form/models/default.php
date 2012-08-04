@@ -8,7 +8,7 @@
  * Include base class & other dependencies
  */
 reason_include_once( 'minisite_templates/modules/form/models/abstract.php' );
-reason_package_include_once( 'carl_util/dir_service/directory.php' );
+include_once_lib( 'carl_util/dir_service/directory.php' );
 
 /**
  * Register model with Reason

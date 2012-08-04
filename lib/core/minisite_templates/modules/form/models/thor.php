@@ -621,7 +621,7 @@ class ThorFormModel extends DefaultFormModel
 	{
 		if (!isset($this->_summary_obj))
 		{
-			reason_package_include_once( 'carl_util/db/table_admin.php');
+			include_once_lib( 'carl_util/db/table_admin.php');
 			// we want to entity convert all the fields that occur naturally 
 			$thor_core =& $this->get_thor_core_object();
 			$display_values =& $thor_core->get_column_labels_indexed_by_name();

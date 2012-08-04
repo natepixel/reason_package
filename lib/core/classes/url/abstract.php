@@ -11,7 +11,7 @@
  * Include dependencies
  */
 include_once('reason_header.php');
-reason_package_include_once( 'carl_util/basic/url_funcs.php');
+include_once_lib( 'carl_util/basic/url_funcs.php');
 
 /**
  * Reason URL

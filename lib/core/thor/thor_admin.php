@@ -13,7 +13,7 @@
  * @todo add support for data models to table admin and deprecate me
  */
 include_once ( 'paths.php' );
-reason_package_include_once( 'carl_util/db/table_admin.php' );
+include_once_lib( 'carl_util/db/table_admin.php' );
 include_once( THOR_INC . 'thor.php');
 include_once( TYR_INC . 'tyr.php');
 

@@ -22,8 +22,8 @@
  */
 
 	include_once( 'reason_header.php' );
-	reason_package_include_once( 'carl_util/db/db.php' );
-	reason_package_include_once( 'carl_util/dev/pray.php' );
+	include_once_lib( 'carl_util/db/db.php' );
+	include_once_lib( 'carl_util/dev/pray.php' );
 	
 	reason_include_once( 'function_libraries/user_functions.php' );
 	force_secure_if_available();

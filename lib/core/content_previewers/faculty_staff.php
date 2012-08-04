@@ -7,7 +7,7 @@
 	 * Register previewer with Reason & include dependencies
 	 */
 	$GLOBALS[ '_content_previewer_class_names' ][ basename( __FILE__) ] = 'facultyStaffPreviewer';
-	reason_package_include_once( 'carl_util/dir_service/directory.php' );
+	include_once_lib( 'carl_util/dir_service/directory.php' );
 	
 	/**
 	 * A content previewer for faculty/staff entities

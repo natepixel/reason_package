@@ -184,7 +184,7 @@
 					$titles[$file_location] = strip_tags($pdf->get_value('name'));
 				}
 				
-				reason_package_include_once( 'carl_util/pdf/pdf_utils.php');
+				include_once_lib( 'carl_util/pdf/pdf_utils.php');
 				$merged = carl_merge_pdfs($pdf_files, $titles);
 				if(empty($merged))
 				{

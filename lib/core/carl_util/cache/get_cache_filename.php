@@ -9,7 +9,7 @@
   * Include dependencies
   */
 	include ('paths.php');
-	reason_package_include_once( 'carl_util/cache/cache.php' );
+	include_once_lib( 'carl_util/cache/cache.php' );
 	
  /**
   * Run the script

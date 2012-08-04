@@ -6,19 +6,19 @@
  *
  * @package reason
  */
-	reason_package_include_once( 'carl_util/error_handler/error_handler.php' );
+	include_once_lib( 'carl_util/error_handler/error_handler.php' );
 	
 	// the pray() function
-	reason_package_include_once( 'carl_util/dev/pray.php' );
+	include_once_lib( 'carl_util/dev/pray.php' );
 	
 	// misc stuff: prettify_string() and unhtmlentities()
-	reason_package_include_once( 'carl_util/basic/misc.php' );
+	include_once_lib( 'carl_util/basic/misc.php' );
 	
 	// the prp function
-	reason_package_include_once( 'carl_util/dev/prp.php' );
+	include_once_lib( 'carl_util/dev/prp.php' );
 	
 	// load core db functions - connectDB() and db_query()
-	reason_package_include_once( 'carl_util/db/db.php' );
+	include_once_lib( 'carl_util/db/db.php' );
 
 	//load file finder functions - reason_get_merged_fileset() and reason_file_exists()
 	include_once ( REASON_INC .'lib/core/function_libraries/file_finders.php' );

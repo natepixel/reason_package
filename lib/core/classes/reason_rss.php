@@ -11,8 +11,8 @@
 	 */
 	include_once('reason_header.php');
 	reason_include_once( 'classes/entity_selector.php' );
-	reason_package_include_once( 'carl_util/basic/date_funcs.php');
-	reason_package_include_once( 'carl_util/basic/cleanup_funcs.php');
+	include_once_lib( 'carl_util/basic/date_funcs.php');
+	include_once_lib( 'carl_util/basic/cleanup_funcs.php');
 	
 	/**
 	 * quick function to convert a date field into RFC 822, required by RSS 2.0

@@ -3,7 +3,7 @@
  * @package reason
  * @subpackage minisite_modules
  */
-reason_package_include_once( 'carl_util/go/shorturl.php' );
+include_once_lib( 'carl_util/go/shorturl.php' );
 reason_include_once( 'minisite_templates/modules/default.php' );
 $GLOBALS[ '_module_class_names' ][ basename( __FILE__, '.php' ) ] = 'GoModule';
 

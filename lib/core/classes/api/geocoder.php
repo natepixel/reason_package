@@ -7,8 +7,8 @@
  */
  
 include_once('reason_header.php');
-reason_package_include_once( 'carl_util/api/api.php');
-reason_package_include_once( 'carl_util/basic/url_funcs.php');
+include_once_lib( 'carl_util/api/api.php');
+include_once_lib( 'carl_util/basic/url_funcs.php');
 reason_include_once('classes/geocoder.php');
 
 /**

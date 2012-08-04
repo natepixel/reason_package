@@ -12,8 +12,8 @@
  /**
   * Include dependencies
   */
-	reason_package_include_once( 'carl_util/dir_service/directory.php' );
-	reason_package_include_once( 'carl_util/basic/misc.php' );
+	include_once_lib( 'carl_util/dir_service/directory.php' );
+	include_once_lib( 'carl_util/basic/misc.php' );
 	require_once INCLUDE_PATH . '/disco/plugins/input_limiter/input_limiter.php';
 	reason_include_once('classes/event.php');
 	reason_include_once('classes/api/geocoder.php');

@@ -1,6 +1,6 @@
 <?php
 include_once("reason_header.php");
-reason_package_include_once( 'carl_util/basic/cleanup_funcs.php');
+include_once_lib( 'carl_util/basic/cleanup_funcs.php');
 reason_include_once('function_libraries/image_tools.php');
 reason_include_once( 'classes/sized_image.php' );
 reason_include_once( 'classes/av_display.php' );

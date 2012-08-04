@@ -34,7 +34,7 @@ reason_include_once( 'classes/page_access.php' );
 reason_include_once( 'classes/crumbs.php' );
 reason_include_once( 'classes/api/factory.php' );
 reason_include_once( 'classes/object_cache.php' );
-reason_package_include_once( 'carl_util/dev/timer.php' );
+include_once_lib( 'carl_util/dev/timer.php' );
 
 /**
  * The default (and base) Reason minisite template class

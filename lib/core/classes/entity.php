@@ -21,7 +21,7 @@ reason_include_once('classes/locks.php');
 /**
  * Include database management stuff
  */
-reason_package_include_once( 'carl_util/db/db.php' );
+include_once_lib( 'carl_util/db/db.php' );
 
 /**
  * A basic class that abstracts away everything difficult about getting data from an entity

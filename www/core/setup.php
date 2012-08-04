@@ -9,6 +9,9 @@
  * @package reason
  *
  */
+
+include_once('../../lib/bootstrap.php');
+
 $head_content = "
 <html>
 <head>
@@ -60,102 +63,85 @@ error_reporting (E_ALL);
 if (isset($_POST['do_it_pass']) == false)
 {
 	echo '<h3>Verifying Environment</h3>';
-	check_php_include_path();
+	//check_php_include_path();
 	echo '<h4>Checking package availability</h4>';
 	echo '...loading package_settings.php by including paths.php - a fatal error here probably means there is a misconfiguration within paths.php<br/>';
-	include_once('../../bootstrap.php'); // load our bootstrap file.
-	if (!defined('REASON_INC'))
+	if ($path = include_once_lib( 'settings/package_settings.php' ))
 	{
-		$probable_path = get_reason_package_absolute_path();
-		if ($probable_path)
-		{
-			$probable_path .= 'settings/package_settings.php';
-			$xtra = '<p>Unless you are placing your settings files in a different location than the default, the absolute path of the package_settings.php file should probably resolve to or be set to this:</p>';
-			$xtra .= '<p><pre>'.$probable_path.'</pre></p>';
-		}
-		else $xtra = '';
-		die_with_message('<p class="error">ERROR: The file paths.php was included, but did not properly include the package_settings.php file. Modify the require_once statement in paths.php
-						  to include an absolute file system path reference to package_settings.php</p>'.$xtra);
+		echo '<p><strong>...loaded package settings</strong> (' . $path . ')</p>';
 	}
-	else
+		
+	force_error_handler_configuration();
+	check_error_handler_log_file_dir();	
+	
+	if ($path = include_once_lib( 'carl_util/error_handler/error_handler.php')) 
 	{
-		if ($path = reason_package_include_once( 'settings/package_settings.php' ))
-		{
-			echo '<p><strong>...loaded package settings</strong> (' . $path . ')</p>';
-		}
+		echo '<p><strong>...loaded error handler</strong> (' . $path . ')</p>';
+	}
 		
-		force_error_handler_configuration();
-		check_error_handler_log_file_dir();	
+	echo '<h4>Checking component availability</h4>';
+	if (is_readable(INCLUDE_PATH . 'paths.php'))
+	{
+		// verify settings files loaded by header.php before we load the header
+		check_environment_and_trailing_slash(WEB_PATH, 'web path', 'Check the WEB_PATH constant in package_settings.php.</p><p>
+							 The value should resolve to (or be set explicitly to)</p>
+							 <p><pre>'.rtrim($_SERVER['DOCUMENT_ROOT'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR.'</pre>');
+		check_environment_must_be_outside_of_web_tree(DB_CREDENTIALS_FILEPATH, 'db credentials xml file', 'Verify that DB_CREDENTIALS_FILEPATH in package_settings.php is correct and points to a readable file outside the web tree');
+		check_environment(DISCO_INC.'disco.php', 'disco include path', 'Verify the path to DISCO_INC in package_settings.php');
+		check_environment(TYR_INC.'tyr.php', 'tyr include path', 'Verify the path to TYR_INC in package_settings.php');
+		check_environment(THOR_INC.'thor.php', 'thor include path ', 'Verify the path to THOR_INC in package_settings.php');
+		check_environment(XML_PARSER_INC.'xmlparser.php', 'xml parser', 'Verify the path to XML_PARSER_INC in package_settings.php');
+		check_environment(HTML_PURIFIER_INC.'htmlpurifier.php', 'html purifier', 'Verify the path to HTML_PURIFIER_INC in package_settings.php');
+		check_environment(REASON_INC.'header.php', 'reason header', 'Verify the path stored in the constant REASON_INC in package_settings.php');
 		
-		if ($path = reason_package_include_once( 'carl_util/error_handler/error_handler.php')) 
-		{
-			echo '<p><strong>...loaded error handler</strong> (' . $path . ')</p>';
-		}
-			
-		echo '<h4>Checking component availability</h4>';
-		if (is_readable(INCLUDE_PATH . 'paths.php'))
-		{
-			// verify settings files loaded by header.php before we load the header
-			check_environment_and_trailing_slash(WEB_PATH, 'web path', 'Check the WEB_PATH constant in package_settings.php.</p><p>
-								 The value should resolve to (or be set explicitly to)</p>
-								 <p><pre>'.rtrim($_SERVER['DOCUMENT_ROOT'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR.'</pre>');
-			check_environment_must_be_outside_of_web_tree(DB_CREDENTIALS_FILEPATH, 'db credentials xml file', 'Verify that DB_CREDENTIALS_FILEPATH in package_settings.php is correct and points to a readable file outside the web tree');
-			check_environment(DISCO_INC.'disco.php', 'disco include path', 'Verify the path to DISCO_INC in package_settings.php');
-			check_environment(TYR_INC.'tyr.php', 'tyr include path', 'Verify the path to TYR_INC in package_settings.php');
-			check_environment(THOR_INC.'thor.php', 'thor include path ', 'Verify the path to THOR_INC in package_settings.php');
-			check_environment(XML_PARSER_INC.'xmlparser.php', 'xml parser', 'Verify the path to XML_PARSER_INC in package_settings.php');
-			check_environment(HTML_PURIFIER_INC.'htmlpurifier.php', 'html purifier', 'Verify the path to HTML_PURIFIER_INC in package_settings.php');
-			check_environment(REASON_INC.'header.php', 'reason header', 'Verify the path stored in the constant REASON_INC in package_settings.php');
-			
-			echo '<h4>Bootstrapping</h4>';
+		echo '<h4>Bootstrapping</h4>';
 
-			
-			if ($path = reason_package_include_once( 'settings/reason_settings.php' ))
+		
+		if ($path = include_once_lib( 'settings/reason_settings.php' ))
+		{
+			echo '<p><strong>...loaded reason settings</strong> (' . $path . ')</p>';
+		}
+		
+		// connect to Reason DB - we do this right here to make sure we can load the reason_db
+		include_once_lib( 'carl_util/db/connectDB.php');
+		if ($db_info = get_db_credentials(REASON_DB, false))
+		{
+			echo '<p><strong>...loaded db credentials</strong> (the connection name is ' . REASON_DB . ')</p>';
+			$db = mysql_connect($db_info['host'], $db_info['user'], $db_info['password']);
+			if (empty($db))
 			{
-				echo '<p><strong>...loaded reason settings</strong> (' . $path . ')</p>';
-			}
-			
-			// connect to Reason DB - we do this right here to make sure we can load the reason_db
-			reason_package_include_once( 'carl_util/db/connectDB.php');
-			if ($db_info = get_db_credentials(REASON_DB, false))
-			{
-				echo '<p><strong>...loaded db credentials</strong> (the connection name is ' . REASON_DB . ')</p>';
-				$db = mysql_connect($db_info['host'], $db_info['user'], $db_info['password']);
-				if (empty($db))
-				{
-					$msg = '<div class="error">';
-					$msg .= '<p>mysql connection ' . REASON_DB . ' check failed</span> - count not connect to server - could be one of the following</p>';
-					$msg .= '<ul>';
-					$msg .= '<li>Improper username and/or password in the db credentials file in '.SETTINGS_INC.'dbs.xml</li>';
-					$msg .= '<li>Improper mysql hostname - currently set to ' .$db_info['host'].'</li>';
-					$msg .= '<li>The user ' . $db_info['user'] . ' needs to have been granted permission to connect to ' . $db_info['host'] . ' from the web server</li>';
-					$msg .= '</ul>';
-					die_with_message($msg);
-				}
-				else
-				{
-					echo '<p><strong>...connected to reason_db</strong>';
-					include_once(REASON_INC.'header.php');
-					echo '<p style="color: green;"><strong>...the Reason environment has been loaded.</strong></p>';
-				}
+				$msg = '<div class="error">';
+				$msg .= '<p>mysql connection ' . REASON_DB . ' check failed</span> - count not connect to server - could be one of the following</p>';
+				$msg .= '<ul>';
+				$msg .= '<li>Improper username and/or password in the db credentials file in '.SETTINGS_INC.'dbs.xml</li>';
+				$msg .= '<li>Improper mysql hostname - currently set to ' .$db_info['host'].'</li>';
+				$msg .= '<li>The user ' . $db_info['user'] . ' needs to have been granted permission to connect to ' . $db_info['host'] . ' from the web server</li>';
+				$msg .= '</ul>';
+				die_with_message($msg);
 			}
 			else
 			{
-				die_with_message('<p class="error">Please make sure that your database crendentials file ('.DB_CREDENTIALS_FILEPATH.') has an entry for '.REASON_DB.'. If
-								  not, please add it. If the connection name '.REASON_DB.' is wrong, please update the constant REASON_DB in reason_settings.php with the 
-								  proper connection name in your database credentials file.</p>');
+				echo '<p><strong>...connected to reason_db</strong>';
+				include_once(REASON_INC.'header.php');
+				echo '<p style="color: green;"><strong>...the Reason environment has been loaded.</strong></p>';
 			}
 		}
 		else
 		{
-			die_with_message('<p class="error">ERROR: The INCLUDE_PATH constant ('.INCLUDE_PATH.') appears to be invalid.</p>
-							   <p>Check paths.php to make sure the value is correct - it should probably resolve to or be set to:</p>
-							   <p><pre>'.get_reason_package_absolute_path().'</pre></p>');
+			die_with_message('<p class="error">Please make sure that your database crendentials file ('.DB_CREDENTIALS_FILEPATH.') has an entry for '.REASON_DB.'. If
+							  not, please add it. If the connection name '.REASON_DB.' is wrong, please update the constant REASON_DB in reason_settings.php with the 
+							  proper connection name in your database credentials file.</p>');
 		}
+	}
+	else
+	{
+		die_with_message('<p class="error">ERROR: The INCLUDE_PATH constant ('.INCLUDE_PATH.') appears to be invalid.</p>
+						   <p>Check paths.php to make sure the value is correct - it should probably resolve to or be set to:</p>
+						   <p><pre>'.get_reason_package_absolute_path().'</pre></p>');
 	}
 }
 else include_once('reason_header.php');
-reason_package_include_once( 'carl_util/tidy/tidy.php' );
+include_once_lib( 'carl_util/tidy/tidy.php' );
 	
 if (isset($_POST['do_it_pass']) == false)
 {
@@ -176,7 +162,7 @@ if (isset($_POST['do_it_pass']) == false)
 	{
 		echo '<p>Creating login site</p>';
 		reason_include_once ('classes/url_manager.php');
-		reason_package_include_once( 'carl_util/basic/filesystem.php');
+		include_once_lib( 'carl_util/basic/filesystem.php');
 		mkdir_recursive($path, 0775);
 		if (!is_dir($path)) die_with_message('<p>The login site folder at ' . $path.' could not be written. Check paths and permissions.</p>');
 		else echo '<p>The login site folder at ' . $path.' has been created.</p>';
@@ -967,7 +953,7 @@ function check_error_handler_log_file_dir()
  */
 function force_error_handler_configuration()
 {
-	include_once( SETTINGS_INC . 'error_handler_settings.php');
+	include_once_lib( 'settings/error_handler_settings.php');
 	echo '<h4>Error handler setup</h4>';
 	// lets load the error_handler_settings file
 	

@@ -10,7 +10,7 @@
 reason_include_once( 'minisite_templates/modules/form/models/default.php' );
 reason_include_once( 'classes/object_cache.php' );
 include_once(TYR_INC.'tyr.php');
-reason_package_include_once( 'carl_util/db/connectDB.php');
+include_once_lib( 'carl_util/db/connectDB.php');
 
 /**
  * Register model with Reason
@@ -540,7 +540,7 @@ class DBFormModel extends DefaultFormModel
 	{
 		if (!isset($this->_admin_obj))
 		{
-			reason_package_include_once( 'carl_util/db/table_admin.php');
+			include_once_lib( 'carl_util/db/table_admin.php');
 			$this->_admin_obj = new TableAdmin();
 		}
 		return $this->_admin_obj;
@@ -556,7 +556,7 @@ class DBFormModel extends DefaultFormModel
 	{
 		if (!isset($this->_summary_obj))
 		{
-			reason_package_include_once( 'carl_util/db/table_admin.php');
+			include_once_lib( 'carl_util/db/table_admin.php');
 			// we want to entity convert all the fields that occur naturally 
 			$this->_summary_obj = new TableAdmin();
 			$this->_summary_obj->init_from_array($this->get_values_for_user());

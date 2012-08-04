@@ -9,8 +9,8 @@
  * @author Eric Naeseth <enaeseth+reason@gmail.com>
  */
 
-reason_package_include_once( 'carl_util/basic/filesystem.php' );
-reason_package_include_once( 'carl_util/basic/mime_types.php ');
+include_once_lib( 'carl_util/basic/filesystem.php' );
+include_once_lib( 'carl_util/basic/mime_types.php ');
 
 /**
  * A file that was uploaded by the client and stored somewhere temporarily,

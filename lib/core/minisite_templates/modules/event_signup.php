@@ -9,7 +9,7 @@
 	 */
 	reason_include_once( 'minisite_templates/modules/event_registration.php' );
 	reason_include_once( 'function_libraries/admin_actions.php' );
-	reason_package_include_once( 'carl_util/dir_service/directory.php' );
+	include_once_lib( 'carl_util/dir_service/directory.php' );
 	$GLOBALS[ '_module_class_names' ][ basename( __FILE__, '.php' ) ] = 'EventSignupModule';
 
 /**

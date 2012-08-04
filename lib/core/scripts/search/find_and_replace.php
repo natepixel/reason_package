@@ -386,7 +386,7 @@ class FindReplaceWizard5 extends FindReplaceWizard
 		
 		function do_includes()
 		{
-			reason_package_include_once( 'carl_util/db/table_admin.php');
+			include_once_lib( 'carl_util/db/table_admin.php');
 		}
 		
 		function get_display() // {{{ // lets use table admin to display this guy

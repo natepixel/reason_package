@@ -8,8 +8,8 @@
  * Include all needed functions
  */
 include_once('paths.php');
-reason_package_include_once( 'carl_util/pdf/htmlparser.inc' );
-reason_package_include_once( 'carl_util/tidy/tidy.php' );
+include_once_lib( 'carl_util/pdf/htmlparser.inc' );
+include_once_lib( 'carl_util/tidy/tidy.php' );
 
 /**
  * A class that takes HTML and renders it as a PDF

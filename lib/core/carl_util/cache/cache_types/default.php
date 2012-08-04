@@ -8,7 +8,7 @@
  * Include dependencies
  */
 require_once( 'paths.php');
-reason_package_include_once( 'carl_util/cache/object_cache.php');
+include_once_lib( 'carl_util/cache/object_cache.php');
 
 /**
  * Defines the interface for object cache types - these should not be instantiated directly, but rather through the object_cache.php class.

@@ -13,7 +13,7 @@ reason_require_once('classes/head_items.php');
 reason_require_once('function_libraries/asset_functions.php');
 reason_require_once('function_libraries/image_tools.php');
 reason_require_once('function_libraries/upload.php');
-reason_package_include_once( 'carl_util/basic/cleanup_funcs.php ');
+include_once_lib( 'carl_util/basic/cleanup_funcs.php ');
 include_once( DISCO_INC.'plasmature/plasmature.php' );
 
 if (!defined('REASON_FLASH_UPLOAD_URI')) {

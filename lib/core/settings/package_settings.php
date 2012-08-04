@@ -13,7 +13,6 @@
  * reason_header.php - for access to both carl_util and reason libraries
  *
  * @require INCLUDE_PATH must have been defined in paths.php
- * @require SETTINGS_INC must have been defined in paths.php
  *
  * @package carl_util
  */
@@ -37,7 +36,7 @@ domain_define( 'WEBMASTER_NAME', 'Joanne Q. Webmaster' );
  * 
  * SECURITY ALERT: this file MUST be outside of the web tree - otherwise your database credentials are accessible to everyone
  */
-domain_define( 'DB_CREDENTIALS_FILEPATH', SETTINGS_INC. 'dbs.xml' );
+domain_define( 'DB_CREDENTIALS_FILEPATH', INCLUDE_PATH . 'settings/dbs.xml' );
 
 /**
  * The locations of the http credentials file - this need not be defined unless you have web resources behind https authentication

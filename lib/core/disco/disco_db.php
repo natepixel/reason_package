@@ -1,7 +1,7 @@
 <?php
 
 	include_once( DISCO_INC . 'disco.php' );
-	reason_package_include_once( 'carl_util/db/sqler.php' );
+	include_once_lib( 'carl_util/db/sqler.php' );
 
  	/**
 	 * An extension of Disco that handles loading of table structures and data from a database and saves the information back into the database.

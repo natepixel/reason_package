@@ -31,8 +31,8 @@
 	 * Include dependencies and other files that should be considered part of the basic Reason utilities
 	 */
 	include_once( 'reason_header.php' );
-	reason_package_include_once( 'carl_util/db/db_selector.php' );
-	reason_package_include_once( 'carl_util/basic/misc.php' );
+	include_once_lib( 'carl_util/db/db_selector.php' );
+	include_once_lib( 'carl_util/basic/misc.php' );
 	reason_include_once( 'classes/entity_selector.php' );
 	reason_include_once( 'function_libraries/url_utils.php' );
 	reason_include_once( 'classes/object_cache.php' );

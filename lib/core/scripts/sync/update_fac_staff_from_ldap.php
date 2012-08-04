@@ -16,7 +16,7 @@
  */
 	include_once( 'reason_header.php' );
 	reason_include_once( 'classes/entity_selector.php' );
-	reason_package_include_once( 'carl_util/dir_service/directory.php' );
+	include_once_lib( 'carl_util/dir_service/directory.php' );
 	reason_include_once( 'function_libraries/admin_actions.php' );
 
 	$es = new entity_selector();

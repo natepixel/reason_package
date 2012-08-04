@@ -11,7 +11,7 @@ require_once( DISCO_INC.'disco.php');
 /**
  * The directory service class
  */
-reason_package_include_once( 'carl_util/dir_service/directory.php' );
+include_once_lib( 'carl_util/dir_service/directory.php' );
 /**
  * User libraries
  */

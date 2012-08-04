@@ -14,8 +14,8 @@
 	 * Include dependencies
 	 */
 	reason_include_once( 'minisite_templates/modules/default.php' );
-	reason_package_include_once( 'carl_util/basic/browser.php' );
-	reason_package_include_once( 'carl_util/dir_service/directory.php' );
+	include_once_lib( 'carl_util/basic/browser.php' );
+	include_once_lib( 'carl_util/dir_service/directory.php' );
 	
 	/**
 	 * The module that handles login to Reason authentication
