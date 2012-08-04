@@ -7,7 +7,6 @@
 /**
  * Include general paths info
  */
-include_once('paths.php');
 /**
  * Include the tyr settings
  */

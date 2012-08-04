@@ -9,7 +9,6 @@
 /**
  * Include necessary info
  */
-include_once('paths.php');
 include_once_lib( 'carl_util/cache/object_cache.php');
 include_once_lib( 'carl_util/basic/url_funcs.php');
 

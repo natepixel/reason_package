@@ -6,7 +6,6 @@
 /**
  * Include dependencies
  */
-include_once('paths.php');
 require_once( THOR_INC .'disco_thor.php');
 include_once(TYR_INC.'tyr.php');
 require_once( INCLUDE_PATH . 'xml/xmlparser.php' );

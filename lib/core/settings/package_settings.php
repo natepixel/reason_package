@@ -147,10 +147,6 @@ define('THOR_HTTP_PATH','/thor/');
 // Define the path to Tyr files
 define('TYR_INC',INCLUDE_PATH.'tyr/');
 
-// Define the path to ADOdb libraries
-define('ADODB_INC',INCLUDE_PATH.'external/adodb/');
-define('ADODB_DATE_INC',ADODB_INC.'adodb-time.inc.php');
-
 // Define the path to XML Parser files
 define('XML_PARSER_INC',INCLUDE_PATH.'external/xml/');
 

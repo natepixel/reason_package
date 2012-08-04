@@ -6,6 +6,5 @@
  * @package reason
  */
 	if (ob_get_level() == 0) ob_start();
-	include_once('paths.php');
-	rp_include_once( 'header.php' );
+		rp_include_once( 'header.php' );
 ?>

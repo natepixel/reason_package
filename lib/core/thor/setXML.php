@@ -4,7 +4,6 @@
  * @package thor
  */
 
-include_once('paths.php');
 include_once ( SETTINGS_INC.'thor_settings.php' );
 include_once_lib( 'carl_util/dev/prp.php');
 include_once_lib( 'carl_util/db/db.php');

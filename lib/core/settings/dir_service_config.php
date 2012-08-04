@@ -18,7 +18,6 @@
  * directory class.
  */
 
-include_once('paths.php');
 
 $available_services = array('reason');
 

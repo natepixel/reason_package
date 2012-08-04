@@ -7,7 +7,6 @@
 /**
  * Include all needed functions
  */
-include_once('paths.php');
 include_once_lib( 'carl_util/pdf/htmlparser.inc' );
 include_once_lib( 'carl_util/tidy/tidy.php' );
 

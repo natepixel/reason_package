@@ -13,7 +13,6 @@
  /**
   * Include the carl_util error handler
   */
-include_once('paths.php');
 include_once_lib( 'carl_util/error_handler/error_handler.php');
 
 /*

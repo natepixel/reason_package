@@ -12,8 +12,7 @@
 /**
  * Include dependencies
  */
-include_once('paths.php');
-include_once(ADODB_DATE_INC);
+include_once_lib('/external/adodb/adodb-time.inc.php');
 
 /**
  * Explode a MYSQL-formatted date into year, month, and day values

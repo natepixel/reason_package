@@ -16,8 +16,7 @@
 	/** 
 	 * require dependencies
 	 */
-	include_once('paths.php');
-	include_once_lib( 'carl_util/basic/url_funcs.php' );
+		include_once_lib( 'carl_util/basic/url_funcs.php' );
 	include_once_lib( 'carl_util/basic/cleanup_funcs.php' );
 	
 	/**

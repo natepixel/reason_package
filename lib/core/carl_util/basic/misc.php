@@ -11,11 +11,11 @@
 if( !defined( '__INC_DAVE_MISC' ) )
 {
 	define( '__INC_DAVE_MISC', true );
-	include_once('date_funcs.php');
-	include_once('url_funcs.php');
-	include_once('cleanup_funcs.php');
-	include_once('html_funcs.php');
-	include_once('carl_util/tidy/tidy.php');
+	include_once_lib('carl_util/basic/date_funcs.php');
+	include_once_lib('carl_util/basic/url_funcs.php');
+	include_once_lib('carl_util/basic/cleanup_funcs.php');
+	include_once_lib('carl_util/basic/html_funcs.php');
+	include_once_lib('carl_util/tidy/tidy.php');
 	
 	/**
 	 * Use both keys and values to produce imploded string

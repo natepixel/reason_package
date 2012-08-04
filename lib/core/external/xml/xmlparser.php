@@ -1,6 +1,5 @@
 <?php
-	include_once('paths.php');
-	include_once_lib( 'carl_util/basic/misc.php');
+		include_once_lib( 'carl_util/basic/misc.php');
 
 	/**
 	 * Loads the XML Parser class appropriate for the version of PHP

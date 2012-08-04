@@ -6,7 +6,6 @@
 /**
  * Include parent class
  */
-include_once('paths.php');
 include_once( DISCO_INC . 'boxes/boxes.php');
 
 /**

@@ -6,7 +6,6 @@
 /**
  * include the paths settings
  */
-include_once('paths.php');
 /**
  * include the directory service so that usernames as well as email addresses can be sent to this class
  */

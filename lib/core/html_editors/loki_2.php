@@ -122,8 +122,7 @@ class reasonLoki2Integration extends reasonEditorIntegrationBase
 	 */
 	function _get_paths($site_id)
 	{
-		include_once('paths.php');
-		if (file_exists(LOKI_2_INC.'loki.php'))
+				if (file_exists(LOKI_2_INC.'loki.php'))
 		{
 			include_once(LOKI_2_INC.'loki.php');
 		}
