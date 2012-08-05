@@ -6,7 +6,7 @@
 /**
  * Include parent class
  */
-	include_once( DISCO_INC.'disco.php' );
+	include_once_lib('disco/disco.php' );
 
 /**
  * The form that the gallery vote module uses to provide users the ability to vote on images

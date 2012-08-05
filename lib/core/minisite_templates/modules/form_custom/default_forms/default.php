@@ -6,7 +6,7 @@
 	/**
 	 * Include parent class
 	 */
-	include_once( DISCO_INC.'disco_db.php' );
+	include_once_lib('disco/disco_db.php' );
 	/**
 	 * Register form with Reason
 	 */

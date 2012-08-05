@@ -8,7 +8,7 @@
  * Include base class, include dependencies, & register module with Reason
  */
 reason_include_once( 'minisite_templates/modules/content_base.php' );
-include_once( DISCO_INC . 'disco.php' );
+include_once_lib('disco/disco.php' );
 reason_include_once( 'function_libraries/admin_actions.php' );
 reason_include_once( 'classes/inline_editing.php' );
 

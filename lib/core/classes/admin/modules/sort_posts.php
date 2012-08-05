@@ -8,7 +8,7 @@
   * Include the default module and other needed utilities
   */
 	reason_include_once('classes/admin/modules/default.php');
-	include_once( DISCO_INC . 'disco.php');
+	include_once_lib('disco/disco.php');
 	
 	/**
 	 * Simple Sorter for Posts

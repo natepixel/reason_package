@@ -7,7 +7,7 @@
  * @subpackage plasmature
  */
 
-require_once PLASMATURE_TYPES_INC."default.php";
+include_once_lib('disco/plasmature/types/default.php');
 
 /**
  * Displays a comment that extends across both columns.

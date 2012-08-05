@@ -9,7 +9,7 @@
   */
 	reason_include_once('classes/admin/modules/default.php');
 	reason_include_once( 'classes/sized_image.php' );
-	include_once( DISCO_INC.'disco.php' );
+	include_once_lib( 'disco/disco.php' );
 	
 	/**
 	 * Image Sizer Module

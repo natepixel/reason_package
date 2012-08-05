@@ -6,7 +6,7 @@
  * @subpackage plasmature
  */
 
-require_once PLASMATURE_TYPES_INC."default.php";
+include_once_lib('disco/plasmature/types/default.php');
 
 /**
  * The abstract class that powers plasmature types that have multiple options

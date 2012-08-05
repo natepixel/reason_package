@@ -7,7 +7,7 @@
 /**
  * The parent class
  */
-require_once( DISCO_INC.'disco.php');
+include_once_lib('disco/disco.php');
 /**
  * The directory service class
  */

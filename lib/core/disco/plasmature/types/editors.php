@@ -7,8 +7,8 @@
  * @subpackage plasmature
  */
 
-require_once PLASMATURE_TYPES_INC."default.php";
-require_once PLASMATURE_TYPES_INC."text.php";
+include_once_lib('disco/plasmature/types/default.php');
+include_once_lib('disco/plasmature/types/text.php');
 
 /**
  * Edit HTML using a Loki 1 editor.

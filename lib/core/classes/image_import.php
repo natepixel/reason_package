@@ -12,7 +12,7 @@
 	/**
 	 * Include disco so we can extend it
 	 */
-	include_once( DISCO_INC .'disco.php' );
+	include_once_lib('disco/disco.php' );
 	
 	include_once_lib( 'carl_util/basic/image_funcs.php ');
 

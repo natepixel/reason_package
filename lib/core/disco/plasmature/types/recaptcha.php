@@ -5,7 +5,7 @@
  * @package disco
  * @subpackage plasmature
  */
-require_once PLASMATURE_TYPES_INC."default.php";
+include_once_lib('disco/plasmature/types/default.php');
 include_once(SETTINGS_INC . 'recaptcha_settings.php' );
 include_once(RECAPTCHA_INC . 'recaptchalib.php');
 

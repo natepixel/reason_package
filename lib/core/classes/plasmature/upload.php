@@ -14,7 +14,7 @@ reason_require_once('function_libraries/asset_functions.php');
 reason_require_once('function_libraries/image_tools.php');
 reason_require_once('function_libraries/upload.php');
 include_once_lib( 'carl_util/basic/cleanup_funcs.php ');
-include_once( DISCO_INC.'plasmature/plasmature.php' );
+include_once_lib('disco/plasmature/plasmature.php' );
 
 if (!defined('REASON_FLASH_UPLOAD_URI')) {
 	define('REASON_FLASH_UPLOAD_URI', REASON_HTTP_BASE_PATH.'flash_upload/');

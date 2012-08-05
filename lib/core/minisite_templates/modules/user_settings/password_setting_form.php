@@ -6,7 +6,7 @@
 /**
  * Include parent class
  */
-include_once (DISCO_INC . 'disco.php');
+include_once_lib('disco/disco.php');
 
 /**
  * A user setting form to change a user's password. Check their against

@@ -7,8 +7,8 @@
  * Include dependencies
  */
 include_once( 'paths.php' );
-require_once( DISCO_INC.'disco.php' );
-require_once( DISCO_INC.'plasmature/plasmature.php' );
+include_once_lib('disco/disco.php' );
+include_once_lib('disco/plasmature/plasmature.php' );
 require_once( THOR_INC.'boxes_thor.php' );
 
 /**

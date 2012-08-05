@@ -11,8 +11,8 @@
 	include_once_lib( 'carl_util/basic/cleanup_funcs.php' );
 	include_once_lib( 'carl_util/dev/debug.php' );
 	include_once_lib( 'carl_util/error_handler/error_handler.php' );
-	include_once( DISCO_INC . 'plasmature/plasmature.php' );
-	include_once( DISCO_INC . 'boxes/boxes.php' );
+	include_once_lib('disco/plasmature/plasmature.php' );
+	include_once_lib('disco/boxes/boxes.php' );
 	
 	include_once( 'element_group.php');
 	

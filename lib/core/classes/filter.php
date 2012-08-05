@@ -11,7 +11,7 @@
 	include_once('reason_header.php');
 	reason_include_once( 'classes/entity.php' );
 	reason_include_once( 'classes/admin/admin_page.php' );
-	include_once( DISCO_INC . 'disco.php' );
+	include_once_lib('disco/disco.php' );
 
 	/**
 	 * This class works as a filter for the list_content page.  Prints out all the pre stuff

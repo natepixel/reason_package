@@ -9,7 +9,7 @@
  */
 include_once('reason_header.php');
 reason_include_once('minisite_templates/modules/form/views/thor/default.php');
-include_once(DISCO_INC . 'boxes/stacked.php');
+include_once_lib('disco/boxes/stacked.php');
 
 /**
  * Register form with Reason

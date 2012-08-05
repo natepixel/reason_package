@@ -6,7 +6,7 @@
  * @subpackage plasmature
  */
 
-require_once PLASMATURE_TYPES_INC."default.php";
+include_once_lib('disco/plasmature/types/default.php');
 
 /**
  * A group encapsulates a list of items and their values.

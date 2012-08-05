@@ -7,7 +7,7 @@
 /**
  * Include parent class(es)
  */
-include_once(DISCO_INC.'disco.php');
+include_once_lib('disco/disco.php');
 include_once_lib( 'carl_util/db/table_admin.php' );
 
 /**

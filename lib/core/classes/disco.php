@@ -11,7 +11,7 @@
 	 /**
 	  * Include parent class -- disco
 	  */
-	include_once (DISCO_INC . 'disco.php');
+	include_once_lib('disco/disco.php');
 	/**
 	*  Disco Reason 2
 	*

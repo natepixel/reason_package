@@ -8,7 +8,7 @@
   * Include the default module
   */
 	reason_include_once('classes/admin/modules/default.php');
-	include_once(DISCO_INC.'disco.php');
+	include_once_lib('disco/disco.php');
 	
 	/**
 	 * The administrative module that produces the UI for managing entity locks

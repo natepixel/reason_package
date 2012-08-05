@@ -115,13 +115,6 @@ define('HTML_SANITIZATION_FUNCTION','get_safer_html_html_purifier');
 // Define the path to the folder that contains Reason's lib and www folder
 define('REASON_INC',INCLUDE_PATH.'/');
 
-// Define the path to disco files
-define('DISCO_INC',INCLUDE_PATH.'disco/');
-
-// Define the path to flvplayer files
-define('FLVPLAYER_INC',INCLUDE_PATH.'flvplayer/');
-define('FLVPLAYER_HTTP_PATH','/flvplayer/');
-
 // Define the path to loki 1 files
 define('LOKI_INC',INCLUDE_PATH.'loki_1.0/');
 define('LOKI_HTTP_PATH','/loki_1.0/');
@@ -136,9 +129,6 @@ define('TINYMCE_HTTP_PATH','/reason_package/www/tiny_mce/');
 // Define the path to Date Picker files
 define('DATE_PICKER_INC', INCLUDE_PATH.'date_picker/');
 define('DATE_PICKER_HTTP_PATH', REASON_PACKAGE_HTTP_BASE_PATH .'date_picker/');
-
-// Define the path to Magpie RSS files
-define('MAGPIERSS_INC',INCLUDE_PATH.'magpierss/');
 
 // Define the path to Thor files
 define('THOR_INC',INCLUDE_PATH.'thor/');

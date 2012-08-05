@@ -6,7 +6,7 @@
 /**
  * Include parent class
  */
-include_once( DISCO_INC . 'boxes/boxes.php');
+include_once_lib('disco/boxes/boxes.php');
 
 /**
  * A special box class to handle unique characteristics of thor forms

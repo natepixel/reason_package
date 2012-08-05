@@ -6,10 +6,10 @@
  * @subpackage plasmature
  */
 
-require_once PLASMATURE_TYPES_INC."default.php";
-require_once PLASMATURE_TYPES_INC."text.php";
-require_once PLASMATURE_TYPES_INC."hidden.php";
-require_once PLASMATURE_TYPES_INC."options.php";
+include_once_lib('disco/plasmature/types/default.php');
+include_once_lib('disco/plasmature/types/text.php');
+include_once_lib('disco/plasmature/types/hidden.php');
+include_once_lib('disco/plasmature/types/options.php');
 
 /**
  * @package disco

@@ -10,7 +10,7 @@
   */
 	reason_include_once('classes/admin/modules/default.php');
 	
-	include_once(DISCO_INC.'disco.php');
+	include_once_lib('disco/disco.php');
 	
 	/**
 	 * An administrative module for reviewing edits and deletions

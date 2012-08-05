@@ -3,7 +3,7 @@
  * @package reason
  * @subpackage minisite_modules
  */
-include_once( DISCO_INC . 'disco.php' );
+include_once_lib('disco/disco.php' );
 
 /**
  * An extension of disco reason manual map for use with the 

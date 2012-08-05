@@ -66,8 +66,7 @@
  *       the left, right, or above the element). Create corresponding
  *       functionality in the box class.
  */
-/** path constants */
-include_once 'paths.php';
+
 /** tidy functions */
 include_once_lib( 'carl_util/tidy/tidy.php' );
 /** trim_slashes(), prettify_string(), unhtmlentities() */
@@ -75,21 +74,17 @@ include_once_lib( 'carl_util/basic/misc.php' );
 /** date functions */
 include_once_lib( 'carl_util/basic/date_funcs.php' );
 
-if (!defined("PLASMATURE_TYPES_INC")) {
-	define("PLASMATURE_TYPES_INC", DISCO_INC."plasmature/types/");
-}
-
-require_once PLASMATURE_TYPES_INC."default.php";
-require_once PLASMATURE_TYPES_INC."text.php";
-require_once PLASMATURE_TYPES_INC."hidden.php";
-require_once PLASMATURE_TYPES_INC."checkbox.php";
-require_once PLASMATURE_TYPES_INC."presentational.php";
-require_once PLASMATURE_TYPES_INC."editors.php";
-require_once PLASMATURE_TYPES_INC."thor.php";
-require_once PLASMATURE_TYPES_INC."options.php";
-require_once PLASMATURE_TYPES_INC."world.php";
-require_once PLASMATURE_TYPES_INC."datetime.php";
-require_once PLASMATURE_TYPES_INC."upload.php";
-require_once PLASMATURE_TYPES_INC."group.php";
-require_once PLASMATURE_TYPES_INC."colorpicker.php";
+include_once_lib('disco/plasmature/types/default.php');
+include_once_lib('disco/plasmature/types/text.php');
+include_once_lib('disco/plasmature/types/hidden.php');
+include_once_lib('disco/plasmature/types/checkbox.php');
+include_once_lib('disco/plasmature/types/presentational.php');
+include_once_lib('disco/plasmature/types/editors.php');
+include_once_lib('disco/plasmature/types/thor.php');
+include_once_lib('disco/plasmature/types/options.php');
+include_once_lib('disco/plasmature/types/world.php');
+include_once_lib('disco/plasmature/types/datetime.php');
+include_once_lib('disco/plasmature/types/upload.php');
+include_once_lib('disco/plasmature/types/group.php');
+include_once_lib('disco/plasmature/types/colorpicker.php');
 

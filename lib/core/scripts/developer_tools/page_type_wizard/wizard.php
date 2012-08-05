@@ -51,7 +51,7 @@ include_once('reason_header.php');
 reason_include_once('classes/page_types.php');
 reason_include_once('minisite_templates/page_types.php');
 reason_include_once('classes/session_php.php');
-include_once(DISCO_INC . 'controller.php');
+include_once_lib('disco/controller.php');
 
 if (!carl_is_php5())
 {

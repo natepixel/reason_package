@@ -9,7 +9,7 @@
  */
 reason_include_once( 'minisite_templates/modules/default.php' );
 reason_include_once( 'function_libraries/user_functions.php' );
-include_once (DISCO_INC . 'disco.php');
+include_once_lib('disco/disco.php');
 	
 $GLOBALS[ '_module_class_names' ][ basename( __FILE__, '.php' ) ] = 'PasswordChangeModule';
 

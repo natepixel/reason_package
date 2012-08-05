@@ -10,7 +10,7 @@
  * include dependencies
  */
 include_once('reason_header.php');
-include_once( DISCO_INC .'disco.php');
+include_once_lib('disco/disco.php');
 reason_include_once( 'classes/entity_selector.php');
 reason_include_once( 'classes/url_manager.php');
 reason_include_once( 'function_libraries/user_functions.php' );

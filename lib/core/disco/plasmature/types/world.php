@@ -6,7 +6,7 @@
  * @subpackage plasmature
  */
 
-require_once PLASMATURE_TYPES_INC."options.php";
+include_once_lib('disco/plasmature/types/options.php');
 
 /**
  * The plasmature class for a drop-down of languages.

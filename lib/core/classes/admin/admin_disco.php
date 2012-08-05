@@ -9,7 +9,7 @@
  /**
   * Include base disco class and admin actions, which most of these forms use
   */
-	include_once( DISCO_INC . 'disco.php' );
+	include_once_lib('disco/disco.php' );
 	reason_include_once( 'function_libraries/admin_actions.php' );
 	
 	/**

@@ -235,7 +235,7 @@ class OrphanManagerModule extends DefaultModule
 	
 	function init()
 	{
-		include_once(DISCO_INC.'disco.php');
+		include_once_lib('disco/disco.php');
 		reason_include_once( 'function_libraries/user_functions.php' );
 		reason_include_once( 'function_libraries/relationship_finder.php' );		
 		

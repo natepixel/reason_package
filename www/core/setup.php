@@ -87,7 +87,6 @@ if (isset($_POST['do_it_pass']) == false)
 							 The value should resolve to (or be set explicitly to)</p>
 							 <p><pre>'.rtrim($_SERVER['DOCUMENT_ROOT'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR.'</pre>');
 		check_environment_must_be_outside_of_web_tree(DB_CREDENTIALS_FILEPATH, 'db credentials xml file', 'Verify that DB_CREDENTIALS_FILEPATH in package_settings.php is correct and points to a readable file outside the web tree');
-		check_environment(DISCO_INC.'disco.php', 'disco include path', 'Verify the path to DISCO_INC in package_settings.php');
 		check_environment(TYR_INC.'tyr.php', 'tyr include path', 'Verify the path to TYR_INC in package_settings.php');
 		check_environment(THOR_INC.'thor.php', 'thor include path ', 'Verify the path to THOR_INC in package_settings.php');
 		check_environment(XML_PARSER_INC.'xmlparser.php', 'xml parser', 'Verify the path to XML_PARSER_INC in package_settings.php');
@@ -450,9 +449,6 @@ function perform_checks()
 	else $check_failed++;
 	
 	if (check_directory_readable(LOKI_2_INC, 'LOKI_2_INC')) $check_passed++;
-	else $check_failed++;
-	
-	if (check_directory_readable(MAGPIERSS_INC, 'MAGPIERSS_INC')) $check_passed++;
 	else $check_failed++;
 	
 	if (check_file_readable(APACHE_MIME_TYPES, 'APACHE_MIME_TYPES', 

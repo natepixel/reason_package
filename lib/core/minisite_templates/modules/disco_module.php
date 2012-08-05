@@ -8,7 +8,7 @@
  * Include the base module, disco dependency, and register this module with Reason
  */
 reason_include_once( 'minisite_templates/modules/default.php' );
-include_once( DISCO_INC.'disco.php' );
+include_once_lib('disco/disco.php' );
 $GLOBALS[ '_module_class_names' ][ basename( __FILE__, '.php' ) ] = 'DiscoModule';
 
 /**

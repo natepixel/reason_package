@@ -8,8 +8,8 @@
  * Include Disco
  */
 include_once('reason_header.php');
-include_once( DISCO_INC . 'disco.php');
-include_once( DISCO_INC . 'plasmature/types/recaptcha.php' );
+include_once_lib('disco/disco.php');
+include_once_lib('disco/plasmature/types/recaptcha.php' );
 include_once( SETTINGS_INC . 'akismet_settings.php' );
 reason_include_once( 'function_libraries/user_functions.php' );
 
