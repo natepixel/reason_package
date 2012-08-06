@@ -6,17 +6,12 @@
  */
 
 /**
- * Include the reason libraries
- */
-include_once('reason_header.php');
-
-/**
  * Set a global that will be used in the first run of db_query in the absence of an explicitly set connection name
  *
  * This approach replaces an unfortunate direct call to connectDB.
  */
 if (defined("REASON_DB")) $GLOBALS['_db_query_first_run_connection_name'] = REASON_DB;
-reason_include_once('classes/locks.php');
+include_once_lib('classes/locks.php');
 
 /**
  * Include database management stuff

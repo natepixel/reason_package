@@ -10,7 +10,7 @@
  * Include database connection library and parent class
  */
 include_once_lib( 'carl_util/db/connectDB.php' );
-include_once('ds_default.php');
+include_once_lib('ds_default.php');
 
 /**
  * MySQL Directory Service -- Interface for access to directory info in MySQL tables

@@ -14,11 +14,7 @@
 if(!defined("_DBPHP3" ))
 {
 	define("_DBPHP3", 1);
-	include_once( 'paths.php' );
-	include_once_lib( 'carl_util/basic/misc.php' ); // for get_microtime
-	include_once_lib( 'carl_util/error_handler/error_handler.php' );
-	include_once( 'connectDB.php' );
-	include_once( 'db_query.php' );
-
+	include_once_lib( 'carl_util/db/connectDB.php' );
+	include_once_lib( 'carl_util/db/db_query.php' );
 }
 ?>

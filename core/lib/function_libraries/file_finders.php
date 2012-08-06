@@ -4,11 +4,6 @@
  * @package reason
  * @subpackage function_libraries
  */
-
-/**
- * Include dependencies
- */
-include_once( 'reason_header.php' );
 	
 /**
  * Finds files in both the core and local directories and merges them into one listing

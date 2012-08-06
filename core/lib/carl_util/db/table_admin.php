@@ -9,7 +9,7 @@
 /**
  * include dependencies
  */
-include_once( 'paths.php' );
+include_once_lib( 'paths.php' );
 include_once_lib( 'carl_util/db/db.php'); // Requires ConnectDB Functionality
 include_once_lib( 'carl_util/basic/misc.php'); // Requires carl_clean_vars
 include_once_lib( 'disco/disco_db.php'); // Requires Disco_DB

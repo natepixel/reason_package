@@ -9,7 +9,7 @@
 /**
  * Include parent class and general util functions
  */
-include_once('ds_default.php');
+include_once_lib('ds_default.php');
 include_once_lib( 'carl_util/basic/misc.php');
 
 /**

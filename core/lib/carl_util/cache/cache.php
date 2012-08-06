@@ -233,7 +233,7 @@
 	/*
 	if( __FILE__ == $_SERVER['SCRIPT_FILENAME'] )
 	{
-		include_once( 'reason_header.php' );
+		include_once_lib( 'reason_header.php' );
 		connectDB( REASON_DB );
 		$c = new PageCache();
 		$page = $c->fetch( get_current_url() );

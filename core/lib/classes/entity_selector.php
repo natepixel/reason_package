@@ -15,8 +15,7 @@
 	 /**
 	 * Include the necessary files
 	 */
-	include_once( 'reason_header.php' );
-	reason_include_once( 'classes/entity.php' );
+	include_once_lib( 'classes/entity.php' );
 	
 	/**
 	 * defines array_diff_assoc for case where someone is using PHP versions earlier that 4.3

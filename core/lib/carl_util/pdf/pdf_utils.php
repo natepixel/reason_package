@@ -41,8 +41,8 @@ function carl_merge_pdfs_fpdi($pdffiles, $titles = array(), $metadata = array(),
 {
 	// FPDI throws some notices that break the PDF
 	$old_error = error_reporting(E_ERROR | E_WARNING | E_PARSE);
-	include_once(INCLUDE_PATH.'pdf/tcpdf/tcpdf.php');
-	include_once(INCLUDE_PATH.'pdf/fpdi/fpdi.php');
+	include_once_lib(INCLUDE_PATH.'pdf/tcpdf/tcpdf.php');
+	include_once_lib(INCLUDE_PATH.'pdf/fpdi/fpdi.php');
 
 	if(gettype($pdffiles) != 'array')
 	{

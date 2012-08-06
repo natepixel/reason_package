@@ -7,9 +7,8 @@
 /**
  * Include dependencies
  */
-require_once( 'paths.php');
-require_once(SETTINGS_INC.'object_cache_settings.php');
-include_once_lib( 'carl_util/basic/misc.php');
+include_once_lib( 'settings/object_cache_settings.php' );
+include_once_lib( 'carl_util/basic/misc.php' );
 
 /**
  * Object cache system that fetches and sets serialized objects by id
@@ -152,7 +151,7 @@ class ObjectCache
 			$file_path = (isset($settings[$type]['path'])) ? ($settings[$type]['path']) : false;
 			if ($is_defined && file_exists($file_path))
 			{
-				include_once($file_path);
+				include_once_lib($file_path);
 				$cache_class_name[$type] = (isset($settings[$type]['classname'])) 
 							   			 ? $settings[$type]['classname'] 
 							   			 : ucfirst(basename($file_path, ".php")) .'ObjectCache';

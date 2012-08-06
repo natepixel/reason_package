@@ -18,7 +18,7 @@ if( !defined( '__DB_SELECTOR' ) )
 {
 	define ( '__DB_SELECTOR', true );
 	
-	include_once('db_query.php');
+	include_once_lib('carl_util/db/db_query.php');
 	
 	/**
 	 * DBSelector class

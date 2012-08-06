@@ -5,7 +5,7 @@
  */
 
 /**
- * Pre-php4 solution for before include_once() existed
+ * Pre-php4 solution for before include_once_lib() existed
  */
 if(!defined( '__HTTP_VARS' ))
 {

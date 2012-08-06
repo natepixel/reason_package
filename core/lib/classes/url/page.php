@@ -10,8 +10,7 @@
 /**
  * Include dependencies
  */
-include_once('reason_header.php');
-reason_include_once('classes/url/abstract.php');
+include_once_lib('classes/url/abstract.php');
 include_once_lib( 'carl_util/basic/url_funcs.php');
 
 /**

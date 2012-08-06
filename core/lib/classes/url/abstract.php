@@ -10,7 +10,6 @@
 /**
  * Include dependencies
  */
-include_once('reason_header.php');
 include_once_lib( 'carl_util/basic/url_funcs.php');
 
 /**

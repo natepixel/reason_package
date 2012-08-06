@@ -7,11 +7,10 @@
 /**
  * Include dependencies
  */
-include_once( 'reason_header.php' );
 include_once_lib( 'carl_util/basic/url_funcs.php' );
-reason_include_once( 'classes/entity_selector.php' );
-reason_include_once( 'classes/url/page.php' );
-reason_include_once( 'function_libraries/url_utils.php' );
+include_once_lib( 'classes/entity_selector.php' );
+include_once_lib( 'classes/url/page.php' );
+include_once_lib( 'function_libraries/url_utils.php' );
 	
 /**
  * Grab contents of a URL.

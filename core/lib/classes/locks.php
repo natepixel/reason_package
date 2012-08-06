@@ -9,7 +9,6 @@
 /**
  * Include dependencies
  */
-include_once('reason_header.php');
 include_once_lib( 'carl_util/db/db_selector.php');
 
 /*

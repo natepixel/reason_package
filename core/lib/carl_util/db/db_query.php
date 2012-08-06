@@ -8,9 +8,6 @@
 /**
  * include the paths and error handler
  */
-include_once( 'paths.php' );
-include_once_lib( 'carl_util/error_handler/error_handler.php' );
-include_once_lib( 'carl_util/db/connectDB.php' );
 
 /** db_query( $query, $error_message = '', $die_on_error = true ) {{{
  *	Wrapper function for querying the database

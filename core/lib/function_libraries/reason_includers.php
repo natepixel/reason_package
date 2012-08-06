@@ -97,12 +97,14 @@ function reason_includer($path, $section = 'lib', $function = 'include_once')
  * Reason Include Once -- a wrapper for Reason Includer that replaces include_once()
  * Simpler interface that should generally only require a single parameter -- the path
  * @param string $path Path inside the core and/or local directories
- * @param string $section "lib" is the default and nothing else is supported right now
+ * @param string $section "lib" is the default and nothing else is supported right now\
+ * @deprecated
  * @return bool $success
  */
 function reason_include_once($path, $section = 'lib')
 {
-	return reason_includer($path, $section);
+	trigger_warning('Use include_once_lib instead of reason_include_once', 1);
+	return include_once_lib($path);
 }
 /**
  * Reason Include -- a wrapper for Reason Includer that replaces include()

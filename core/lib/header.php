@@ -21,22 +21,22 @@
 	include_once_lib( 'carl_util/db/db.php' );
 
 	//load file finder functions - reason_get_merged_fileset() and reason_file_exists()
-	include_once ( REASON_INC .'lib/core/function_libraries/file_finders.php' );
+	include_once_lib ( 'function_libraries/file_finders.php' );
 	
-	include_once( REASON_INC . 'lib/core/function_libraries/reason_includers.php');
+	include_once_lib( 'function_libraries/reason_includers.php');
 
 	// include the settings for reason.
 	//reason_include_once( 'settings.php' );
-	include_once( SETTINGS_INC.'reason_settings.php');
+	include_once_lib( 'settings/reason_settings.php');
 
 	// load all the factory functions
-	reason_include_once( 'function_libraries/factories.php' );
+	include_once_lib( 'function_libraries/factories.php' );
 
 	// load the session library
-	reason_include_once( 'function_libraries/reason_session.php' );
+	include_once_lib( 'function_libraries/reason_session.php' );
 
 	// load utility functions
-	reason_include_once( 'function_libraries/util.php' );
+	include_once_lib( 'function_libraries/util.php' );
 	
 
 	// make sure this variable is set to something by default

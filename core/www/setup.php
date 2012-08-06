@@ -624,7 +624,7 @@ function check_accessible_over_http($path, $search_string)
 
 function verify_mysql($db_conn_name, $constant_name, $constant_location, $check_for_tables = false) // see if we can connect to mysql using the connection parameters specified in REASON_DB
 {
-	include_once( INCLUDE_PATH . 'xml/xmlparser.php' ); // we have verified this exists already
+	include_once_lib( INCLUDE_PATH . '/core/lib/xml/xmlparser.php' ); // we have verified this exists already
 	$db_file = DB_CREDENTIALS_FILEPATH; // we have verified this exists
 	$xml = file_get_contents($db_file);
 	if(!empty($xml))

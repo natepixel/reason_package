@@ -30,12 +30,11 @@
 	/**
 	 * Include dependencies and other files that should be considered part of the basic Reason utilities
 	 */
-	include_once( 'reason_header.php' );
 	include_once_lib( 'carl_util/db/db_selector.php' );
 	include_once_lib( 'carl_util/basic/misc.php' );
-	reason_include_once( 'classes/entity_selector.php' );
-	reason_include_once( 'function_libraries/url_utils.php' );
-	reason_include_once( 'classes/object_cache.php' );
+	include_once_lib( 'classes/entity_selector.php' );
+	include_once_lib( 'function_libraries/url_utils.php' );
+	include_once_lib( 'classes/object_cache.php' );
 
 	/**
 	 * Get the id of an item with a given unique name
