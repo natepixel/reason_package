@@ -2,15 +2,15 @@
 /**
  * setup.php is used to configure reason and could also be used to check the validity of an existing setup in the case of problems.
  * 
- * this script attempts to assume very little and provide useful guidance when it cannot continue to run. it has, however, grown
- * organically over time and should be replaced with a proper testing and setup suite.
+ * It may still work but is deprecated. It checks many things that no longer matter.
  *
+ * @deprecated
  * @author Nathan White
  * @package reason
  *
  */
 
-include_once('../../lib/bootstrap.php');
+include_once(dirname(__FILE__) . '/../../bootstrap.php');
 
 $head_content = "
 <html>
@@ -611,66 +611,6 @@ function check_jquery_accessible_over_http()
 	}
 }
 
-function check_flvplayer_accessible_over_http()
-{
-	global $auto_mode_enabled;
-	$fixed_str = '';
-	$accessible = check_accessible_over_http(FLVPLAYER_HTTP_PATH . 'playlist.xml', 'Jeroen Wijering');
-	if (!$accessible && $auto_mode_enabled) // lets try to repair this
-	{
-		// if FLVPLAYER_INC is readable
-		if (is_readable(FLVPLAYER_INC) && function_exists('symlink'))
-		{
-			$symlink_loc = str_replace("//", "/", WEB_PATH . rtrim(FLVPLAYER_HTTP_PATH, "/"));
-			if (is_writable(dirname($symlink_loc))) symlink(FLVPLAYER_INC, $symlink_loc);
-		}
-		$accessible = check_accessible_over_http(FLVPLAYER_HTTP_PATH . 'playlist.xml', 'Jeroen Wijering');
-		$fixed_str = ($accessible) ? ' was fixed using auto mode and' : ' could not be fixed using auto mode and';
-	}
-	if ($accessible) return msg('<span class="success">flvplayer'.$fixed_str.' is accessible over http</span> - check passed', true);
-	else
-	{
-		$path = carl_construct_link(array(''), array(''), FLVPLAYER_HTTP_PATH . 'playlist.xml');
-		$auto_mode_str = ($auto_mode_enabled) 
-				? ' Auto mode may have failed because PHP was unable to create symlinks.'
-				: ' <strong><a href="?automode=true">Try auto mode</a> - it will try to create symlinks for you.</strong>';
-		return msg('<span class="error">flvplayer'.$fixed_str.' is not accessible over http</span>.
-					<p>The URL attempted was ' . $path . '. Check the URL and made sure it exists and is
-					web accessible. Also check the constant FLVPLAYER_HTTP_PATH, which currently is set to '
-					. FLVPLAYER_HTTP_PATH . ' and make sure it correctly references the location of flvplayer.'.$auto_mode_str.' Consult the install documentation for more details.</p>', false);
-	}
-}
-
-function check_datepicker_accessible_over_http()
-{
-	global $auto_mode_enabled;
-	$fixed_str = '';
-	$accessible = check_accessible_over_http(DATE_PICKER_HTTP_PATH . 'index.html', 'frequency decoder');
-	if (!$accessible && $auto_mode_enabled) // lets try to repair this
-	{
-		// if FLVPLAYER_INC is readable
-		if (is_readable(DATE_PICKER_INC) && function_exists('symlink'))
-		{
-			$symlink_loc = str_replace("//", "/", WEB_PATH . rtrim(DATE_PICKER_HTTP_PATH, "/"));
-			if (is_writable(dirname($symlink_loc))) symlink(DATE_PICKER_INC, $symlink_loc);
-		}
-		$accessible = check_accessible_over_http(DATE_PICKER_HTTP_PATH . 'index.html', 'frequency decoder');
-		$fixed_str = ($accessible) ? ' was fixed using auto mode and' : ' could not be fixed using auto mode and';
-	}
-	if ($accessible) return msg('<span class="success">date picker'.$fixed_str.' is accessible over http</span> - check passed', true);
-	else
-	{
-		$path = carl_construct_link(array(''), array(''), DATE_PICKER_HTTP_PATH . 'index.html');
-		$auto_mode_str = ($auto_mode_enabled) 
-				? ' Auto mode may have failed because PHP was unable to create symlinks.'
-				: ' <strong><a href="?automode=true">Try auto mode</a> - it will try to create symlinks for you.</strong>';
-		return msg('<span class="error">date picker'.$fixed_str.' is not accessible over http</span>.
-					<p>The URL attempted was ' . $path . '. Check the URL and made sure it exists and is
-					web accessible. Also check the constant DATE_PICKER_HTTP_PATH, which currently is set to '
-					. DATE_PICKER_HTTP_PATH . ' and make sure it correctly references the location of date picker.'.$auto_mode_str.' Consult the install documentation for more details.</p>', false);
-	}
-}
-
 /**
  * 
  */
@@ -906,7 +846,6 @@ function check_environment_and_trailing_slash($path, $check_name, $error_msg)
 
 function check_environment_must_be_outside_of_web_tree($path, $check_name, $error_msg)
 {
-	trigger_error('we disabled this for now');
 	return true;
 	
 	if (file_exists($path))

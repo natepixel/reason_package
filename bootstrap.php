@@ -2,7 +2,11 @@
 /**
  * This is a bootstrap file. It must be included by any web facing php scripts that use code in lib.
  *
- * It defines INCLUDE_PATH and the method include_once_lib.
+ * It does the following:
+ *
+ * - defines INCLUDE_PATH to be the current Directory
+ * - defined include_once_lib and include_once_www
+ * - loads the error handler
  *
  * @package reason_package
  */
@@ -10,7 +14,7 @@
 /** 
  * The location of the reason_package folder
  */
-define ('INCLUDE_PATH', dirname(dirname(__FILE__)) .'/');
+define ('INCLUDE_PATH', dirname(__FILE__) .'/');
 
 /**
  * Function to include something from the reason_package lib directory
@@ -23,8 +27,8 @@ define ('INCLUDE_PATH', dirname(dirname(__FILE__)) .'/');
  */
 function include_once_lib( $path )
 {
-	$local = INCLUDE_PATH .'lib/local/'.$path;
-	$core = INCLUDE_PATH .'lib/core/'.$path;
+	$local = INCLUDE_PATH .'local/lib/'.$path;
+	$core = INCLUDE_PATH .'core/lib/'.$path;
 	
 	if (file_exists($local) || file_exists($core))
 	{
@@ -35,7 +39,6 @@ function include_once_lib( $path )
 		}
 		else
 		{
-			echo $core;
 			include_once($core);
 			return $core;
 		}
@@ -49,8 +52,8 @@ function include_once_lib( $path )
 
 function include_once_www( $path )
 {
-	$local = INCLUDE_PATH .'www/local/'.$path;
-	$core = INCLUDE_PATH .'www/core/'.$path;
+	$local = INCLUDE_PATH .'local/www/'.$path;
+	$core = INCLUDE_PATH .'core/www/'.$path;
 	
 	if (file_exists($local) || file_exists($core))
 	{
@@ -72,5 +75,34 @@ function include_once_www( $path )
 	}
 }
 
-include_once_lib('paths.php');
+/**
+ * Defines a constant using the settings for the current domain, if available, or the provided default value.
+ * 
+ * @param constant string name of the constant to define
+ * @param default string default value to set if there is not a value for $GLOBALS['_current_domain_settings[$constant]
+ *
+ * @todo stop using and deprecate me
+ * @return void
+ */
+function domain_define($constant, $default) 
+{
+	define ($constant, (isset($GLOBALS['_current_domain_settings'][$constant])) ? $GLOBALS['_current_domain_settings'][$constant] : $default);
+	$GLOBALS['_default_domain_settings'][$constant] = $default; // lets store the default in case something cares about the difference
+}
+
+/**
+ * Load in domain specific settings. Any setting defined with the domain_define will use domain specific settings when available
+ */
+include_once_lib ('settings/domain_settings.php');
+
+/**
+ * Include package settings
+ */
+include_once_lib('settings/package_settings.php');
+
+/**
+ * Load the error handler
+ */
+include_once_lib('carl_util/error_handler/error_handler.php');
+
 ?>

@@ -12,6 +12,8 @@
  * paths.php - for carl_util functionality when the full reason environment is not needed
  * reason_header.php - for access to both carl_util and reason libraries
  *
+ * @todo remove almost everything - all the constans relating to paths are deprecated.
+ *
  * @require INCLUDE_PATH must have been defined in paths.php
  *
  * @package carl_util
@@ -34,9 +36,9 @@ domain_define( 'WEBMASTER_NAME', 'Joanne Q. Webmaster' );
 /**
  * The location of the database credentials file
  * 
- * SECURITY ALERT: this file MUST be outside of the web tree - otherwise your database credentials are accessible to everyone
+ * SECURITY ALERT: this file should not be web accessible
  */
-domain_define( 'DB_CREDENTIALS_FILEPATH', INCLUDE_PATH . 'settings/dbs.xml' );
+domain_define( 'DB_CREDENTIALS_FILEPATH', INCLUDE_PATH . 'settings/dbs.php' );
 
 /**
  * The locations of the http credentials file - this need not be defined unless you have web resources behind https authentication
@@ -113,7 +115,14 @@ domain_define( 'HTTP_HOST_NAME', $_SERVER['HTTP_HOST'] );
 define('HTML_SANITIZATION_FUNCTION','get_safer_html_html_purifier');
 
 // Define the path to the folder that contains Reason's lib and www folder
-define('REASON_INC',INCLUDE_PATH.'/');
+define('REASON_INC',INCLUDE_PATH.'core/lib/');
+
+// Define the path to disco files
+define('DISCO_INC',INCLUDE_PATH.'disco/');
+
+// Define the path to flvplayer files
+define('FLVPLAYER_INC',INCLUDE_PATH.'flvplayer/');
+define('FLVPLAYER_HTTP_PATH','/flvplayer/');
 
 // Define the path to loki 1 files
 define('LOKI_INC',INCLUDE_PATH.'loki_1.0/');
@@ -130,21 +139,24 @@ define('TINYMCE_HTTP_PATH','/reason_package/www/tiny_mce/');
 define('DATE_PICKER_INC', INCLUDE_PATH.'date_picker/');
 define('DATE_PICKER_HTTP_PATH', REASON_PACKAGE_HTTP_BASE_PATH .'date_picker/');
 
+// Define the path to Magpie RSS files
+define('MAGPIERSS_INC',INCLUDE_PATH.'magpierss/');
+
 // Define the path to Thor files
-define('THOR_INC',INCLUDE_PATH.'thor/');
-define('THOR_HTTP_PATH','/thor/');
+define('THOR_INC',INCLUDE_PATH.'core/lib/thor/');
+define('THOR_HTTP_PATH','/core/www/thor/');
 
 // Define the path to Tyr files
-define('TYR_INC',INCLUDE_PATH.'tyr/');
+define('TYR_INC',INCLUDE_PATH.'core/lib/tyr/');
 
 // Define the path to XML Parser files
-define('XML_PARSER_INC',INCLUDE_PATH.'external/xml/');
+define('XML_PARSER_INC',INCLUDE_PATH.'core/lib/xml/');
 
 // Define the path to HTML Purifier
-define('HTML_PURIFIER_INC',INCLUDE_PATH.'external/htmlpurifier/');
+define('HTML_PURIFIER_INC',INCLUDE_PATH.'core/lib/htmlpurifier/');
 
 // Define the path to libcurlemu
-define('LIBCURLEMU_INC',INCLUDE_PATH.'external/libcurlemu-1.0.4/');
+define('LIBCURLEMU_INC',INCLUDE_PATH.'core/lib/libcurlemu-1.0.4/');
 
 // Define the path to jquery
 define('JQUERY_INC',INCLUDE_PATH.'external/jquery/');
