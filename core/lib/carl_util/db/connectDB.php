@@ -5,11 +5,6 @@
  * @package carl_util
  * @subpackage db
  */
- 
-/**
- * include the paths file that sets up basic include paths
- */
-include_once( 'paths.php' );
 
 /**
  * include the error handler so that errors are logged, etc.

@@ -17,6 +17,11 @@
 define ('INCLUDE_PATH', dirname(__FILE__) .'/');
 
 /**
+ * SETTINGS_INC is deprecated but we keep it here list in case. It would be nice to trigger an error whenever it is used if there was a good way to do that.
+ */
+define ('SETTINGS_INC', INCLUDE_PATH . 'core/lib/settings/');
+
+/**
  * Function to include something from the reason_package lib directory
  *
  * - prefer the local folder

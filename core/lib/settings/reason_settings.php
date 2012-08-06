@@ -7,8 +7,7 @@
  * the environment for this Reason instance.
  * @package reason
  */
- 	include_once( 'paths.php');
-	
+
 	/**
 	 * REASON_VERSION
 	 * This setting identifies the current version of Reason

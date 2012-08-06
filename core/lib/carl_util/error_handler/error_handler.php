@@ -30,7 +30,7 @@ error_reporting(defined('E_STRICT') ? E_ALL | E_STRICT : E_ALL);
  */
 include_once_lib ( 'settings/error_handler_settings.php' );
 include_once_lib ( 'carl_util/basic/misc.php' );
-//include_once_lib ( 'carl_util/dev/pray.php' );
+include_once_lib ( 'carl_util/dev/pray.php' );
 
 /**
  * Provides access to the error handler configuration items.

@@ -80,7 +80,7 @@ if (isset($_POST['do_it_pass']) == false)
 	}
 		
 	echo '<h4>Checking component availability</h4>';
-	if (include_once_lib('paths.php'))
+	if (include_once_lib( 'settings/package_settings.php' ))
 	{
 		// verify settings files loaded by header.php before we load the header
 		check_environment_and_trailing_slash(WEB_PATH, 'web path', 'Check the WEB_PATH constant in package_settings.php.</p><p>

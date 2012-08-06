@@ -38,7 +38,7 @@ domain_define( 'WEBMASTER_NAME', 'Joanne Q. Webmaster' );
  * 
  * SECURITY ALERT: this file should not be web accessible
  */
-domain_define( 'DB_CREDENTIALS_FILEPATH', INCLUDE_PATH . 'settings/dbs.php' );
+domain_define( 'DB_CREDENTIALS_FILEPATH', INCLUDE_PATH . 'core/lib/settings/dbs.xml' );
 
 /**
  * The locations of the http credentials file - this need not be defined unless you have web resources behind https authentication
