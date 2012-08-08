@@ -10,7 +10,7 @@
 /**
  * Include dependencies
  */
-include_once_lib('cleanup_funcs.php');
+include_once_lib('carl_util/basic/cleanup_funcs.php');
 
 /**
  * carl_make_link() will preserve the url query string, while adding or removing items specified in the new_request_vars array.

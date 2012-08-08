@@ -7,7 +7,7 @@
 	 * Include dependencies
 	 */
 	include_once( 'reason_header.php' );
-	include_once_lib( 'carl_util/basic/filesystem.php');
+	include_once(CARL_UTIL_INC.'basic/filesystem.php');
 	reason_include_once( 'classes/entity_selector.php' );
 	reason_include_once( 'function_libraries/url_utils.php' );
 	reason_include_once( 'classes/module_sets.php' );
@@ -89,11 +89,6 @@
 		 * @var string
 		 */
 		var $test_full_base_url;
-
-		/**
-		 * @var string
-		 */
-		var $cli;
 		
 		/**
 		 * Is the URL manager OK to run?
@@ -104,19 +99,8 @@
 		 */
 		var $_ok_to_run = false;
 		
-		/**
-		 * @var boolean
-		 */
-		protected $_htaccess_changed = false;
-		
-		function url_manager( $site_id, $debug = false, $do_global_rewrites = false, $cli = false) // {{{
+		function url_manager( $site_id, $debug = false, $do_global_rewrites = false ) // {{{
 		{
-			
-			if(php_sapi_name() == 'cli' || $cli)
-			{
-				$this->cli = true;
-			}
-
 			$this->debug = $debug;
 			$this->debug( 'debugging is on' );
 
@@ -157,30 +141,13 @@
 		{
 			return trim($str);
 		}
-		
-		/**
-		 * We make this static to avoid various requests for the same resource on pages that might use multiple instances of this class.
-		 */
-		function get_server_ip()
-		{
-			static $server_ip;
-			if (!isset($server_ip))
-			{
-				$get_ip_url = carl_construct_link(array(''), array(''), REASON_HTTP_BASE_PATH . 'displayers/ip.php');
-				$result_ip = carl_util_get_url_contents($get_ip_url);
-				$server_ip = (!empty($result_ip)) ? $result_ip : false;
-			}
-			return $server_ip;
-		}
-		
 		function refresh_localhost_limiter_rule()
 		{
-			$ip = $this->get_server_ip();
-			if(!empty($ip))
+			if(!empty($_SERVER['SERVER_ADDR']))
 			{
 				$hta = 'Order deny,allow'."\n";
 				$hta .= 'deny from all'."\n";
-				$hta .= 'allow from '.$ip."\n";
+				$hta .= 'allow from '.$_SERVER['SERVER_ADDR']."\n";
 				// sometimes the server_addr will be present, but when the hostname is localhost CURL requests are still forbidden.
 				// we address this by conditionally adding allow from localhost.
 				if (strpos(strtolower(HTTP_HOST_NAME), 'localhost') !== false)
@@ -261,7 +228,7 @@
 		function debug( $str ) // {{{
 		{
 			if( $this->debug )
-				echo 'URL Manager: '.$str.($this->cli ? '' : '<br />')."\n";
+				echo 'URL Manager: '.$str.(php_sapi_name() == 'cli' ? '' : '<br />')."\n";
 		} // }}}
 		function update_rewrites() // {{{
 		// this is the method that does all the work.
@@ -275,10 +242,6 @@
 			{
 				$this->debug( 'SKIPPED - CUSTOM URL HANDLER DEFINED: '.$this->site->get_value('custom_url_handler') );
 				return;
-			}
-			if(!$this->_is_base_valid( 0 ))
-			{
-				$this->make_site_valid(false);
 			}
 			if( $this->_is_base_valid( HIGH ) )
 			{
@@ -374,7 +337,6 @@
 				{
 					$this->debug( 'test file diff from current, testing and copying' );
 					$this->_test_and_copy();
-					$this->_htaccess_changed = true;
 				}
 				else
 				{
@@ -396,70 +358,37 @@
 		{
 			return $this->_is_base_valid( WARNING );
 		} // }}}
-		function make_site_valid($report = true) // {{{
+		function make_site_valid() // {{{
 		// function to either make a site's directory structure valid or at least report the steps necessary to do so
 		{
-			if($report)
+			$ret = array();
+			if( !$this->_is_base_valid( 0 ) AND (empty($this->site) || !$this->site->get_value('custom_url_handler') ) )
 			{
-				$ret = array();
-				if( !$this->_is_base_valid( 0 ) AND (empty($this->site) || 	!$this->site->get_value('custom_url_handler') ) )
+				$this->debug( '<strong>site not set up correctly, gathering needed changes.</strong>' );
+				if( !$this->_base_url_exists() )
 				{
-					$this->debug( '<strong>site not set up correctly, gathering needed changes.</strong>' );
-					if( !$this->_base_url_exists() )
+					$path = trim_slashes( $this->web_base_url );
+					$path_parts = split( '/', $path );
+					$working_dir = $this->web_root;
+					foreach( $path_parts AS $part )
 					{
-						$path = trim_slashes( $this->web_base_url );
-						$path_parts = split( '/', $path );
-						$working_dir = $this->web_root;
-						foreach( $path_parts AS $part )
-						{
-							$working_dir .= $part.'/';
-							if( !file_exists( $working_dir ) )
-								$ret[] = 'mkdir '.$working_dir;
-						}
-						$ret[] = 'sudo chown '.REASON_SITE_DIRECTORY_OWNER.'.'.REASON_SITE_DIRECTORY_OWNER.' '.$working_dir;
-						$ret[] = 'sudo chmod 775 '.$working_dir;
+						$working_dir .= $part.'/';
+						if( !file_exists( $working_dir ) )
+							$ret[] = 'mkdir '.$working_dir;
 					}
-					else if( !$this->_base_url_writable() )
-					{
-						$ret[] = 'sudo chown '.REASON_SITE_DIRECTORY_OWNER.'.'.REASON_SITE_DIRECTORY_OWNER.' '.$this->full_base_url;
-						$ret[] = 'sudo chmod 775 '.$this->full_base_url;
-					}
+					$ret[] = 'sudo chown '.REASON_SITE_DIRECTORY_OWNER.'.'.REASON_SITE_DIRECTORY_OWNER.' '.$working_dir;
+					$ret[] = 'sudo chmod 775 '.$working_dir;
 				}
-				else
-					$this->debug( '<strong>Site is set up properly.</strong>' );
-				return $ret;
+				else if( !$this->_base_url_writable() )
+				{
+					$ret[] = 'sudo chown '.REASON_SITE_DIRECTORY_OWNER.'.'.REASON_SITE_DIRECTORY_OWNER.' '.$this->full_base_url;
+					$ret[] = 'sudo chmod 775 '.$this->full_base_url;
+				}
 			}
 			else
-			{
-				if( !$this->_is_base_valid( 0 ) AND (empty($this->site) || 	!$this->site->get_value('custom_url_handler') ) )
-				{
-					$this->debug( '<strong>site not set up correctly, attempting to fix.</strong>' );
-					if( !$this->_base_url_exists() )
-					{
-						mkdir_recursive($this->full_base_url, 0775);
-					}
-					elseif( !$this->_base_url_writable() )
-					{
-						$ret = '<strong>Base URL is not writable; please run these commands:</strong> ';
-						$ret .= '<code>';
-						$ret .= 'sudo chown '.REASON_SITE_DIRECTORY_OWNER.'.'.REASON_SITE_DIRECTORY_OWNER.' '.$this->full_base_url.'; ';
-						$ret .= 'sudo chmod 775 '.$this->full_base_url.';</code>';
-						$this->debug( $ret );
-					}
-					
-					if($this->_base_url_exists() && $this->_base_url_writable())
-					{
-						$this->debug( '<strong>Site directory successfully fixed.</strong>' );
-						return true;
-					}
-					return false;
-				}
-			}
+				$this->debug( '<strong>Site is set up properly.</strong>' );
+			return $ret;
 		} // }}}
-		function htaccess_changed()
-		{
-			return $this->_htaccess_changed;
-		}
 		function _test_and_copy() // {{{
 		{
 			if( filesize( $this->test_file ) > 0 )
@@ -732,7 +661,7 @@
 		} // }}}
 		function _get_minisite_ugly_url( $page ) // {{{
 		{
-			$script_url = REASON_HTTP_BASE_PATH.'displayers/generate_page.php';
+			$script_url = INCLUDE_PATH.'core/lib/minisite/generate_page.php';
 			return $script_url.'?site_id='.$this->site->id().'&page_id='.$page['id'];
 		} // }}}
 		function _update_feeds()

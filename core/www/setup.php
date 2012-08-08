@@ -4,39 +4,20 @@
  * 
  * It may still work but is deprecated. It checks many things that no longer matter.
  *
- * @deprecated
+ * @deprecated some of this logic could be ported into a unit test framework.
+ *
  * @author Nathan White
  * @package reason
  *
  */
 
 include_once(dirname(__FILE__) . '/../../bootstrap.php');
-
-$head_content = "
-<html>
-<head>
-<title>Reason Setup</title>
-<link rel='stylesheet' href='css/reason_setupgrade/reason_setupgrade.css' type='text/css'>
-<style>
-.error
-{
-color: red;
-}
-.success
-{
-color: green;
-}
-</style>
-</head>
-<body>
-<h1>Reason Setup</h1>";
-$curl_test_content = $head_content . '</body></html>';
 if (isset($_GET['curl_test']))
 {
-	echo $curl_test_content;
+	echo get_curl_test_content();
 	die;
 }
-else echo $head_content;
+else echo get_head_content();
 
 $auto_mode_enabled = (!empty($_REQUEST['automode']) && ($_REQUEST['automode'] == 'false')) ? false : true;
 $auto_mode_link = ($auto_mode_enabled) ? ' Enabled (<a href="?automode=false">disable</a>)' : ' Disabled (<a href="?automode=true">enable</a>)';
@@ -144,7 +125,7 @@ include_once_lib( 'carl_util/tidy/tidy.php' );
 	
 if (isset($_POST['do_it_pass']) == false)
 {
-	if (perform_checks() == false)
+	if (perform_checks($auto_mode_enabled) == false)
 	{
 		die_with_message('<p>Please address the identified problems and run this script again.</p>');
 	}
@@ -308,6 +289,33 @@ else
 </body>
 </html>
 <?php
+function get_curl_test_content()
+{
+	return get_head_content() . '</body></html>';
+}
+
+function get_head_content()
+{
+	return 
+"<html>
+<head>
+<title>Reason Setup</title>
+<link rel='stylesheet' href='css/reason_setupgrade/reason_setupgrade.css' type='text/css'>
+<style>
+.error
+{
+color: red;
+}
+.success
+{
+color: green;
+}
+</style>
+</head>
+<body>
+<h1>Reason Setup</h1>";
+}
+
 function admin_user_exists()
 {
 	reason_include_once('function_libraries/admin_actions.php');
@@ -384,7 +392,7 @@ function setup_check_is_windows()
 	else return false;
 }
 
-function perform_checks()
+function perform_checks($auto_mode_enabled)
 {
 	$check_passed = 0;
 	$check_failed = 0;
@@ -407,41 +415,38 @@ function perform_checks()
 	
 	if (curl_check()) $check_passed++;
 	else $check_failed++;
-	
-	if (imagemagick_check()) $check_passed++;
-	else $check_failed++;
-	
+
 	echo '<h3>Performing Directory and File Checks</h3>';
 	echo '<h4>Write checks</h4>';
-	if (data_dir_writable(WEB_PATH, 'WEB_PATH')) $check_passed++;
+	if (data_dir_writable(WEB_PATH, 'WEB_PATH', $auto_mode_enabled)) $check_passed++;
 	else $check_failed++;
 	
-	if (data_dir_writable(REASON_CSV_DIR, 'REASON_CSV_DIR')) $check_passed++;
+	if (data_dir_writable(REASON_CSV_DIR, 'REASON_CSV_DIR', $auto_mode_enabled)) $check_passed++;
 	else $check_failed++;
 	
-	if (data_dir_writable(REASON_LOG_DIR, 'REASON_LOG_DIR')) $check_passed++;
+	if (data_dir_writable(REASON_LOG_DIR, 'REASON_LOG_DIR', $auto_mode_enabled)) $check_passed++;
 	else $check_failed++;
 	
-	if (data_dir_writable(ASSET_PATH, 'ASSET_PATH')) $check_passed++;
+	if (data_dir_writable(ASSET_PATH, 'ASSET_PATH', $auto_mode_enabled)) $check_passed++;
 	else $check_failed++;
 	
-	if (data_dir_writable(PHOTOSTOCK, 'PHOTOSTOCK')) $check_passed++;
+	if (data_dir_writable(PHOTOSTOCK, 'PHOTOSTOCK', $auto_mode_enabled)) $check_passed++;
 	else $check_failed++;
 	
-	if (data_dir_writable(REASON_TEMP_DIR, 'REASON_TEMP_DIR')) $check_passed++;
+	if (data_dir_writable(REASON_TEMP_DIR, 'REASON_TEMP_DIR', $auto_mode_enabled)) $check_passed++;
 	else $check_failed++;
 	
-	if (data_dir_writable(REASON_CACHE_DIR, 'REASON_CACHE_DIR')) $check_passed++;
+	if (data_dir_writable(REASON_CACHE_DIR, 'REASON_CACHE_DIR', $auto_mode_enabled)) $check_passed++;
 	else $check_failed++;
 	
 	// In our default config if this path is not writable then uploads should fail. Probably it would be better to distribute the package with 
 	// the /www/tmp directory being an alias to the file system location of REASON_TEMP_DIR. Until this is done, we are leaving it like this. 
 	// We may want to do something to check the validity of those aliases, such as writing a file then trying to access it via curl. The same 
 	// thing could be done for assets.
-	if (data_dir_writable(rtrim($_SERVER[ 'DOCUMENT_ROOT' ], DIRECTORY_SEPARATOR).WEB_TEMP, 'WEB_TEMP')) $check_passed++;
-	else $check_failed++;
+	//if (data_dir_writable(rtrim($_SERVER[ 'DOCUMENT_ROOT' ], DIRECTORY_SEPARATOR).WEB_TEMP, 'WEB_TEMP', $auto_mode_enabled)) $check_passed++;
+	//else $check_failed++;
 
-	if (data_dir_writable(REASON_INC.'data/geocodes/', 'Geocode data directory')) $check_passed++;
+	if (data_dir_writable(INCLUDE_PATH.'data/geocodes/', 'Geocode data directory', $auto_mode_enabled)) $check_passed++;
 	else $check_failed++;
 	
 	echo '<h4>Read checks</h4>';
@@ -460,22 +465,19 @@ function perform_checks()
 			  A pass here does not necessarily indicate the reason package components are configured and fully functional, but it does mean that the
 			  basic paths defined in reason_package are setup correctly, and that reason can use curl to request files over http.</em></p>';
 	
-	if (check_reason_package_http_base_path()) $check_passed++;
+	if (check_reason_package_http_base_path($auto_mode_enabled)) $check_passed++;
 	else $check_failed++;
 	
-	if (check_thor_accessible_over_http()) $check_passed++;
+	if (check_thor_accessible_over_http($auto_mode_enabled)) $check_passed++;
 	else $check_failed++;
 	
-	if (check_loki_accessible_over_http()) $check_passed++;
+	if (check_loki_accessible_over_http($auto_mode_enabled)) $check_passed++;
 	else $check_failed++;
 	
-	if (check_jquery_accessible_over_http()) $check_passed++;
+	if (check_jquery_accessible_over_http($auto_mode_enabled)) $check_passed++;
 	else $check_failed++;
 	
-	if (check_flvplayer_accessible_over_http()) $check_passed++;
-	else $check_failed++;
-
-	if (check_datepicker_accessible_over_http()) $check_passed++;
+	if (check_datepicker_accessible_over_http($auto_mode_enabled)) $check_passed++;
 	else $check_failed++;
 	
 	echo '<h3>Checking for Apache mod_rewrite support</h3>';	
@@ -491,9 +493,8 @@ function perform_checks()
 	else return false;
 }
 
-function check_reason_package_http_base_path()
+function check_reason_package_http_base_path($auto_mode_enabled)
 {
-	global $auto_mode_enabled;
 	$fixed_str = '';
 	$accessible = check_accessible_over_http(REASON_PACKAGE_HTTP_BASE_PATH . 'colorpicker/README.html', 'Farbtastic');
 	if (!$accessible && $auto_mode_enabled) // lets try to repair this
@@ -520,9 +521,37 @@ function check_reason_package_http_base_path()
 	}
 }
 
-function check_thor_accessible_over_http()
+function check_datepicker_accessible_over_http($auto_mode_enabled)
 {
-	global $auto_mode_enabled;
+	$fixed_str = '';
+	$accessible = check_accessible_over_http(DATE_PICKER_HTTP_PATH . 'index.html', 'frequency decoder');
+	if (!$accessible && $fix_mode_enabled) // lets try to repair this
+	{
+		// if FLVPLAYER_INC is readable
+		if (is_readable(DATE_PICKER_INC) && function_exists('symlink'))
+		{
+			$symlink_loc = str_replace("//", "/", WEB_PATH . rtrim(DATE_PICKER_HTTP_PATH, "/"));
+			if (is_writable(dirname($symlink_loc))) symlink(DATE_PICKER_INC, $symlink_loc);
+		}
+		$accessible = check_accessible_over_http(DATE_PICKER_HTTP_PATH . 'index.html', 'frequency decoder');
+		$fixed_str = ($accessible) ? ' was fixed using fix mode and' : ' could not be fixed using fix mode and';
+	}
+	if ($accessible) return msg('<span class="success">date picker'.$fixed_str.' is accessible over http</span> - check passed', true);
+	else
+	{
+		$path = carl_construct_link(array(''), array(''), DATE_PICKER_HTTP_PATH . 'index.html');
+		$fix_mode_str = ($fix_mode_enabled) 
+				? ' Fix mode may have failed because PHP was unable to create symlinks.'
+				: ' <strong><a href="?fixmode=true">Try fix mode</a> - it will try to create symlinks for you.</strong>';
+		return msg('<span class="error">date picker'.$fixed_str.' is not accessible over http</span>.
+					<p>The URL attempted was ' . $path . '. Check the URL and made sure it exists and is
+					web accessible. Also check the constant DATE_PICKER_HTTP_PATH, which currently is set to '
+					. DATE_PICKER_HTTP_PATH . ' and make sure it correctly references the location of date picker.'.$fix_mode_str.' Consult the install documentation for more details.</p>', false);
+	}
+}
+
+function check_thor_accessible_over_http($auto_mode_enabled)
+{
 	$fixed_str = '';
 	$accessible = check_accessible_over_http(THOR_HTTP_PATH . 'getXML.php', 'tmp_id');
 	if (!$accessible && $auto_mode_enabled) // lets try to repair this
@@ -550,9 +579,8 @@ function check_thor_accessible_over_http()
 	}
 }
 
-function check_loki_accessible_over_http()
+function check_loki_accessible_over_http($auto_mode_enabled)
 {
-	global $auto_mode_enabled;
 	$fixed_str = '';
 	$path = carl_construct_link(array(''), array(''), LOKI_2_HTTP_PATH . 'loki.js');
 	$accessible = check_accessible_over_http($path, 'loki-editor');
@@ -582,9 +610,8 @@ function check_loki_accessible_over_http()
 	}
 }
 
-function check_jquery_accessible_over_http()
+function check_jquery_accessible_over_http($auto_mode_enabled)
 {
-	global $auto_mode_enabled;
 	$fixed_str = '';
 	$accessible = check_accessible_over_http(JQUERY_URL, 'John Resig');
 	if (!$accessible && $auto_mode_enabled) // lets try to repair this
@@ -624,7 +651,7 @@ function check_accessible_over_http($path, $search_string)
 
 function verify_mysql($db_conn_name, $constant_name, $constant_location, $check_for_tables = false) // see if we can connect to mysql using the connection parameters specified in REASON_DB
 {
-	include_once_lib( INCLUDE_PATH . '/core/lib/xml/xmlparser.php' ); // we have verified this exists already
+	include_once_lib( 'xml/xmlparser.php' ); // we have verified this exists already
 	$db_file = DB_CREDENTIALS_FILEPATH; // we have verified this exists
 	$xml = file_get_contents($db_file);
 	if(!empty($xml))
@@ -701,7 +728,7 @@ function tidy_check()
 
 function curl_check()
 {
-	global $curl_test_content;
+	$curl_test_content = get_curl_test_content();
 	$link = carl_construct_link(array('curl_test' => "true"), array(''));
 	$insecure_link = on_secure_page() ? alter_protocol($link,'https','http') : $link;
 	$secure_link = on_secure_page() ? $link : alter_protocol($link,'http', 'https');
@@ -757,6 +784,18 @@ function imagemagick_check()
  */
 function mod_rewrite_check()
 {
+	// so this checks if we can do rewrites ... we no longer want to allow writing in the web directory so this check should fundamentally be different.
+	return true;
+	
+	// if apache module
+	if (in_array('mod_rewrite', apache_get_modules())) return true;
+	elseif (strpos(shell_exec('/usr/local/apache/bin/apachectl -l'), 'mod_rewrite') !== false) return true;
+	else return false;
+
+	//// if CGI
+	//return (
+	
+	
 	$test_string = 'reason_rocks'; // randomize me
 	$dir_name = 'mod_rewrite_check/';
 	$dir_url = $path = carl_construct_link(array(''), array(''), WEB_TEMP.$dir_name);
@@ -799,9 +838,8 @@ function mod_rewrite_check()
 	}
 }
 
-function data_dir_writable($dir, $name)
+function data_dir_writable($dir, $name, $auto_mode_enabled)
 {
-	global $auto_mode_enabled;
 	if (!file_exists($dir) && $auto_mode_enabled)
 	{
 		mkdir($dir, 0775);
@@ -817,7 +855,7 @@ function data_dir_writable($dir, $name)
 function check_directory_readable($dir, $name, $extra = '')
 {
 	if (is_readable($dir)) return msg('<span class="success">'.$name . ' directory is readable</span> - check passed', true);
-	else return msg ('<span class="error">'.$name . ' directory not readable - failed</span>. Make sure ' .$file. ' exists and apache user has read access to it. '.$extra, false);
+	else return msg ('<span class="error">'.$name . ' directory not readable - failed</span>. Make sure ' .$dir. ' exists and apache user has read access to it. '.$extra, false);
 }
 
 function check_file_readable($file, $name, $extra = '')

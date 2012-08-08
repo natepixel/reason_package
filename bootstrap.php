@@ -4,20 +4,31 @@
  *
  * It does the following:
  *
- * - defines INCLUDE_PATH to be the current Directory
+ * - defines INCLUDE_PATH to be the directory that contains this file.
  * - defined include_once_lib and include_once_www
  * - loads the error handler
  *
+ * Lets define some not user customizable things
+ *
+ * @todo define WEB_PATH (absolute web root)
+ *
+ * @todo error handling should be first thing - right now it has to be loaded late due to dependencies
  * @package reason_package
  */
+ini_set("display_errors", "on");
 
 /** 
  * The location of the reason_package folder
  */
 define ('INCLUDE_PATH', dirname(__FILE__) .'/');
 
+//define ('REASON_PACKAGE_DATA', INCLUDE_PATH . 'data/'); // is this necessary?
 /**
- * SETTINGS_INC is deprecated but we keep it here list in case. It would be nice to trigger an error whenever it is used if there was a good way to do that.
+ *
+ */
+ 
+/**
+ * SETTINGS_INC is deprecated (really??) but we keep it here list in case. It would be nice to trigger an error whenever it is used if there was a good way to do that.
  */
 define ('SETTINGS_INC', INCLUDE_PATH . 'core/lib/settings/');
 
@@ -50,7 +61,21 @@ function include_once_lib( $path )
 	}
 	else
 	{
-		trigger_error('File does not exist at ' . $local . ' or ' . $core);
+		if (function_exists('trigger_warning'))
+		{
+			trigger_error('File does not exist at ' . $local . ' or ' . $core);
+			
+		}
+		else trigger_error('File does not exist at ' . $local . ' or ' . $core);
+		foreach(debug_backtrace() as $k=>$v){ 
+        if($v['function'] == "include" || $v['function'] == "include_once" || $v['function'] == "require_once" || $v['function'] == "require"){ 
+            $backtracel .= "#".$k." ".$v['function']."(".$v['args'][0].") called at [".$v['file'].":".$v['line']."]<br />"; 
+        }else{ 
+            $backtracel .= "#".$k." ".$v['function']."() called at [".$v['file'].":".$v['line']."]<br />"; 
+        } 
+    }
+    echo 'bah';
+    echo $backtracel;
 		return false;
 	}
 }
@@ -109,5 +134,4 @@ include_once_lib('settings/package_settings.php');
  * Load the error handler
  */
 include_once_lib('carl_util/error_handler/error_handler.php');
-
 ?>

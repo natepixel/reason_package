@@ -601,7 +601,7 @@ function _carl_util_trigger_error($message, $level, $stack_offset)
 	$stack_offset++; // skip over _trigger_error itself
 	$stack = debug_backtrace();
 	$stack_offset_max = max(array_keys($stack));
-	
+    
 	// make sure our offset exists ... bring it down if not
 	$stack_offset = ($stack_offset > max(array_keys($stack))) ? max(array_keys($stack)) : $stack_offset;
 	
@@ -666,6 +666,8 @@ function trigger_high_error($message, $stack_offset=1)
  */
 function trigger_warning($message, $stack_offset=1)
 {
+	if (defined("WARNING")) echo 'yes it is';
+	else echo 'nope it is not. how can that be?';
 	_carl_util_trigger_error($message, WARNING, $stack_offset);
 }
 
