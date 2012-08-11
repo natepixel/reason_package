@@ -5,6 +5,7 @@
  *
  * @package reason
  */
-	if (ob_get_level() == 0) ob_start();
-		rp_include_once( 'header.php' );
+
+include_once(dirname(__FILE__) . '/../../bootstrap.php');
+include_once_lib('reason_4_compatibility.php');
 ?>

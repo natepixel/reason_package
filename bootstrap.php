@@ -134,4 +134,9 @@ include_once_lib('settings/package_settings.php');
  * Load the error handler
  */
 include_once_lib('carl_util/error_handler/error_handler.php');
+
+/**
+ * Load in reason 4 compatibility lib - defines deprecates functions, throws warnings, modifies include path
+ */
+include_once_lib ('reason_4_compatibility.php');
 ?>

@@ -18,10 +18,17 @@
  *  Ok.  The way this page works has been altered in parts and in order to maximize the efficiency of the caching
  *  mechanism.
  */
- 
-include_once('reason_header.php');
-reason_include_once('classes/page_cache.php' );
+include_once(dirname(__FILE__) . '/../../../bootstrap.php');
+include_once_lib('carl_util/db/db.php');
+include_once_lib('carl_util/cache/object_cache.php');
+include_once_lib('function_libraries/util.php');
+include_once_lib('classes/page_cache.php' );
+include_once_lib('classes/entity.php');
+include_once_lib('settings/reason_settings.php');
+include_once_lib( 'function_libraries/factories.php' );
+include_once_lib( 'function_libraries/reason_session.php' );
 
+connectDB(REASON_DB);
 /**
  * We don't want people to call generate_page.php directly so we check to see if their requested
  * path ends in '.php' and give them an error if it does. Keeps people from fishing around for not

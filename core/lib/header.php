@@ -2,21 +2,11 @@
 /**
  * This file includes a number of core libraries and functions needed by reason
  *
- * It is included by reason_header.php and should not be included by anything else directly
+ * It is deprecated
  *
  * @package reason
  */
-	include_once_lib( 'carl_util/error_handler/error_handler.php' );
-	
-	// the pray() function
-	include_once_lib( 'carl_util/dev/pray.php' );
-	
-	// misc stuff: prettify_string() and unhtmlentities()
-	include_once_lib( 'carl_util/basic/misc.php' );
-	
-	// the prp function
-	include_once_lib( 'carl_util/dev/prp.php' );
-	
+ 
 	// load core db functions - connectDB() and db_query()
 	include_once_lib( 'carl_util/db/db.php' );
 
