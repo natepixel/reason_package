@@ -71,7 +71,9 @@ class ReasonImagesJSON extends ReasonJSON
 	}
 	function _transform_items()
 	{
-		foreach ($this->raw_items as $k => $v)
+		if (empty($this->raw_items))
+			$this->items = Array("null");
+    else foreach ($this->raw_items as $k => $v)
 		{
 			$newArray = array();
 			$newArray['id'] = $v->get_value('id');
