@@ -1,6 +1,7 @@
 <?php
 /**
  * include dependencies
+ * TODO: require authentication.
  */
 $reason_session = false;
 include_once( 'reason_header.php' );
@@ -19,7 +20,7 @@ class ReasonJSON
 	var $items;
 	var $json;
 	var $num;
-	var $offset;
+	var $start;
 
 	/**
 	 * The constructor instantiates an entity and adds some
@@ -45,9 +46,9 @@ class ReasonJSON
 	{
 		$this->num = $num;
 	}
-	function set_offset($offset)
+	function set_start($start)
 	{
-		$this->offset = $offset;
+		$this->start = $start;
 	}
 }
 
@@ -65,9 +66,6 @@ class ReasonImagesJSON extends ReasonJSON
 							  ' OR chunk.content LIKE "%' . addslashes($_REQUEST['q']) . '%"'.
 							  ')');
 		}
-		$this->es->set_num( $this->num );
-		$this->es->set_start( $this->offset);
-		$this->es->set_order( 'entity.last_modified DESC, dated.datetime DESC, entity.name ASC' );
 	}
 	function _transform_items()
 	{
@@ -92,6 +90,9 @@ class ReasonImagesJSON extends ReasonJSON
 	}
 	function run()
 	{
+			$this->es->set_num( $this->num );
+			$this->es->set_start( $this->start);
+			$this->es->set_order( 'entity.last_modified DESC, dated.datetime DESC, entity.name ASC' );
 			$this->_get_items();
 			$this->_transform_items();
 			$this->_build_json();
@@ -106,9 +107,9 @@ if (isset($_GET['type_id']) && isset($_GET['site_id'])) {
 				$reasonImagesJson = new ReasonImagesJSON($type_id, $site_id);
 				// Add the edits for all of the extra fields you might give.
 				$num = !empty($_REQUEST['num']) ? turn_into_int($_REQUEST['num']) : '500';
-				$offset = !empty($_REQUEST['start']) ? turn_into_int($_REQUEST['start']) : '0';
+				$start = !empty($_REQUEST['start']) ? turn_into_int($_REQUEST['start']) : '0';
 				$reasonImagesJson->set_num($num);
-				$reasonImagesJson->set_offset($offset);
+				$reasonImagesJson->set_start($start);
 				print($reasonImagesJson->run());
 		}
 } else
