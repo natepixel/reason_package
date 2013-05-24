@@ -155,7 +155,7 @@ class tiny_mceType extends textareaType
 	var $type = 'tinymce';
 	var $type_valid_args = array('buttons', 'buttons2', 'buttons3', 'status_bar_location', 'formatselect_options', 'content_css', 'init_options');
 	var $status_bar_location = 'none';
-	var $buttons = array('formatselect','bold','italic','hr','blockquote','numlist','bullist','indent','outdent','image','reasonimage','link','unlink','anchor');
+	var $buttons = array('formatselect','bold','italic','hr','blockquote','numlist','bullist','indent','outdent','image','reasonimage','link','unlink','anchor','media','forecolor');
 	var $buttons2 = array();
 	var $buttons3 = array();
 	var $content_css;
@@ -165,7 +165,7 @@ class tiny_mceType extends textareaType
 	var $init_options = array();
 	var $base_init_options = array(
 		'mode' => 'exact',
-		'plugins' => 'image,anchor,link,paste',
+		'plugins' => 'image,anchor,link,paste,reasonimage,media,textcolor',
 		'dialog_type' => 'modal',
 		'theme' => 'modern',
 		'convert_urls' => false,
@@ -213,7 +213,7 @@ class tiny_mceType extends textareaType
 		static $loaded_an_instance;
 		if (!isset($loaded_an_instance))
 		{
-			$js = '<script language="javascript" type="text/javascript" src="'.TINYMCE_HTTP_PATH.'tinymce.min.js"></script>'."\n";
+			$js = '<script language="javascript" type="text/javascript" src="'.TINYMCE_HTTP_PATH.'tinymce.js"></script>'."\n";
 			$loaded_an_instance = true;
 		}
 		return (!empty($js)) ? $js : '';
