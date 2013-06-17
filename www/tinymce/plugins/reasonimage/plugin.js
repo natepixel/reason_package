@@ -45,12 +45,13 @@ reasonPlugins = function(selector, poo, type, win) {
    */
   reasonPlugins.jsonURL = function (offset, chunk_size) { 
     var self = this;
+    var site_id = tinymce.activeEditor.settings.reason_site_id;
     if (self.type === "image")
       typeId = 243;
     else if (self.type === "link")
       typeId = "???";
 
-    return '/reason/displayers/generate_json.php?site_id=240618&type_id=243&num=' + chunk_size + '&start=' + offset + '&';
+    return '/reason/displayers/generate_json.php?site_id=' + site_id + '&type_id=243&num=' + chunk_size + '&start=' + offset + '&';
   };
 
   /**

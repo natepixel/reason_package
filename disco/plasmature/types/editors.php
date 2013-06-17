@@ -153,7 +153,7 @@ class loki2Type extends defaultType
 class tiny_mceType extends textareaType
 {
 	var $type = 'tinymce';
-	var $type_valid_args = array('buttons', 'buttons2', 'buttons3', 'status_bar_location', 'formatselect_options', 'content_css', 'init_options');
+	var $type_valid_args = array('buttons', 'buttons2', 'buttons3', 'reason_page_id', 'reason_site_id', 'status_bar_location', 'formatselect_options', 'content_css', 'init_options');
 	var $status_bar_location = 'none';
 	var $buttons = array('formatselect','bold','italic','hr','blockquote','numlist','bullist','indent','outdent','image','reasonimage','link','unlink','anchor','media','forecolor');
 	var $buttons2 = array();
@@ -194,6 +194,11 @@ class tiny_mceType extends textareaType
 		// make me conditional on formatselect being in the buttons array and formatselect_options being set.
 		//$options['formats'] = "{'p', 'pre', 'h1'}"; //implode(",",$this->formatselect_options);
     $options['elements'] = $this->name;
+    if (isset($this->reason_page_id))
+      $options['reason_page_id'] = $this->reason_page_id;
+    if (isset($this->reason_site_id))
+      $options['reason_site_id'] = $this->reason_site_id;
+
 		if ($this->get_class_var('content_css')) $options['content_css'] = $this->get_class_var('content_css');
 		
 		// Merge in custom options
