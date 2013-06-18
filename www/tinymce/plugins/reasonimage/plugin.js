@@ -83,6 +83,7 @@ reasonPlugins = function(selector, poo, type, win) {
    * need to do in order to get the plugin up and running.
    */
   reasonPlugins.reasonImage = function(selector) {
+    this.chunk_size = 4;
     this.panel = reasonPlugins.getPanel(selector);
     this.json_url = reasonPlugins.jsonURL;
     this.filePickerControl = this.panel.find("*").filter(function(item) { if (item._id === selector.slice(0,-4)) return item })[0].parent();
@@ -144,15 +145,19 @@ reasonPlugins = function(selector, poo, type, win) {
       e.preventDefault();
     };
 
+    this.prevButton.onclick = function(e) {
+      self.renderReasonImages(self.page - 1 || 1);
+    };
+
     this.nextButton.onclick = function(e) {
-      this.renderReasonImages(this.page + 1);
+      self.renderReasonImages(self.page + 1);
     };
   };
 
   reasonPlugins.reasonImage.prototype.renderReasonImages = function (page) {
     // Render UI bits
     // Render each item
-    page = !page ? 1 : page;
+    var page = !page ? 1 : page;
     this.page = page;
     this.fetch_images(page, function() {
       this.display_images(page);
