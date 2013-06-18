@@ -139,19 +139,19 @@ reasonPlugins = function(selector, poo, type, win) {
     // this.SearchBox = this.UI.getElementsByClassName('searchBox')[0];
 
     // Maybe I should move these bindings elsewhere for better coherence?
-    this.CancelButton.onclick = function(e) {
+    tinymce.DOM.bind(this.CancelButton, 'click', function(e) {
       self.reasonImageControls.remove();
       self.filePickerControl.show();
       e.preventDefault();
-    };
+    });
 
-    this.prevButton.onclick = function(e) {
+    tinymce.DOM.bind(this.prevButton, 'click', function(e) {
       self.renderReasonImages(self.page - 1 || 1);
-    };
+    });
 
-    this.nextButton.onclick = function(e) {
+    tinymce.DOM.bind(this.nextButton, 'click', function(e) {
       self.renderReasonImages(self.page + 1);
-    };
+    });
   };
 
   reasonPlugins.reasonImage.prototype.renderReasonImages = function (page) {
