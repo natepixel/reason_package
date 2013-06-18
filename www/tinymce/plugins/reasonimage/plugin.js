@@ -1,11 +1,9 @@
 /**
- * plugin.js
+ * ReasonImage and ReasonLink plugins
  *
- * Copyright, Moxiecode Systems AB
- * Released under LGPL License.
- *
- * License: http://www.tinymce.com/license
- * Contributing: http://www.tinymce.com/contributing
+ * These plugins integrate tinyMCE into the Reason CMS.
+ * ReasonImage allows a user to insert an image that belongs
+ * to a Reason Site
  */
 
 /*global tinymce:true */
@@ -43,7 +41,7 @@ reasonPlugins = function(selector, poo, type, win) {
    * For example, jsonURL(15, 6) should return a URL for the sixteenth
    * to the twenty-second items of the list.
    */
-  reasonPlugins.jsonURL = function (offset, chunk_size) { 
+  reasonPlugins.jsonURL = function (offset, chunk_size) {
     var self = this;
     var site_id = tinymce.activeEditor.settings.reason_site_id;
     if (self.type === "image")
@@ -112,7 +110,7 @@ reasonPlugins = function(selector, poo, type, win) {
   reasonPlugins.reasonImage.prototype.insertReasonUI = function() {
     var holderDiv;
     this.UI = this.panel.getEl();
-    
+
     // I should probably be using documentFragments here. Eh.
     holderDiv = document.createElement("div");
     holderDiv.innerHTML = '<div class="reasonImage"><button class="mce-btn prevImagePage">Previous</button><button class="mce-btn nextImagePage">Next</button><div class="items_chunk"> </div><a class="cancelReasonImage mce-btn mce-widget" href="">Cancel</a></div>';
@@ -173,7 +171,7 @@ reasonPlugins = function(selector, poo, type, win) {
   };
 
   reasonPlugins.reasonImage.prototype.fetch_images = function (page, callback) {
-    // If cached... 
+    // If cached...
     if (this.items && typeof this.items[page] !== 'undefined') {
       callback.call(this);
       return;
@@ -234,8 +232,8 @@ reasonPlugins = function(selector, poo, type, win) {
   ReasonImageDialogItem.prototype.render_item = function () {
     size = 'thumbnail';
     description = this.escapeHtml(this.description);
-    return '<img ' 
-    + 'src="' + this.URLs[size] 
+    return '<img '
+    + 'src="' + this.URLs[size]
     + '" alt="' + description + '"></img>';
   }
 
