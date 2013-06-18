@@ -80,7 +80,7 @@ reasonPlugins = function(selector, poo, type, win) {
   reasonPlugins.reasonImage = function(selector) {
     this.panel = reasonPlugins.getPanel(selector);
     this.json_url = reasonPlugins.jsonURL;
-    this.filePickerControlSelector = selector;
+    this.filePickerControl = this.panel.find("*").filter(function(item) { if (item._id === selector.slice(0,-4)) return item })[0].parent();
     this.items = [];
 
     this.hideTinymceControls();
@@ -98,9 +98,7 @@ reasonPlugins = function(selector, poo, type, win) {
 
 
   reasonPlugins.reasonImage.prototype.hideTinymceControls = function() {
-    var self=this;
-    self.filePickerControl = this.panel.find("*").filter(function(item) { if (item._id === self.filePickerControlSelector.slice(0,-4)) return item })[0].parent();
-    self.filePickerControl.hide();
+    this.filePickerControl.hide();
   }
 
 
