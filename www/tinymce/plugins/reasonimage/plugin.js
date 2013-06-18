@@ -23,9 +23,6 @@
   **/
 reasonPlugins = function(selector, poo, type, win) {
   var self = this, panel, currentReasonPlugin;
-  console.log("The call has been made.");
-  console.log(selector,poo,type,win);
-
   self.panel = reasonPlugins.getPanel(selector);
 
   if (type === "image") {
@@ -51,12 +48,20 @@ reasonPlugins = function(selector, poo, type, win) {
 
     return '/reason/displayers/generate_json.php?site_id=' + site_id + '&type_id=243&num=' + chunk_size + '&start=' + offset + '&';
   };
+  /**
+   * After a plugin button has been pressed and the window has been shown, hit the filepicker
+   * button. Maybe this should be replaced with something like execCallback?
+   **/
+  reasonPlugins.openBrowser = function() {
+//    tinymce.activeEditor.
+  }
 
   /**
    * Gets a reference to tinyMCE's representation of the panel that holds the filePicker.
    * This code is pretty fragile, but could be improved to be more robust.
    * The fundamental consideration re: fragility is: "What is my containing element?" or,
    * more specifically, "Where do I want to put the ReasonPlugin controls?"
+   * @param string selector the selector for the file browser control
    **/
   reasonPlugins.getPanel = function (selector) {
     var itemID = selector.slice(0,-4), windowItems, filePickerField, panel;
@@ -151,7 +156,6 @@ reasonPlugins = function(selector, poo, type, win) {
     this.page = page;
     this.fetch_images(page, function() {
       this.display_images(page);
-      console.log(this.imagesListBox);
     });
 
   };
@@ -165,7 +169,6 @@ reasonPlugins = function(selector, poo, type, win) {
     }
 
     this.imagesListBox.innerHTML = imagesHTML;
-    console.log(this.imagesListBox.innerHTML)
   };
 
   reasonPlugins.reasonImage.prototype.fetch_images = function (page, callback) {
