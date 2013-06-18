@@ -155,7 +155,7 @@ class tiny_mceType extends textareaType
 	var $type = 'tinymce';
 	var $type_valid_args = array('buttons', 'buttons2', 'buttons3', 'reason_page_id', 'reason_site_id', 'status_bar_location', 'formatselect_options', 'content_css', 'init_options');
 	var $status_bar_location = 'none';
-	var $buttons = array('formatselect','bold','italic','hr','blockquote','numlist','bullist','indent','outdent','image','reasonimage','link','unlink','anchor','media','forecolor');
+	var $buttons = array('formatselect','bold','italic','hr','blockquote','numlist','bullist','indent','outdent','reasonimage','link','unlink','anchor','media','forecolor');
 	var $buttons2 = array();
 	var $buttons3 = array();
 	var $content_css;
