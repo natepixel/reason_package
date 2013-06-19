@@ -228,14 +228,14 @@ reasonPlugins = function(linkSelector, targetPanelSelector, type) {
   ReasonImageDialogItem.prototype.render_item = function () {
     size = 'thumbnail';
     description = this.escapeHtml(this.description);
-    return '<img '
-    + 'src="' + this.URLs[size]
-    + '" alt="' + description + '"></img>';
-  }
+    return '<img ' +
+      'src="' + this.URLs[size] +
+      '" alt="' + description + '"></img>';
+  };
 
   ReasonImageDialogItem.prototype.display_item = function () {
-    return '<a class="image_item">' + this.render_item() + '<div class="description">' + this.escapeHtml(this.name) + '</div></a>';
-  }
+    return '<a id="reasonimage_' + this.id + '" class="image_item">' + this.render_item() + '<span class="description">' + this.escapeHtml(this.name) + '</span></a>';
+  };
 
 
   reasonPlugins.reasonLink = function() {};
@@ -333,7 +333,6 @@ tinymce.PluginManager.add('reasonimage', function(editor, url) {
           }
         }
       });
-
         editor.settings.file_browser_callback = old_file_browser_callback;
 	}
 
