@@ -20,13 +20,16 @@
   * TODO: We need to account for having multiple editors per page. I think that maybe
   *       we should cache a reference to the current editor's plugin and check if activeEditor
   *       is the same as the last time reasonPlugins was called?
+  *
+  * @param String linkSelector The item to which the the picker will be bound
+  * @param String targetPanelSelector The item to which the the picker will be bound
+  * @param String type 'image' or 'link'; determines which plugin to use
   **/
-reasonPlugins = function(selector, poo, type, win) {
-  var self = this, panel, currentReasonPlugin;
-  self.panel = reasonPlugins.getPanel(selector);
+reasonPlugins = function(linkSelector, targetPanelSelector, type) {
+  var currentReasonPlugin;
 
   if (type === "image") {
-    currentReasonPlugin = new reasonPlugins.reasonImage(selector);
+    currentReasonPlugin = new reasonPlugins.reasonImage(linkSelector, targetPanelSelector);
     //TODO: caching here?
   }
   else if (type === "link")
@@ -48,13 +51,10 @@ reasonPlugins = function(selector, poo, type, win) {
 
     return '/reason/displayers/generate_json.php?site_id=' + site_id + '&type_id=243&num=' + chunk_size + '&start=' + offset + '&';
   };
-  /**
-   * After a plugin button has been pressed and the window has been shown, hit the filepicker
-   * button. Maybe this should be replaced with something like execCallback?
-   **/
-  reasonPlugins.openBrowser = function() {
-//    tinymce.activeEditor.
-  };
+
+  reasonPlugins.getControl = function (selector) {
+    return tinymce.activeEditor.windowManager.windows[0].find('#'+selector)[0];
+  }
 
   /**
    * Gets a reference to tinyMCE's representation of the panel that holds the filePicker.
@@ -63,18 +63,9 @@ reasonPlugins = function(selector, poo, type, win) {
    * more specifically, "Where do I want to put the ReasonPlugin controls?"
    * @param string selector the selector for the file browser control
    **/
-  reasonPlugins.getPanel = function (selector) {
-    var itemID = selector.slice(0,-4), windowItems, filePickerField, panel;
-
+  reasonPlugins.getPanel = function (inputControl) {
     // TODO: We can keep going up until we find a parent of type panel to make this a little more robust.
-    windowItems = tinymce.activeEditor.windowManager.windows[0].items()[0].find("*");
-    filePickerField = windowItems.filter(function(item) {
-        if (item._id === itemID)
-          return item;
-    });
-
-    panel = filePickerField.parent().parent();
-    return panel;
+    return inputControl.parent().parent();
   };
 
 
@@ -82,14 +73,13 @@ reasonPlugins = function(selector, poo, type, win) {
    * Dispatch function. Gets a reference to the panel, and does everything we
    * need to do in order to get the plugin up and running.
    */
-  reasonPlugins.reasonImage = function(selector) {
+  reasonPlugins.reasonImage = function(linkSelector, placeholderSelector) {
     this.chunk_size = 4;
-    this.panel = reasonPlugins.getPanel(selector);
+    this.inputControl = reasonPlugins.getControl(linkSelector);
+    this.targetPanel = reasonPlugins.getControl(placeholderSelector);
     this.json_url = reasonPlugins.jsonURL;
-    this.filePickerControl = this.panel.find("*").filter(function(item) { if (item._id === selector.slice(0,-4)) return item; })[0].parent();
     this.items = [];
 
-    this.hideTinymceControls();
     this.insertReasonUI();
     this.bindReasonUI();
     this.renderReasonImages();
@@ -113,11 +103,11 @@ reasonPlugins = function(selector, poo, type, win) {
    **/
   reasonPlugins.reasonImage.prototype.insertReasonUI = function() {
     var holderDiv;
-    this.UI = this.panel.getEl();
+    this.UI = this.targetPanel.getEl();
 
     // I should probably be using documentFragments here. Eh.
     holderDiv = document.createElement("div");
-    holderDiv.innerHTML = '<div class="reasonImage"><button class="mce-btn prevImagePage" type="button">Previous</button><button class="mce-btn nextImagePage">Next</button><div class="items_chunk"> </div><a class="cancelReasonImage mce-btn mce-widget" href="">Cancel</a></div>';
+    holderDiv.innerHTML = '<div class="reasonImage"><button class="mce-btn prevImagePage" type="button">Previous</button><button class="mce-btn nextImagePage">Next</button><div class="items_chunk"> </div></div>';
 
     this.UI.insertBefore(holderDiv.firstChild, this.UI.firstChild);
 
@@ -139,10 +129,10 @@ reasonPlugins = function(selector, poo, type, win) {
     // this.SearchBox = this.UI.getElementsByClassName('searchBox')[0];
 
     // Maybe I should move these bindings elsewhere for better coherence?
-    tinymce.DOM.bind(this.CancelButton, 'click', function(e) {
-      self.reasonImageControls.remove();
-      self.filePickerControl.show();
-      e.preventDefault();
+    tinymce.DOM.bind(this.imagesListBox, 'click', function(e) {
+      if (e.originalTarget.nodeName == 'IMG' || e.originalTarget.nodeName == 'div') {
+        self.selectImage(e.originalTarget);
+      }
     });
 
     tinymce.DOM.bind(this.prevButton, 'click', function(e) {
@@ -157,9 +147,8 @@ reasonPlugins = function(selector, poo, type, win) {
   reasonPlugins.reasonImage.prototype.selectImage = function (imageNode) {
     // Some stuff happens.
     console.log(imageNode);
-    console.log(self.filePickerControl);
-    console.log(self.filePickerControl.value);
-    self.filePickerControl.value("http://bukk.it/business.gif");
+    console.log(this.inputControl.getEl());
+    this.inputControl.value(imageNode.src);
   };
 
 
@@ -287,17 +276,16 @@ tinymce.PluginManager.add('reasonimage', function(editor, url) {
 
     win = editor.windowManager.open({
         title: 'Add an image',
-//        width: "700",
-//        height: "700",
         body: [
           // Add from Reason
           {
           title: "from reason",
+          name: "reasonImagePanel",
           type: "form",
+          //layout: "flex",
           minWidth: "700",
           minHeight: "500",
           items: [
-            {type: 'filepicker', filetype: 'image', name: 'src', label: 'Image File'},
             {name: 'text', type: 'textbox', size: 40, label: 'Text to display'},
             {name: 'size', type: 'listbox', label: "Size", values: [
               {text: 'Thumbnail', value: 'thumb'},
@@ -317,7 +305,7 @@ tinymce.PluginManager.add('reasonimage', function(editor, url) {
           items: [
             {
             name: 'src',
-            type: 'filepicker',
+            type: 'textbox',
             filetype: 'image',
             size: 40,
             autofocus: true,
@@ -339,6 +327,11 @@ tinymce.PluginManager.add('reasonimage', function(editor, url) {
 
         ],
         bodyType: 'tabpanel',
+        onPostRender: function(e) {
+          control_to_bind = 'src';
+          target_panel = 'reasonImagePanel';
+          reasonPlugins(control_to_bind, target_panel,  'image', e);
+        },
         onSubmit: function(e) {
           console.log(e);
 
