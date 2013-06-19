@@ -83,19 +83,8 @@ reasonPlugins = function(linkSelector, targetPanelSelector, type) {
     this.insertReasonUI();
     this.bindReasonUI();
     this.renderReasonImages();
-    this.linkReasonToTinymce();
   };
 
-  /**
-   * Links reason controls (selecting an image, writing alt text) to hidden
-   * tinyMCE elements.
-   */
-  reasonPlugins.reasonImage.prototype.linkReasonToTinymce = function() {};
-
-
-  reasonPlugins.reasonImage.prototype.hideTinymceControls = function() {
-    this.filePickerControl.hide();
-  };
 
 
   /**
@@ -144,10 +133,12 @@ reasonPlugins = function(linkSelector, targetPanelSelector, type) {
     });
   };
 
+  /**
+   * Links reason controls (selecting an image, writing alt text) to hidden
+   * tinyMCE elements.
+   * TODO: add alt tag things.
+   */
   reasonPlugins.reasonImage.prototype.selectImage = function (imageNode) {
-    // Some stuff happens.
-    console.log(imageNode);
-    console.log(this.inputControl.getEl());
     this.inputControl.value(imageNode.src);
   };
 
