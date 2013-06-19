@@ -31,7 +31,7 @@ reasonPlugins = function(selector, poo, type, win) {
   }
   else if (type === "link")
     currentReasonPlugin = '';
-}
+};
 
   /**
    * jsonURL handles url and query string building for json requests.
@@ -54,7 +54,7 @@ reasonPlugins = function(selector, poo, type, win) {
    **/
   reasonPlugins.openBrowser = function() {
 //    tinymce.activeEditor.
-  }
+  };
 
   /**
    * Gets a reference to tinyMCE's representation of the panel that holds the filePicker.
@@ -86,7 +86,7 @@ reasonPlugins = function(selector, poo, type, win) {
     this.chunk_size = 4;
     this.panel = reasonPlugins.getPanel(selector);
     this.json_url = reasonPlugins.jsonURL;
-    this.filePickerControl = this.panel.find("*").filter(function(item) { if (item._id === selector.slice(0,-4)) return item })[0].parent();
+    this.filePickerControl = this.panel.find("*").filter(function(item) { if (item._id === selector.slice(0,-4)) return item; })[0].parent();
     this.items = [];
 
     this.hideTinymceControls();
@@ -105,7 +105,7 @@ reasonPlugins = function(selector, poo, type, win) {
 
   reasonPlugins.reasonImage.prototype.hideTinymceControls = function() {
     this.filePickerControl.hide();
-  }
+  };
 
 
   /**
@@ -117,11 +117,11 @@ reasonPlugins = function(selector, poo, type, win) {
 
     // I should probably be using documentFragments here. Eh.
     holderDiv = document.createElement("div");
-    holderDiv.innerHTML = '<div class="reasonImage"><button class="mce-btn prevImagePage">Previous</button><button class="mce-btn nextImagePage">Next</button><div class="items_chunk"> </div><a class="cancelReasonImage mce-btn mce-widget" href="">Cancel</a></div>';
+    holderDiv.innerHTML = '<div class="reasonImage"><button class="mce-btn prevImagePage" type="button">Previous</button><button class="mce-btn nextImagePage">Next</button><div class="items_chunk"> </div><a class="cancelReasonImage mce-btn mce-widget" href="">Cancel</a></div>';
 
     this.UI.insertBefore(holderDiv.firstChild, this.UI.firstChild);
 
-  }
+  };
 
   /**
    * Binds various controls like cancel, next page, and search to their 
@@ -154,10 +154,20 @@ reasonPlugins = function(selector, poo, type, win) {
     });
   };
 
+  reasonPlugins.reasonImage.prototype.selectImage = function (imageNode) {
+    // Some stuff happens.
+    console.log(imageNode);
+    console.log(self.filePickerControl);
+    console.log(self.filePickerControl.value);
+    self.filePickerControl.value("http://bukk.it/business.gif");
+  };
+
+
+  // TODO: Right now you can click past the last page and some weirdness happens.
   reasonPlugins.reasonImage.prototype.renderReasonImages = function (page) {
     // Render UI bits
     // Render each item
-    var page = !page ? 1 : page;
+    page = !page ? 1 : page;
     this.page = page;
     this.fetch_images(page, function() {
       this.display_images(page);
@@ -168,7 +178,7 @@ reasonPlugins = function(selector, poo, type, win) {
   reasonPlugins.reasonImage.prototype.display_images = function (page) {
     var imagesHTML = "";
 
-    for (i in this.items[page]) {
+    for (var i in this.items[page]) {
       i = this.items[page][i];
       imagesHTML += i.display_item();
     }
@@ -197,7 +207,7 @@ reasonPlugins = function(selector, poo, type, win) {
       var parse_images = function(response) {
         var json_objs = JSON.parse(response);
         var items_to_add = [];
-        for (i in json_objs) {
+        for (var i in json_objs) {
           item = new ReasonImageDialogItem();
           item.name = json_objs[i].name;
           item.id = json_objs[i].id;
@@ -213,7 +223,7 @@ reasonPlugins = function(selector, poo, type, win) {
       tinymce.util.XHR.send({
         "url": url,
         "success": parse_images,
-        "success_scope": this,
+        "success_scope": this
       });
   };
 
@@ -226,7 +236,7 @@ reasonPlugins = function(selector, poo, type, win) {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
-  }
+  };
 
   ReasonImageDialogItem.prototype.URLs = {
     thumbnail: '',
@@ -269,7 +279,7 @@ tinymce.PluginManager.add('reasonimage', function(editor, url) {
 		if (imgElm.nodeName == "IMG" && !imgElm.getAttribute('data-mce-object')) {
 			data = {
 				src: dom.getAttrib(imgElm, 'src'),
-				alt: dom.getAttrib(imgElm, 'alt'),
+				alt: dom.getAttrib(imgElm, 'alt')
 			};
 		} else {
 			imgElm = null;
@@ -287,17 +297,17 @@ tinymce.PluginManager.add('reasonimage', function(editor, url) {
           minWidth: "700",
           minHeight: "500",
           items: [
-            {type: 'filepicker', filetype: 'image', name: 'moo', label: 'Image File'},
+            {type: 'filepicker', filetype: 'image', name: 'src', label: 'Image File'},
             {name: 'text', type: 'textbox', size: 40, label: 'Text to display'},
             {name: 'size', type: 'listbox', label: "Size", values: [
               {text: 'Thumbnail', value: 'thumb'},
               {text: 'Full', value: 'full'}
-            ]},
+            ]}
           ],
           // You can also pass a function and have it executed, but you need to change
           // the type to "panel," I believe. 
           // html: somefunction,
-          onchange: function(e) {console.log(!!e.target? e.target.value: e)}
+          onchange: function(e) {console.log(!!e.target? e.target.value: e);}
         },
 
           // Add from the Web
@@ -306,18 +316,18 @@ tinymce.PluginManager.add('reasonimage', function(editor, url) {
           type: "form",
           items: [
             {
-            name: 'href',
+            name: 'src',
             type: 'filepicker',
             filetype: 'image',
             size: 40,
             autofocus: true,
-            label: 'URL',
+            label: 'URL'
           },
           {name: 'text', type: 'textbox', size: 40, label: 'Text to display'},
           {name: 'size', type: 'listbox', label: "Size", values: [
             {text: 'Thumbnail', value: 'thumb'},
             {text: 'Full', value: 'full'}
-          ]},
+          ]}
           // TODO: This isn't implemented in tinymce yet. When it is... !
           //{ title: "Size", type: "radiogroup", items: [
             //{type: 'radio', text: 'Thumbnail', value: 'poooo', tooltip: "Image will display as a thumbnail"},
@@ -329,7 +339,7 @@ tinymce.PluginManager.add('reasonimage', function(editor, url) {
 
         ],
         bodyType: 'tabpanel',
-        onSubmit: function(e) { 
+        onSubmit: function(e) {
           console.log(e);
 
           if (imgElm) {
