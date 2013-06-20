@@ -324,7 +324,7 @@ tinymce.PluginManager.add('reasonimage', function(editor, url) {
           reasonPlugins(control_to_bind, target_panel,  'image', e);
         },
         onSubmit: function(e) {
-          console.log(e);
+          var data = win.toJSON();
 
           if (imgElm) {
             dom.setAttribs(imgElm, data);
