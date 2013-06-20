@@ -119,8 +119,9 @@ reasonPlugins = function(linkSelector, targetPanelSelector, type) {
 
     // Maybe I should move these bindings elsewhere for better coherence?
     tinymce.DOM.bind(this.imagesListBox, 'click', function(e) {
-      if (e.originalTarget.nodeName == 'IMG' || e.originalTarget.nodeName == 'div') {
-        self.selectImage(e.originalTarget);
+      var target = e.target || window.event.srcElement;
+      if (target.nodeName == 'IMG' || target.nodeName == 'div') {
+        self.selectImage(target);
       }
     });
 
