@@ -49,7 +49,7 @@ reasonPlugins = function(linkSelector, targetPanelSelector, type) {
     else if (self.type === "link")
       typeId = "???";
 
-    return '/reason/displayers/generate_json.php?site_id=' + site_id + '&type_id=243&num=' + chunk_size + '&start=' + offset + '&';
+    return '/reason/displayers/generate_json.php?site_id=' + site_id + '&type=image&num=' + chunk_size + '&start=' + offset + '&';
   };
 
   reasonPlugins.getControl = function (selector) {

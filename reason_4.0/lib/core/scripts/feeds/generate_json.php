@@ -100,11 +100,11 @@ class ReasonImagesJSON extends ReasonJSON
 	}
 }
 
-if (isset($_GET['type_id']) && isset($_GET['site_id'])) {
-		$type_id = turn_into_int($_GET['type_id']);
+if (isset($_GET['type']) && isset($_GET['site_id'])) {
+		$type = turn_into_string($_GET['type']);
 		$site_id = turn_into_int($_GET['site_id']);
-		if ($type_id == id_of('image')) {
-				$reasonImagesJson = new ReasonImagesJSON($type_id, $site_id);
+		if (id_of($type) == id_of('image')) {
+				$reasonImagesJson = new ReasonImagesJSON(id_of($type), $site_id);
 				// Add the edits for all of the extra fields you might give.
 				$num = !empty($_REQUEST['num']) ? turn_into_int($_REQUEST['num']) : '500';
 				$start = !empty($_REQUEST['start']) ? turn_into_int($_REQUEST['start']) : '0';
