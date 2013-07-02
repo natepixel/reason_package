@@ -184,6 +184,7 @@ class ReasonImagesJSON extends ReasonJSON
 			$newArray['name'] = $v->get_value('name');
 			$newArray['description'] = $v->get_value('description');
 			$newArray['pubDate'] = $v->get_value('creation_date');
+      $newArray['lastMod'] = $v->get_value('last_modified');
 			$newArray['link'] = $this->make_image_link($newArray['id'], 'standard');
 			$newArray['thumbnail'] = $this->make_image_link($newArray['id'], 'thumbnail');
       $newArray['content'] = $v->get_value('content');
