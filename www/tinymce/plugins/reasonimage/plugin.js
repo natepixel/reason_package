@@ -150,9 +150,13 @@ reasonPlugins = function(linkSelector, targetPanelSelector, type) {
     // Render each item
     page = !page ? 1 : page;
     this.page = page;
-    this.fetch_images(page, function() {
+    if (typeof this.items[page] !== 'undefined') {
       this.display_images(page);
-    });
+    } else {
+      this.fetch_images(function() {
+        this.display_images(page);
+      });
+    }
 
   };
 
@@ -168,11 +172,6 @@ reasonPlugins = function(linkSelector, targetPanelSelector, type) {
   };
 
   reasonPlugins.reasonImage.prototype.fetch_images = function (page, callback) {
-    // If cached...
-    if (this.items && typeof this.items[page] !== 'undefined') {
-      callback.call(this);
-      return;
-    }
 
     if (!this.json_url)
       throw "You need to set a URL for the dialog to fetch JSON from.";
