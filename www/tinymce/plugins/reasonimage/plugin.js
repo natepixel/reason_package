@@ -49,7 +49,7 @@ reasonPlugins = function(linkSelector, targetPanelSelector, type) {
     else if (self.type === "link")
       typeId = "???";
 
-    return '/reason/displayers/generate_json.php?site_id=' + site_id + '&type=image&num=' + chunk_size + '&start=' + offset + '&';
+    return '/reason/displayers/generate_json.php?site_id=' + site_id + '&type=image&num=' + chunk_size + '&offset=' + offset + '&';
   };
 
   reasonPlugins.getControl = function (selector) {
@@ -153,7 +153,7 @@ reasonPlugins = function(linkSelector, targetPanelSelector, type) {
     if (typeof this.items[page] !== 'undefined') {
       this.display_images(page);
     } else {
-      this.fetch_images(function() {
+      this.fetch_images(page, function() {
         this.display_images(page);
       });
     }
@@ -171,6 +171,25 @@ reasonPlugins = function(linkSelector, targetPanelSelector, type) {
     this.imagesListBox.innerHTML = imagesHTML;
   };
 
+  reasonPlugins.reasonImage.prototype.parse_images = function(response, page) {
+    var parsed_response = JSON.parse(response), response_items = parsed_response['items'];
+    var items_to_add = [];
+
+    this.totalItems = parsed_response['count'];
+
+    for (var i in response_items) {
+      item = new ReasonImageDialogItem();
+      item.name = response_items[i].name;
+      item.id = response_items[i].id;
+      item.description = response_items[i].description;
+      item.pubDate = response_items[i].pubDate;
+      item.lastMod = response_items[i].lastMod;
+      item.URLs = {'thumbnail': response_items[i].thumbnail, 'full': response_items[i].link};
+      items_to_add.push(item);
+    }
+    this.items[page] = items_to_add;
+  };
+
   reasonPlugins.reasonImage.prototype.fetch_images = function (page, callback) {
 
     if (!this.json_url)
@@ -184,25 +203,14 @@ reasonPlugins = function(linkSelector, targetPanelSelector, type) {
       } else
         var url = this.json_url;
 
-      var parse_images = function(response) {
-        var json_objs = JSON.parse(response);
-        var items_to_add = [];
-        for (var i in json_objs) {
-          item = new ReasonImageDialogItem();
-          item.name = json_objs[i].name;
-          item.id = json_objs[i].id;
-          item.description = json_objs[i].description;
-          item.pubDate = json_objs[i].pubDate;
-          item.URLs = {'thumbnail': json_objs[i].thumbnail, 'full': json_objs[i].link};
-          items_to_add.push(item);
-        }
-        this.items[page] = items_to_add;
-        callback.call(this);
-      };
-
       tinymce.util.XHR.send({
         "url": url,
-        "success": parse_images,
+        "success": function(response) {
+          this.parse_images(response, page);
+          callback.call(this);
+          if (page+1 <= this.totalItems/this.chunk_size)
+            this.fetch_images(page+1, function() {});
+        },
         "success_scope": this
       });
   };

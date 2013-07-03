@@ -127,7 +127,6 @@ class ReasonJSON
 			return $this->_num;
 		else {
 			$this->_num = $num;
-			$this->es->set_num($num);
 		}
 	}
 	function offset($offset = NULL)
