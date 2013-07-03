@@ -68,6 +68,15 @@ reasonPlugins = function(linkSelector, targetPanelSelector, type) {
     return inputControl.parent().parent();
   };
 
+  // From SO: http://stackoverflow.com/questions/1909441/jquery-keyup-delay
+  reasonPlugins.delay = (function(){
+    var timer = 0;
+    return function(callback, ms){
+      clearTimeout (timer);
+      timer = setTimeout(callback, ms);
+    };
+  })();
+
 
   /** 
    * Dispatch function. Gets a reference to the panel, and does everything we
@@ -96,7 +105,9 @@ reasonPlugins = function(linkSelector, targetPanelSelector, type) {
 
     // I should probably be using documentFragments here. Eh.
     holderDiv = document.createElement("div");
-    holderDiv.innerHTML = '<div class="reasonImage"><button class="mce-btn prevImagePage" type="button">Previous</button><button class="mce-btn nextImagePage">Next</button><div class="items_chunk"> </div></div>';
+    // TODO this makes me incredibly sad.
+    var search = '<div style="margin-left: 20px; margin-top: 20px; width: 660px; height: 30px;" class="mce-container-body mce-abs-layout"><div id="mce_51-absend" class="mce-abs-end"></div><label style="line-height: 18px; left: 0px; top: 6px; width: 122px; height: 18px;" id="mce_52" class="mce-widget mce-label mce-first mce-abs-layout-item">Search:</label><input style="left: 122px; top: 0px; width: 528px; height: 28px;" id="searchyThing" class="reasonImageSearch mce-textbox mce-last mce-abs-layout-item" value="" hidefocus="true" size="40"></div>';
+    holderDiv.innerHTML = '<div class="reasonImage">' + search + '<button class="mce-btn prevImagePage" type="button">Previous</button><button class="mce-btn nextImagePage">Next</button><div class="items_chunk"> </div></div>';
 
     this.UI.insertBefore(holderDiv.firstChild, this.UI.firstChild);
 
@@ -114,8 +125,7 @@ reasonPlugins = function(linkSelector, targetPanelSelector, type) {
     this.CancelButton = this.UI.getElementsByClassName('cancelReasonImage')[0];
     this.prevButton = this.UI.getElementsByClassName('prevImagePage')[0];
     this.nextButton = this.UI.getElementsByClassName('nextImagePage')[0];
-    // More button bindings go here:
-    // this.SearchBox = this.UI.getElementsByClassName('searchBox')[0];
+    this.searchBox = this.UI.getElementsByClassName('reasonImageSearch')[0];
 
     // Maybe I should move these bindings elsewhere for better coherence?
     tinymce.DOM.bind(this.imagesListBox, 'click', function(e) {
@@ -132,7 +142,35 @@ reasonPlugins = function(linkSelector, targetPanelSelector, type) {
     tinymce.DOM.bind(this.nextButton, 'click', function(e) {
       self.renderReasonImages(self.page + 1);
     });
+
+    tinymce.DOM.bind(this.searchBox, 'keyup', function(e) {
+      var target = e.target || window.event.srcElement;
+      reasonPlugins.delay(function() {
+        if (!target.value) {
+          self.renderReasonImages(1);
+          return;
+        }
+        self.results = self.findImagesWithText(target.value);
+        self.display_images(self.results);
+      }, 200);
+    });
   };
+
+  reasonPlugins.reasonImage.prototype.findImagesWithText = function (q) {
+    var result = [];
+    var list = this.items;
+    var regex = new RegExp(q, "i");
+    for (var i in list) {
+      if (list.hasOwnProperty(i)) {
+        for (var j in list[i]) {
+          if (list[i][j].hasText(regex)) {
+            result.push(list[i][j]);
+          }
+        }
+      }
+    }
+    return result;
+  }
 
   /**
    * Links reason controls (selecting an image, writing alt text) to hidden
@@ -146,25 +184,23 @@ reasonPlugins = function(linkSelector, targetPanelSelector, type) {
 
   // TODO: Right now you can click past the last page and some weirdness happens.
   reasonPlugins.reasonImage.prototype.renderReasonImages = function (page) {
-    // Render UI bits
-    // Render each item
     page = !page ? 1 : page;
     this.page = page;
     if (typeof this.items[page] !== 'undefined') {
-      this.display_images(page);
+      this.display_images(this.items[page]);
     } else {
       this.fetch_images(page, function() {
-        this.display_images(page);
+        this.display_images(this.items[page]);
       });
     }
 
   };
 
-  reasonPlugins.reasonImage.prototype.display_images = function (page) {
+  reasonPlugins.reasonImage.prototype.display_images = function (images_array) {
     var imagesHTML = "";
 
-    for (var i in this.items[page]) {
-      i = this.items[page][i];
+    for (var i in images_array) {
+      i = images_array[i];
       imagesHTML += i.display_item();
     }
 
@@ -230,6 +266,12 @@ reasonPlugins = function(linkSelector, targetPanelSelector, type) {
     thumbnail: '',
     full: ''
   };
+  ReasonImageDialogItem.prototype.hasText = function(q) {
+    if ((this.name.search(q) !== -1) || (this.description.search(q) !== -1)) {
+      return this;
+    }
+  }
+
   ReasonImageDialogItem.prototype.description = '';
 
 
@@ -242,7 +284,7 @@ reasonPlugins = function(linkSelector, targetPanelSelector, type) {
   };
 
   ReasonImageDialogItem.prototype.display_item = function () {
-    return '<a id="reasonimage_' + this.id + '" class="image_item">' + this.render_item() + '<span class="description">' + this.escapeHtml(this.name) + '</span></a>';
+    return '<a id="reasonimage_' + this.id + '" class="image_item"><span class="name">' + this.escapeHtml(this.name) + '</span>' + this.render_item() + '<span class="description">' + this.escapeHtml(this.description) + '</span></a>';
   };
 
 
