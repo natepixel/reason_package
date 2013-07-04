@@ -25,11 +25,11 @@
   * @param String targetPanelSelector The item to which the the picker will be bound
   * @param String type 'image' or 'link'; determines which plugin to use
   **/
-reasonPlugins = function(linkSelector, targetPanelSelector, type) {
+reasonPlugins = function(controlSelectors, targetPanelSelector, type) {
   var currentReasonPlugin;
 
   if (type === "image") {
-    currentReasonPlugin = new reasonPlugins.reasonImage(linkSelector, targetPanelSelector);
+    currentReasonPlugin = new reasonPlugins.reasonImage(controlSelectors, targetPanelSelector);
     //TODO: caching here?
   }
   else if (type === "link")
@@ -63,9 +63,9 @@ reasonPlugins = function(linkSelector, targetPanelSelector, type) {
    * more specifically, "Where do I want to put the ReasonPlugin controls?"
    * @param string selector the selector for the file browser control
    **/
-  reasonPlugins.getPanel = function (inputControl) {
+  reasonPlugins.getPanel = function (control) {
     // TODO: We can keep going up until we find a parent of type panel to make this a little more robust.
-    return inputControl.parent().parent();
+    return control.parent().parent();
   };
 
   // From SO: http://stackoverflow.com/questions/1909441/jquery-keyup-delay
@@ -82,9 +82,11 @@ reasonPlugins = function(linkSelector, targetPanelSelector, type) {
    * Dispatch function. Gets a reference to the panel, and does everything we
    * need to do in order to get the plugin up and running.
    */
-  reasonPlugins.reasonImage = function(linkSelector, placeholderSelector) {
-    this.chunk_size = 4;
-    this.inputControl = reasonPlugins.getControl(linkSelector);
+  reasonPlugins.reasonImage = function(controlSelectors, placeholderSelector) {
+    this.chunk_size = 6;
+    this.srcControl = reasonPlugins.getControl(controlSelectors.src);
+    this.altControl = reasonPlugins.getControl(controlSelectors.alt);
+    this.sizeControl = reasonPlugins.getControl(controlSelectors.size);
     this.targetPanel = reasonPlugins.getControl(placeholderSelector);
     this.json_url = reasonPlugins.jsonURL;
     this.items = [];
@@ -131,12 +133,9 @@ reasonPlugins = function(linkSelector, targetPanelSelector, type) {
     tinymce.DOM.bind(this.imagesListBox, 'click', function(e) {
       var target = e.target || window.event.srcElement;
       if (target.nodeName == 'A' && target.className == 'image_item')
-        self.selectImage( target.getElementsByTagName('IMG')[0] );
-      else if (target.nodeName == 'SPAN' && (target.className == 'name' || target.className == 'description'))
-        self.selectImage( target.parentElement.getElementsByTagName('IMG')[0]);
-      else if (target.nodeName == 'IMG') {
-        self.selectImage(target);
-      }
+        self.selectImage( target );
+      else if (target.nodeName == 'IMG' || (target.nodeName == 'SPAN' && (target.className == 'name' || target.className == 'description')))
+        self.selectImage( target.parentElement );
     });
 
     tinymce.DOM.bind(this.prevButton, 'click', function(e) {
@@ -181,8 +180,9 @@ reasonPlugins = function(linkSelector, targetPanelSelector, type) {
    * tinyMCE elements.
    * TODO: add alt tag things.
    */
-  reasonPlugins.reasonImage.prototype.selectImage = function (imageNode) {
-    this.inputControl.value(imageNode.src);
+  reasonPlugins.reasonImage.prototype.selectImage = function (image_item) {
+    this.srcControl.value(image_item.getElementsByTagName('IMG')[0].src);
+    this.altControl.value(image_item.getElementsByClassName('name')[0].innerHTML);
   };
 
 
@@ -331,8 +331,10 @@ tinymce.PluginManager.add('reasonimage', function(editor, url) {
           minWidth: "700",
           minHeight: "500",
           items: [
-            {name: 'text', type: 'textbox', size: 40, label: 'Text to display'},
-            {name: 'size', type: 'listbox', label: "Size", values: [
+            {name: 'alt_2', type: 'textbox', size: 40, label: 'Text to display'},
+            // TODO: This needs a default value or something. tinymce displays the top item
+            //       but doesn't count it as selected.
+            {name: 'size_2', type: 'listbox', label: "Size", values: [
               {text: 'Thumbnail', value: 'thumb'},
               {text: 'Full', value: 'full'}
             ]}
@@ -356,11 +358,7 @@ tinymce.PluginManager.add('reasonimage', function(editor, url) {
             autofocus: true,
             label: 'URL'
           },
-          {name: 'text', type: 'textbox', size: 40, label: 'Text to display'},
-          {name: 'size', type: 'listbox', label: "Size", values: [
-            {text: 'Thumbnail', value: 'thumb'},
-            {text: 'Full', value: 'full'}
-          ]}
+          {name: 'alt', type: 'textbox', size: 40, label: 'Text to display'},
           // TODO: This isn't implemented in tinymce yet. When it is... !
           //{ title: "Size", type: "radiogroup", items: [
             //{type: 'radio', text: 'Thumbnail', value: 'poooo', tooltip: "Image will display as a thumbnail"},
@@ -373,9 +371,13 @@ tinymce.PluginManager.add('reasonimage', function(editor, url) {
         ],
         bodyType: 'tabpanel',
         onPostRender: function(e) {
-          control_to_bind = 'src';
           target_panel = 'reasonImagePanel';
-          reasonPlugins(control_to_bind, target_panel,  'image', e);
+          controls_to_bind = {
+            src: 'src',
+            alt: 'alt',
+            size: 'size',
+          };
+          reasonPlugins(controls_to_bind, target_panel,  'image', e);
         },
         onSubmit: function(e) {
           var data = win.toJSON();
