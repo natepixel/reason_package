@@ -85,7 +85,10 @@ reasonPlugins = function(controlSelectors, targetPanelSelector, type) {
   reasonPlugins.reasonImage = function(controlSelectors, placeholderSelector) {
     this.chunk_size = 6;
     this.srcControl = reasonPlugins.getControl(controlSelectors.src);
-    this.altControl = reasonPlugins.getControl(controlSelectors.alt);
+    this.altControls = tinymce.map(controlSelectors.alt, function(item) {
+      console.log("working on" + item);
+      return reasonPlugins.getControl(item);
+    });
     this.sizeControl = reasonPlugins.getControl(controlSelectors.size);
     this.targetPanel = reasonPlugins.getControl(placeholderSelector);
     this.json_url = reasonPlugins.jsonURL;
@@ -150,6 +153,11 @@ reasonPlugins = function(controlSelectors, targetPanelSelector, type) {
       self.setImageSize(self.sizeControl.value());
     });
 
+    // TODO This could be a little nicer...
+    // TODO I don't think binding both to the selectImage is needed if this is here, too...
+    this.altControls[0].on('change', function(e) {self.altControls[1].value(self.altControls[0].value()) });
+    this.altControls[1].on('change', function(e) {self.altControls[0].value(self.altControls[1].value()) });
+
     tinymce.DOM.bind(this.searchBox, 'keyup', function(e) {
       var target = e.target || window.event.srcElement;
       reasonPlugins.delay(function() {
@@ -189,7 +197,7 @@ reasonPlugins = function(controlSelectors, targetPanelSelector, type) {
     if (!!this.imageSize && this.imageSize == 'full')
       src = src.replace("_tn", "_orig");
     this.srcControl.value(src);
-    this.altControl.value(image_item.getElementsByClassName('name')[0].innerHTML);
+    tinymce.each(this.altControls, function(v, i) {v.value(image_item.getElementsByClassName('name')[0].innerHTML)});
   };
 
   reasonPlugins.reasonImage.prototype.setImageSize = function (size) {
@@ -387,7 +395,7 @@ tinymce.PluginManager.add('reasonimage', function(editor, url) {
           target_panel = 'reasonImagePanel';
           controls_to_bind = {
             src: 'src',
-            alt: 'alt',
+            alt: ['alt', 'alt_2'],
             size: 'size',
           };
           reasonPlugins(controls_to_bind, target_panel,  'image', e);
