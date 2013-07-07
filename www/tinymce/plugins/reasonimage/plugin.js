@@ -146,6 +146,10 @@ reasonPlugins = function(controlSelectors, targetPanelSelector, type) {
       self.renderReasonImages(self.page + 1);
     });
 
+    this.sizeControl.on('select', function (e) {
+      self.setImageSize(self.sizeControl.value());
+    });
+
     tinymce.DOM.bind(this.searchBox, 'keyup', function(e) {
       var target = e.target || window.event.srcElement;
       reasonPlugins.delay(function() {
@@ -181,10 +185,19 @@ reasonPlugins = function(controlSelectors, targetPanelSelector, type) {
    * TODO: add alt tag things.
    */
   reasonPlugins.reasonImage.prototype.selectImage = function (image_item) {
-    this.srcControl.value(image_item.getElementsByTagName('IMG')[0].src);
+    var src = image_item.getElementsByTagName('IMG')[0].src;
+    if (!!this.imageSize && this.imageSize == 'full')
+      src = src.replace("_tn", "_orig");
+    this.srcControl.value(src);
     this.altControl.value(image_item.getElementsByClassName('name')[0].innerHTML);
   };
 
+  reasonPlugins.reasonImage.prototype.setImageSize = function (size) {
+    this.imageSize = size;
+    if (this.srcControl.value() && this.srcControl.value().search("_tn.jpg") != -1) {
+      this.srcControl.value(this.srcControl.value().replace("_tn", "_orig"));
+    }
+  }
 
   // TODO: Right now you can click past the last page and some weirdness happens.
   reasonPlugins.reasonImage.prototype.renderReasonImages = function (page) {
@@ -334,7 +347,7 @@ tinymce.PluginManager.add('reasonimage', function(editor, url) {
             {name: 'alt_2', type: 'textbox', size: 40, label: 'Text to display'},
             // TODO: This needs a default value or something. tinymce displays the top item
             //       but doesn't count it as selected.
-            {name: 'size_2', type: 'listbox', label: "Size", values: [
+            {name: 'size', type: 'listbox', label: "Size", values: [
               {text: 'Thumbnail', value: 'thumb'},
               {text: 'Full', value: 'full'}
             ]}
