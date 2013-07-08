@@ -21,7 +21,7 @@
   *       we should cache a reference to the current editor's plugin and check if activeEditor
   *       is the same as the last time reasonPlugins was called?
   *
-  * @param String linkSelector The item to which the the picker will be bound
+  * @param Object controlSelectors The items to which the the picker will be bound
   * @param String targetPanelSelector The item to which the the picker will be bound
   * @param String type 'image' or 'link'; determines which plugin to use
   **/
@@ -40,6 +40,9 @@ reasonPlugins = function(controlSelectors, targetPanelSelector, type) {
    * jsonURL handles url and query string building for json requests.
    * For example, jsonURL(15, 6) should return a URL for the sixteenth
    * to the twenty-second items of the list.
+   *
+   * @param Integer offset the index of the first item to fetch
+   * @param Integer chunk_size the number of items to fetch
    */
   reasonPlugins.jsonURL = function (offset, chunk_size) {
     var self = this;
@@ -52,6 +55,11 @@ reasonPlugins = function(controlSelectors, targetPanelSelector, type) {
     return '/reason/displayers/generate_json.php?site_id=' + site_id + '&type=image&num=' + chunk_size + '&offset=' + offset + '&';
   };
 
+  /**
+   * Returns the tinyMCE control object for a given tinymce control name.
+   *
+   * @param String selector the 'name' value of a tinymce control
+   **/
   reasonPlugins.getControl = function (selector) {
     return tinymce.activeEditor.windowManager.windows[0].find('#'+selector)[0];
   }
@@ -86,7 +94,6 @@ reasonPlugins = function(controlSelectors, targetPanelSelector, type) {
     this.chunk_size = 6;
     this.srcControl = reasonPlugins.getControl(controlSelectors.src);
     this.altControls = tinymce.map(controlSelectors.alt, function(item) {
-      console.log("working on" + item);
       return reasonPlugins.getControl(item);
     });
     this.sizeControl = reasonPlugins.getControl(controlSelectors.size);
@@ -133,8 +140,8 @@ reasonPlugins = function(controlSelectors, targetPanelSelector, type) {
   };
 
   /**
-   * Binds various controls like cancel, next page, and search to their 
-   * corresponding functions. Genius.
+   * Binds various controls like cancel, next page, and search to their
+   * corresponding functions.
    **/
   reasonPlugins.reasonImage.prototype.bindReasonUI = function() {
     var self = this;
@@ -169,8 +176,8 @@ reasonPlugins = function(controlSelectors, targetPanelSelector, type) {
 
     // TODO This could be a little nicer...
     // TODO I don't think binding both to the selectImage is needed if this is here, too...
-    this.altControls[0].on('change', function(e) {self.altControls[1].value(self.altControls[0].value()) });
-    this.altControls[1].on('change', function(e) {self.altControls[0].value(self.altControls[1].value()) });
+    this.altControls[0].on('change', function(e) {self.altControls[1].value(self.altControls[0].value()); });
+    this.altControls[1].on('change', function(e) {self.altControls[0].value(self.altControls[1].value()); });
 
     tinymce.DOM.bind(this.searchBox, 'keyup', function(e) {
       var target = e.target || window.event.srcElement;
@@ -199,7 +206,7 @@ reasonPlugins = function(controlSelectors, targetPanelSelector, type) {
       }
     }
     return result;
-  }
+  };
 
   /**
    * Links reason controls (selecting an image, writing alt text) to hidden
@@ -211,7 +218,7 @@ reasonPlugins = function(controlSelectors, targetPanelSelector, type) {
     if (!!this.imageSize && this.imageSize == 'full')
       src = src.replace("_tn", "_orig");
     this.srcControl.value(src);
-    tinymce.each(this.altControls, function(v, i) {v.value(image_item.getElementsByClassName('name')[0].innerHTML)});
+    tinymce.each(this.altControls, function(v, i) {v.value(image_item.getElementsByClassName('name')[0].innerHTML);});
   };
 
   reasonPlugins.reasonImage.prototype.setImageSize = function (size) {
@@ -219,7 +226,7 @@ reasonPlugins = function(controlSelectors, targetPanelSelector, type) {
     if (this.srcControl.value() && this.srcControl.value().search("_tn.jpg") != -1) {
       this.srcControl.value(this.srcControl.value().replace("_tn", "_orig"));
     }
-  }
+  };
 
   // TODO: Right now you can click past the last page and some weirdness happens.
   reasonPlugins.reasonImage.prototype.renderReasonImages = function (page) {
@@ -247,10 +254,10 @@ reasonPlugins = function(controlSelectors, targetPanelSelector, type) {
   };
 
   reasonPlugins.reasonImage.prototype.parse_images = function(response, page) {
-    var parsed_response = JSON.parse(response), response_items = parsed_response['items'];
+    var parsed_response = JSON.parse(response), response_items = parsed_response.items;
     var items_to_add = [];
 
-    this.totalItems = parsed_response['count'];
+    this.totalItems = parsed_response.count;
 
     for (var i in response_items) {
       item = new ReasonImageDialogItem();
@@ -270,13 +277,13 @@ reasonPlugins = function(controlSelectors, targetPanelSelector, type) {
     if (!this.json_url)
       throw "You need to set a URL for the dialog to fetch JSON from.";
 
-    var offset = ((page - 1) * this.chunk_size);
+    var offset = ((page - 1) * this.chunk_size), url;
 
     if (typeof this.json_url === 'function')
       {
-        var url = this.json_url(offset, this.chunk_size);
+        url = this.json_url(offset, this.chunk_size, this.type);
       } else
-        var url = this.json_url;
+        url = this.json_url;
 
       tinymce.util.XHR.send({
         "url": url,
@@ -309,7 +316,7 @@ reasonPlugins = function(controlSelectors, targetPanelSelector, type) {
     if ((this.name.search(q) !== -1) || (this.description.search(q) !== -1)) {
       return this;
     }
-  }
+  };
 
   ReasonImageDialogItem.prototype.description = '';
 
@@ -359,10 +366,9 @@ tinymce.PluginManager.add('reasonimage', function(editor, url) {
         body: [
           // Add from Reason
           {
-          title: "from reason",
+          title: "existing image",
           name: "reasonImagePanel",
           type: "form",
-          //layout: "flex",
           minWidth: "700",
           minHeight: "500",
           items: [
@@ -374,33 +380,26 @@ tinymce.PluginManager.add('reasonimage', function(editor, url) {
               {text: 'Full', value: 'full'}
             ]}
           ],
-          // You can also pass a function and have it executed, but you need to change
-          // the type to "panel," I believe. 
-          // html: somefunction,
           onchange: function(e) {console.log(!!e.target? e.target.value: e);}
         },
 
-          // Add from the Web
-          {
-          title: "from a URL",
-          type: "form",
-          items: [
-            {
-            name: 'src',
-            type: 'textbox',
-            filetype: 'image',
-            size: 40,
-            autofocus: true,
-            label: 'URL'
-          },
-          {name: 'alt', type: 'textbox', size: 40, label: 'Text to display'},
-          // TODO: This isn't implemented in tinymce yet. When it is... !
-          //{ title: "Size", type: "radiogroup", items: [
-            //{type: 'radio', text: 'Thumbnail', value: 'poooo', tooltip: "Image will display as a thumbnail"},
-            //{type: 'radio', text: 'Full', value: 'poooo', tooltip: "Image will display at full size"},
-          //]}
-
-          ]
+        // Add from the Web
+        {
+            title: "from a web address",
+            type: "form",
+            items: [{
+                name: 'src',
+                type: 'textbox',
+                filetype: 'image',
+                size: 40,
+                autofocus: true,
+                label: 'URL'
+            }, {
+                name: 'alt',
+                type: 'textbox',
+                size: 40,
+                label: 'Text to display'
+            }]
         }
 
         ],
