@@ -102,12 +102,26 @@ reasonPlugins = function(controlSelectors, targetPanelSelector, type) {
 
 
   /**
-   * Prepends the reason controls to the tinyMCE panel.
+   * Prepends the reason controls to the tinyMCE panel specified by
+   * this.targetPanel.
+   *
+   * TODO: Make this a tinymce control of type panel and settings.html
    **/
   reasonPlugins.reasonImage.prototype.insertReasonUI = function() {
     var holderDiv;
     this.UI = this.targetPanel.getEl();
+    var css = '.items_chunk { text-align: center; height: 300px; overflow-y: scroll; white-space: normal;} .image_item {width: 190px; padding: 5px; display: inline-block;} .items_chunk .name, .items_chunk .description {display: block; white-space: normal;} .items_chunk .description {font-size: 0.9em;}' ,
+    head = document.getElementsByTagName('head')[0],
+    style = document.createElement('style');
 
+    style.type = 'text/css';
+    if (style.styleSheet){
+      style.styleSheet.cssText = css;
+    } else {
+      style.appendChild(document.createTextNode(css));
+    }
+
+    head.appendChild(style);
     // I should probably be using documentFragments here. Eh.
     holderDiv = document.createElement("div");
     // TODO this makes me incredibly sad.
