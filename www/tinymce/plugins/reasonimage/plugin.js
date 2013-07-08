@@ -25,34 +25,32 @@
   * @param String targetPanelSelector The item to which the the picker will be bound
   * @param String type 'image' or 'link'; determines which plugin to use
   **/
-reasonPlugins = function(controlSelectors, targetPanelSelector, type) {
+reasonPlugins = function (controlSelectors, targetPanelSelector, type) {
   var currentReasonPlugin;
 
   if (type === "image") {
     currentReasonPlugin = new reasonPlugins.reasonImage(controlSelectors, targetPanelSelector);
     //TODO: caching here?
   }
-  else if (type === "link")
+  else if (type === "link") {
     currentReasonPlugin = '';
+  }
 };
 
-  /**
-   * jsonURL handles url and query string building for json requests.
-   * For example, jsonURL(15, 6) should return a URL for the sixteenth
-   * to the twenty-second items of the list.
-   *
-   * @param Integer offset the index of the first item to fetch
-   * @param Integer chunk_size the number of items to fetch
-   */
-  reasonPlugins.jsonURL = function (offset, chunk_size) {
-    var self = this;
-    var site_id = tinymce.activeEditor.settings.reason_site_id;
-    if (self.type === "image")
-      typeId = 243;
-    else if (self.type === "link")
-      typeId = "???";
+/**
+ * jsonURL handles url and query string building for json requests.
+ * For example, jsonURL(15, 6, 'image') should return a URL for the sixteenth
+ * to the twenty-second images of the list.
+ *
+ * @param Integer offset     the index of the first item to fetch
+ * @param Integer chunk_size the number of items to fetch
+ * @param String  type       the type of items to fetch, i.e. image or link
+ */
+  reasonPlugins.jsonURL = function (offset, chunk_size, type) {
+    var site_id = tinymce.activeEditor.settings.reason_site_id,
+        reason_http_base_path = tinymce.activeEditor.settings.reason_http_base_path;
 
-    return '/reason/displayers/generate_json.php?site_id=' + site_id + '&type=image&num=' + chunk_size + '&offset=' + offset + '&';
+    return reason_http_base_path + 'displayers/generate_json.php?site_id=' + site_id + '&type=' + type + '&num=' + chunk_size + '&offset=' + offset + '&';
   };
 
   /**
@@ -98,6 +96,7 @@ reasonPlugins = function(controlSelectors, targetPanelSelector, type) {
     });
     this.sizeControl = reasonPlugins.getControl(controlSelectors.size);
     this.targetPanel = reasonPlugins.getControl(placeholderSelector);
+    this.type = "image";
     this.json_url = reasonPlugins.jsonURL;
     this.items = [];
 
