@@ -1,3 +1,4 @@
+/*
 @import url('/global_stock/fonts/proxima_nova/family_basic.css');
 @import url('/global_stock/fonts/proxima_nova/family_thin.css');
 html {
@@ -15,6 +16,7 @@ a {
 #wrapper, #wrapper input, #wrapper textarea {
 	font-family:'ProximaNova';
 }
+
 #bannerAndMeat, #footer {
 	margin:0 0 5em 0;
 	max-width:1200px;
@@ -24,6 +26,11 @@ a {
 #footer {
 	font-size:1.154em;
 }
+
+NOTE DELETE THE ABOVE WHEN I KNOW IT DOESN'T MATTER
+
+THIS MODULE WORKS WELL WITH SIMPLICITY BLUE BUT OTHERWISE THE CSS NEEDS TWEAKS
+*/
 #wrapper {
 	background:-moz-linear-gradient(top, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0) 14px, rgba(0,0,0,0) 100%); /* FF3.6+ */
 	background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,0.1)), color-stop(14px,rgba(0,0,0,0)), color-stop(100%,rgba(0,0,0,0))); /* Chrome,Safari4+ */
@@ -42,17 +49,18 @@ a {
 	padding-left:190px;
 	position:relative;
 }
+#profilesModule a {
+	color:#fff;
+}
 #mainProfileContent {
 	float:left;
 	width:100%;
 }
 #secondaryProfileContent {
-	float:left;
 	width:170px;
-	margin-left:-100%;
-	position:relative;
-	left:-190px;
-	margin-top:280px;
+	position:absolute;
+	top:280px;
+	left:0px;
 }
 
 #profilesModule:after, #contactInfo:after, #interestTags:after, #profilesWelcome ul.actions:after {

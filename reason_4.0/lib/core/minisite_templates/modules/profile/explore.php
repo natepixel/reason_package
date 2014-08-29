@@ -16,7 +16,7 @@ $GLOBALS[ '_module_class_names' ][ module_basename( __FILE__, '.php' ) ] = 'Prof
 reason_include_once( 'minisite_templates/modules/default.php' );
 reason_include_once( 'minisite_templates/modules/profile/connector_class.php' );
 reason_include_once( 'minisite_templates/modules/profile/profile.php' );
-
+reason_include_once( 'config/modules/profile/config.php' );
 
 /**
  * Profile Connector Module
@@ -266,7 +266,14 @@ class ProfileConnectorModule extends DefaultMinisiteModule
 				{
 					if ($tag = $this->pc->get_tag_by_id($id))
 					{
-						$str .= '<li><a class="interestTag" href="' . $this->page_url . $tag['slug'] . '" title="Explore this tag">'.htmlspecialchars($tag['name']).' ('.$count.')</a></li>' ."\n";
+						if ($this->config->friendly_urls)
+						{
+							$str .= '<li><a class="interestTag" href="' . $this->page_url . $tag['slug'] . '" title="Explore this tag">'.htmlspecialchars($tag['name']).' ('.$count.')</a></li>' ."\n";
+						}
+						else
+						{
+							$str .= '<li><a class="interestTag" href="'.$this->page_url.'?tag='.htmlspecialchars($tag['slug']).'" title="Explore this tag">'.htmlspecialchars($tag['name']).' ('.$count.')</a></li>' ."\n";						
+						}
 						$count++;
 					}
 				}

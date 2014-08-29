@@ -27,6 +27,7 @@ reason_include_once( 'config/modules/profile/config.php' );
  * We map out which profile sections are included for each audience. For those in multiple audiences, we take an additive approach.
  * 
  * @todo current inline editing does not use activation parameters or check if it is active and thus will not play well with layouts where multiple modules support inline editing.
+ * @todo when called with nothing in the query string the module should do something meaningful - possibly just present the nav.
  *
  * @author Nathan White
  * @author Mark Heiman
@@ -155,8 +156,9 @@ class ProfileModule extends DefaultMinisiteModule
 		
 		if($head_items = $this->get_head_items())
 		{
+			$head_items->add_javascript(JQUERY_URL, true);
 			$head_items->add_javascript(REASON_HTTP_BASE_PATH . 'modules/profiles/general.js');
-
+			$head_items->add_stylesheet(REASON_HTTP_BASE_PATH . 'modules/profiles/base.css');
 			if ($this->get_view_mode() == 'connect')
 			{
 				$head_items->add_javascript(REASON_HTTP_BASE_PATH . 'modules/profiles/connector.js');
@@ -246,7 +248,6 @@ class ProfileModule extends DefaultMinisiteModule
 		{
 			echo $this->get_profile_html();
 		}
-		echo $this->get_module_footer();
 	}
 	
 	/**
@@ -367,18 +368,19 @@ class ProfileModule extends DefaultMinisiteModule
 	protected function get_edit_offer()
 	{
 		$str = '';
-		if ($this->user_can_inline_edit() && $this->get_view_mode() == 'profile')
+		if (($this->user_can_inline_edit() || $this->user_can_pose()) && $this->get_view_mode() == 'profile')
 		{
 			if($this->user_is_currently_inline_editing())
 			{
-				$str .= '<div class="editOffer done"><a href="'.carl_make_link(array('inline_editing_availability'=>'disable','edit_section'=>'',)).'" title="Stop editing this profile"><span class="icon"></span>Done Editing</a></div>'."\n";
+				$str .= '<div class="editOffer done"><a href="'.carl_make_link(array('inline_editing_availability'=>'disable','edit_section'=>'','pose_as'=>'')).'" title="Stop editing this profile"><span class="icon"></span>Done Editing</a></div>'."\n";
 			}
 			else
 			{
 				$person = $this->get_person();
 				$profile = $person->get_profile();
+				$pose_as = ($person->get_username() != reason_check_authentication()) ? $person->get_username() : '';
 				if(!empty($profile['id']))
-					$str .= '<div class="editOffer start"><a href="'.carl_make_link(array('inline_editing_availability'=>'enable')).'" title="Edit this profile"><span class="icon"></span>Start Editing</a></div>'."\n";
+					$str .= '<div class="editOffer start"><a href="'.carl_make_link(array('inline_editing_availability'=>'enable', 'pose_as' => $pose_as)).'" title="Edit this profile"><span class="icon"></span>Start Editing</a></div>'."\n";
 			}
 		}
 		return $str;
@@ -674,13 +676,90 @@ class ProfileModule extends DefaultMinisiteModule
 		
 	/**
 	 * Populate the navigation region of the page
+	 * 
+	 * The contents of this are defined in config.php, and can be comprised of two elements:
+	 *
+	 * - html suitable for inclusion within a list item
+	 * - calls to class methods that return html suitable for inclusion within a list item (or empty)
+	 *
+	 * The default settings shows "Profile list", "Pose as user" if on a user profile with privs
 	 */
 	protected function get_module_navigation()
 	{
-		$str = '';
-		$str .= '<div id="moduleNavigation" class="section">';
-		// You can put something here.
-		$str .= '</div>';
+		$items = array();
+		foreach ($this->config->navigation_items as $k => $v)
+		{
+			if (!is_int($k) && method_exists($this, $k))
+			{
+				$item = ($v != NULL) ? call_user_func_array(array($this, $k), $v) : call_user_func(array($this, $k));
+				if ($item) $items[] = $item;
+			}
+			else $items[] = $v;
+		}
+		if (!empty($items))
+		{
+			$str = '<div id="moduleNavigation" class="section">';
+			$str .= '<ul><li>' . implode('</li><li>', $items) . '</li></ul>';
+			$str .= '</div>';
+			return $str;
+		}
+	}
+
+	/**
+	 * Return a link to the profile list module on the site if it exists 
+	 */
+	protected function get_profile_list_link($link_title)
+	{
+		$es = new entity_selector($this->site_id);
+		$es->limit_tables('page_node');
+		$es->limit_fields();
+		$es->add_type(id_of('minisite_page'));
+		$es->add_relation('page_node.custom_page = "profile_list"');
+		$result = $es->run_one();
+		if (!empty($result))
+		{
+			$keys = array_keys($result);
+			$id = reset($keys);
+			reason_include_once('function_libraries/url_utils.php');
+			$url = reason_get_page_url($id);
+			return '<a href="'.$url.'">'.$link_title.'</a>';
+		}
+	}
+	
+	/**
+	 * Return a link to the profile list module on the site if it exists 
+	 */
+	protected function get_profile_explore_link($link_title)
+	{
+		$es = new entity_selector($this->site_id);
+		$es->limit_tables('page_node');
+		$es->limit_fields();
+		$es->add_type(id_of('minisite_page'));
+		$es->add_relation('page_node.custom_page = "profile_explore"');
+		$result = $es->run_one();
+		if (!empty($result))
+		{
+			$keys = array_keys($result);
+			$id = reset($keys);
+			reason_include_once('function_libraries/url_utils.php');
+			$url = reason_get_page_url($id);
+			return '<a href="'.$url.'">'.$link_title.'</a>';
+		}
+	}	
+	
+	/**
+	 * Return a link to "my" profile
+	 */
+	protected function get_my_profile_link($always_show = FALSE)
+	{
+		if ($this->config->friendly_urls)
+		{
+			$str = '<a href="' . carl_construct_link(array(''), array(''), parse_url($this->site_url, PHP_URL_PATH).'me'.'/') .'">My Profile</a>';
+		}
+		else
+		{
+			$str = '<a href="' . carl_construct_link(array(''), array(''), parse_url($this->site_url, PHP_URL_PATH).$this->config->profile_slug.'/?username=me') . '">My Profile</a>';
+		}	
 		return $str;
 	}
 	
@@ -697,60 +776,11 @@ class ProfileModule extends DefaultMinisiteModule
 		$str .= '</div>'."\n";
 		return $str;
 	}
-
-	/**
-	 * Display our footer text with links to about, sign in and edit, edit, etc as appropriate.
-	 */
-	protected function get_module_footer()
-	{
-		// we only show this if we are viewing a profile.
-		if ($p = $this->get_person())
-		{
-			if ($netid = $this->get_user_netid())
-			{
-				if ($p->get_first_ds_value('ds_username') == $netid)
-				{
-					$link_txt = '';
-				}
-				else
-				{
-					$link_txt = 'View and edit your own profile';
-				}
-				$link_to = $netid;
-				$link_preserve_array = array('pose_as');
-			}
-			else
-			{
-				$link_txt = 'Sign in to view and edit your own profile';
-				$link_to = 'me';
-				$link_preserve_array = array();
-			}
-			
-			$str = '';
-			$str .= '<div id="profileModuleFooter">' . "\n";
-			if (!empty($link_txt))
-			{
-				if ($this->config->friendly_urls)
-				{
-					$str .= '<a href="' . carl_construct_link(array(''), $link_preserve_array, parse_url($this->site_url, PHP_URL_PATH).$link_to.'/') .'">'.$link_txt.'</a>';
-				}
-				else
-				{
-					$str .= '<a href="' . carl_construct_link(array(''), $link_preserve_array, parse_url($this->site_url, PHP_URL_PATH).$this->config->profile_slug.'/?username='.$link_to) .'">'.$link_txt.'</a>';
-				}
-			}
-			$str .= '</p>';
-			$str .= '</div>'."\n";
-			return $str;
-		}
-		else return '';
-	}
 	
 	/**
 	 * If the current user's profile is being displayed, we allow it to be edited.
 	 *
-	 * @todo can all site admins edit all profiles? Or should we require you to pose_as a user?
-	 * @return boolean;
+	 * @return boolean is the active or posed user profile being displayed?
 	 */
 	function user_can_inline_edit()
 	{
@@ -967,6 +997,8 @@ class ProfileModule extends DefaultMinisiteModule
 	 * as the profile-holder if:
 	 *  1. They're an admin on the profile site
 	 *  2. The profile is an alum, and the person is in the alumni_profile_editors_group
+	 *
+	 * @todo is #2 functional?
 	 */
 	function get_user_netid()
 	{
@@ -978,7 +1010,7 @@ class ProfileModule extends DefaultMinisiteModule
 				$p = new $this->config->person_class($username);
 				if ($p->get_ds_record()) 
 				{
-					if (reason_check_access_to_site($this->site_id))
+					if ($this->user_can_pose())
 					{
 						$this->_user_netid = $username;
 					}
@@ -989,6 +1021,14 @@ class ProfileModule extends DefaultMinisiteModule
 		return $this->_user_netid;
 	}
 
+	/**
+	 * Return true if the logged in user has admin access to this site.
+	 */
+	function user_can_pose()
+	{
+		return reason_check_access_to_site($this->site_id);
+	}
+	
 	protected function format_phone_number($phone)
 	{
 		$phone_parts = explode(' ', $phone);

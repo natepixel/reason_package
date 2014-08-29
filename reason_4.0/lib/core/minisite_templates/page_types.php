@@ -2030,6 +2030,7 @@
         'profile' => array(
         	'main_head' => '', // turn off main head
         	'main' => '', // turn off main content - profile shows it
+        	'navigation' => '', // turn off main navigation - profile nav has link to profile list by default
         	'main_post' => 'profile/profile',
         ),
         'profile_explore' => array(

@@ -55,6 +55,19 @@ class ProfileConfig
 	public $allow_posing = true;
 	
 	/**
+	 * Contains profile navigation items - ordered array contents are one of two things:
+	 *
+	 * - HTML for a navigation item
+	 * - key / value pair where key is function name in profile.php, value is an array of arguments (OR NULL)
+	 */
+	public $navigation_items = array(
+		'get_profile_list_link' => array('Browse Profiles'),
+		'get_profile_explore_link' => array('Explore Profiles'),
+		'get_my_profile_link' => NULL,
+		'pose_if_available' => NULL,
+	);
+		
+	/**
 	 * If true, we depend on an .htaccess file which provides friendly redirects.
 	 *
 	 * RewriteCond %{REQUEST_URI} ^/profiles/([0-9a-zA-Z_]+)$
