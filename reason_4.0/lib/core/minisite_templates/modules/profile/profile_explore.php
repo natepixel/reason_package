@@ -14,7 +14,8 @@ $GLOBALS[ '_module_class_names' ][ module_basename( __FILE__, '.php' ) ] = 'Prof
  * Include dependencies
  */
 reason_include_once( 'minisite_templates/modules/default.php' );
-reason_include_once( 'minisite_templates/modules/profile/connector_class.php' );
+reason_include_once( 'minisite_templates/modules/profile/lib/connector_class.php' );
+reason_include_once( 'minisite_templates/modules/profile/lib/profile_functions.php' );
 reason_include_once( 'minisite_templates/modules/profile/profile.php' );
 reason_include_once( 'config/modules/profile/config.php' );
 
@@ -25,6 +26,8 @@ reason_include_once( 'config/modules/profile/config.php' );
  * tag slug as a parameter, it shows related tags and individuals who have used
  * the tag.
  *
+ * @todo find and deprecate instances where page_url is used.
+ *
  * @author Mark Heiman
  */
 class ProfileConnectorModule extends DefaultMinisiteModule
@@ -32,6 +35,8 @@ class ProfileConnectorModule extends DefaultMinisiteModule
 	/** 
 	 * How many profiles should appear in a single list before a "More" 
 	 * link is put up?
+	 *
+	 * @todo move to config
 	 */
 	protected $max_connections_shown = 12;
 	
@@ -45,8 +50,6 @@ class ProfileConnectorModule extends DefaultMinisiteModule
 	protected $pc;
 	protected $person;
 	protected $page_url;
-	protected $site_url;
-	protected $profiles_url;
 		
 	public function init( $args = array() )
 	{		
@@ -70,7 +73,6 @@ class ProfileConnectorModule extends DefaultMinisiteModule
 		$this->get_person();
 				
 		$this->page_url = reason_get_page_url($this->cur_page);
-		$this->site_url = reason_get_site_url(id_of($this->config->profiles_site_unique_name));
 	}
 	
 	public function run()
@@ -94,23 +96,12 @@ class ProfileConnectorModule extends DefaultMinisiteModule
 	/** Get the HTML for the navigation region of the page */
 	protected function get_module_navigation()
 	{
-		if ($this->config->friendly_urls || reason_check_authentication())
-		{
-			$str  = '<div id="moduleNavigation" class="section">';
-			$str .= '<ul>';
-			if ($this->config->friendly_urls)
-			{
-				$str .= '<li><a href="'.$this->site_url.'me/">My Profile</a></li>';
-			}
-			else
-			{
-				$str .= '<li><a href="'.$this->site_url.$this->config->profile_slug.'/?username='.reason_check_authentication().'">My Profile</a></li>';
-			}
-			$str .= '</ul>';
-			$str .= '</div>';
-			return $str;
-		}
-		else return '';
+		$str  = '<div id="moduleNavigation" class="section">';
+		$str .= '<ul>';
+		$str .= '<li><a href="'.profile_construct_link(array('username' => 'me')).'">My Profile</a></li>';
+		$str .= '</ul>';
+		$str .= '</div>';
+		return $str;
 	}
 	
 	/** Get the HTML for the login region of the page */
@@ -169,14 +160,7 @@ class ProfileConnectorModule extends DefaultMinisiteModule
 							$str .= '<li>';
 						else
 							$str .= '<li class="overflow">';
-						if ($this->config->friendly_urls)
-						{
-							$str .= '<a href="'. $this->site_url . $username .'">'.$profile['display_name'].'</a></li>'."\n";
-						}
-						else
-						{
-							$str .= '<a href="'. $this->site_url . $this->config->profile_slug. '/?username='.$username .'">'.$profile['display_name'].'</a></li>'."\n";
-						}	
+						$str .= '<a href="'.profile_construct_link(array('username'=>$username)).'">'.$profile['display_name'].'</a></li>'."\n";	
 						$count++;
 					}
 					$str .= '</ul>';
@@ -266,14 +250,7 @@ class ProfileConnectorModule extends DefaultMinisiteModule
 				{
 					if ($tag = $this->pc->get_tag_by_id($id))
 					{
-						if ($this->config->friendly_urls)
-						{
-							$str .= '<li><a class="interestTag" href="' . $this->page_url . $tag['slug'] . '" title="Explore this tag">'.htmlspecialchars($tag['name']).' ('.$count.')</a></li>' ."\n";
-						}
-						else
-						{
-							$str .= '<li><a class="interestTag" href="'.$this->page_url.'?tag='.htmlspecialchars($tag['slug']).'" title="Explore this tag">'.htmlspecialchars($tag['name']).' ('.$count.')</a></li>' ."\n";						
-						}
+						$str .= '<li><a class="interestTag" href="'.profile_construct_explore_link(array('tag'=>$tag['slug'])).'" title="Explore this tag">'.htmlspecialchars($tag['name']).' ('.$count.')</a></li>' ."\n";
 						$count++;
 					}
 				}

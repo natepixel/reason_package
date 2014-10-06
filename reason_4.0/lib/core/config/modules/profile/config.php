@@ -12,13 +12,24 @@
  * class, with or without extending the other classes.
  *
  * @author Mark Heiman
+ * @author Nathan White
  */
- 
+
 /**
- * Set these to match the class names defined below:
+ * Include basic dependencies
  */
-reason_include_once( 'minisite_templates/modules/profile/profile_person.php' );
-reason_include_once( 'minisite_templates/modules/profile/connector_class.php' );
+include_once( 'reason_header.php' );
+reason_include_once( 'minisite_templates/modules/profile/lib/profile_functions.php' );
+
+/**
+ * Set this to match $person_class as defined below
+ */
+reason_include_once( 'minisite_templates/modules/profile/lib/profile_person.php' );
+
+/**
+ * Set this to match $connector_class as defined below
+ */
+reason_include_once( 'minisite_templates/modules/profile/lib/connector_class.php' );
 
 class ProfileConfig
 {
@@ -36,18 +47,24 @@ class ProfileConfig
 
 	/**
 	 * Populate this with the Reason unique name of your profiles site.
+	 *
+	 * @todo possible to ever allow multiples?
 	 */
 	public $profiles_site_unique_name = 'profiles';
 	
 	/**
 	 * Populate this with the page slug of your explore page on the profiles site.
+	 *
+	 * @todo this should be determined by a page type on the site likely ... not slugs - with default explore
 	 */
 	public $explore_slug = 'explore';
 	
 	/**
 	 * Populate this with the page slug of your profile page on the profiles site.
+	 *
+	 * @todo this should be determined by a page type on the site likely ... not slugs - with default profile
 	 */
-	public $profile_slug = 'profile';		
+	public $profile_slug = '/';		
 	
 	/**
 	 * If true, passing pose_as=xxxx in the URL will allow a site admin of the profile site to pose as another user.
@@ -66,7 +83,12 @@ class ProfileConfig
 		'get_my_profile_link' => NULL,
 		'pose_if_available' => NULL,
 	);
-		
+	
+	/**
+	 * Indicates the profiles modules should redirect to profile list is no username was set.
+	 */
+	public $redirect_to_profile_list_if_no_username = true;
+	
 	/**
 	 * If true, we depend on an .htaccess file which provides friendly redirects.
 	 *

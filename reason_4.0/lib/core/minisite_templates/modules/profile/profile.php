@@ -29,6 +29,8 @@ reason_include_once( 'config/modules/profile/config.php' );
  * @todo current inline editing does not use activation parameters or check if it is active and thus will not play well with layouts where multiple modules support inline editing.
  * @todo when called with nothing in the query string the module should do something meaningful - possibly just present the nav.
  *
+ * @todo should we not use inline editing framework (editors are not typically site editors)
+ *
  * @author Nathan White
  * @author Mark Heiman
  */
@@ -49,7 +51,6 @@ class ProfileModule extends DefaultMinisiteModule
 	/** These are used to store various settings and lookup tables */
 	protected $config;
 	protected $person;
-	protected $site_url;
 	protected $user_can_inline_edit;
 	protected $affiliation_supports_section;
 	protected $profile_sections_by_region;
@@ -57,7 +58,7 @@ class ProfileModule extends DefaultMinisiteModule
 
 	public function pre_request_cleanup_init()
 	{
-		$this->config = new ProfileConfig();
+		$this->config = profile_get_config();
 	}
 
 	public function get_cleanup_rules()
@@ -89,32 +90,19 @@ class ProfileModule extends DefaultMinisiteModule
 			}
 			exit;
 		}
-		
-		$this->site_url = reason_get_site_url(id_of($this->config->profiles_site_unique_name));
-		
+
 		// Handle requests for generic usernames (me and editme)
 		if(isset($this->request['username']) && ('me' == $this->request['username'] || 'editme' == $this->request['username']))
 		{
-			$cur_username = reason_require_authentication();
-			if ($this->config->friendly_urls)
+			$username = reason_require_authentication();
+			if ('me' == $this->request['username'])
 			{
-				$link = $this->site_url . urlencode($cur_username) . '/';
+				$link = profile_construct_redirect(array('username' => $username));
 			}
 			else
 			{
-				$link = $this->site_url . $this->config->profile_slug . '/?username=' . urlencode($cur_username);
-			}
-			if('editme' == $this->request['username'])
-			{
-				if ($this->config->friendly_urls)
-				{
-					$link .= '?inline_editing_availability=enable';
-				}
-				else
-				{
-					$link .= '&inline_editing_availability=enable';
-				}
-			}			
+				$link = profile_construct_redirect(array('username' => $username, 'inline_editing_availability' => 'enable'));
+			}		
 			header('Location: '.$link);
 			echo '<a href="'.htmlspecialchars($link, ENT_QUOTES).'">Your profile</a>';
 			die();
@@ -234,6 +222,14 @@ class ProfileModule extends DefaultMinisiteModule
 		$p = $this->get_person();
 		if (!$p)
 		{
+			if ($this->config->redirect_to_profile_list_if_no_username)
+			{
+				if ($link = $this->get_profile_list_link(NULL, FALSE))
+				{
+					header('Location: '.$link);
+					exit();
+				}
+			}
 			echo $this->get_welcome_html();
 		}
 		elseif ($this->should_show_404())
@@ -545,28 +541,14 @@ class ProfileModule extends DefaultMinisiteModule
 		$str .= '<li id="profileTab" '.(($this->get_view_mode() != 'profile') ? 'class="disabled"' :'').'>';
 		if ($this->get_view_mode() != 'profile')
 		{
-			if ($this->config->friendly_urls)
-			{
-				$str .= '<a href="'.$this->site_url.$this->request['username'].'/">Profile</a></li>'."\n";
-			}
-			else
-			{
-				$str .= '<a href="'.$this->site_url.$this->config->profile_slug.'/?username='.$this->request['username'].'">Profile</a></li>';
-			}
+			$str .= '<a href="'.profile_construct_link(array('username' => $this->request['username'])).'">Profile</a></li>'."\n";
 		}
 		else
 			$str .= 'Profile</li>'."\n";
 		$str .= '<li id="connectTab" '.(($this->get_view_mode() == 'profile') ? 'class="disabled"' :'').'>';
 		if ($this->get_view_mode() == 'profile')
 		{
-			if ($this->config->friendly_urls)
-			{
-				$str .= '<a href="'.$this->site_url.$this->request['username'].'/connect/">Connections</a></li>'."\n";
-			}
-			else
-			{
-				$str .= '<a href="'.$this->site_url.$this->config->profile_slug.'/?username='.$this->request['username'].'&connect=1">Connections</a></li>';
-			}
+			$str .= '<a href="'.profile_construct_link(array('username' => $this->request['username'], 'connect' => 1)).'">Connections</a></li>'."\n";
 		}
 		else
 			$str .= 'Connections</li>'."\n";
@@ -659,14 +641,7 @@ class ProfileModule extends DefaultMinisiteModule
 					$tags_str .= '<li class="disabled">'.htmlspecialchars($tag).'</li>';
 				else
 				{
-					if ($this->config->friendly_urls)
-					{
-						$tags_str .= '<li><a class="interestTag" href="'.$this->site_url.$this->config->explore_slug.'/'.htmlspecialchars($slug).'" title="Find others with this interest">'.htmlspecialchars($tag).'</a></li>' ."\n";
-					}
-					else
-					{
-						$tags_str .= '<li><a class="interestTag" href="'.$this->site_url.$this->config->explore_slug.'/?tag='.htmlspecialchars($slug).'" title="Find others with this interest">'.htmlspecialchars($tag).'</a></li>' ."\n";
-					}
+					$tags_str .= '<li><a class="interestTag" href="'.profile_construct_explore_link(array('tag'=>htmlspecialchars($slug))).'" title="Find others with this interest">'.htmlspecialchars($tag).'</a></li>' ."\n";
 				}
 			}
 			$tags_str .= '</ul>' . "\n";
@@ -708,7 +683,7 @@ class ProfileModule extends DefaultMinisiteModule
 	/**
 	 * Return a link to the profile list module on the site if it exists 
 	 */
-	protected function get_profile_list_link($link_title)
+	protected function get_profile_list_link($link_title, $html = true)
 	{
 		$es = new entity_selector($this->site_id);
 		$es->limit_tables('page_node');
@@ -722,14 +697,14 @@ class ProfileModule extends DefaultMinisiteModule
 			$id = reset($keys);
 			reason_include_once('function_libraries/url_utils.php');
 			$url = reason_get_page_url($id);
-			return '<a href="'.$url.'">'.$link_title.'</a>';
+			return ($html) ? '<a href="'.$url.'">'.$link_title.'</a>' : $url;
 		}
 	}
 	
 	/**
 	 * Return a link to the profile list module on the site if it exists 
 	 */
-	protected function get_profile_explore_link($link_title)
+	protected function get_profile_explore_link($link_title, $html = true)
 	{
 		$es = new entity_selector($this->site_id);
 		$es->limit_tables('page_node');
@@ -743,7 +718,7 @@ class ProfileModule extends DefaultMinisiteModule
 			$id = reset($keys);
 			reason_include_once('function_libraries/url_utils.php');
 			$url = reason_get_page_url($id);
-			return '<a href="'.$url.'">'.$link_title.'</a>';
+			return ($html) ? '<a href="'.$url.'">'.$link_title.'</a>' : $url;
 		}
 	}	
 	
@@ -752,14 +727,7 @@ class ProfileModule extends DefaultMinisiteModule
 	 */
 	protected function get_my_profile_link($always_show = FALSE)
 	{
-		if ($this->config->friendly_urls)
-		{
-			$str = '<a href="' . carl_construct_link(array(''), array(''), parse_url($this->site_url, PHP_URL_PATH).'me'.'/') .'">My Profile</a>';
-		}
-		else
-		{
-			$str = '<a href="' . carl_construct_link(array(''), array(''), parse_url($this->site_url, PHP_URL_PATH).$this->config->profile_slug.'/?username=me') . '">My Profile</a>';
-		}	
+		$str = '<a href="' . profile_construct_link(array('username' => 'me')) .'">My Profile</a>';	
 		return $str;
 	}
 	
@@ -1026,7 +994,7 @@ class ProfileModule extends DefaultMinisiteModule
 	 */
 	function user_can_pose()
 	{
-		return reason_check_access_to_site($this->site_id);
+		return ($this->config->allow_posing && reason_check_access_to_site($this->site_id));
 	}
 	
 	protected function format_phone_number($phone)
@@ -1297,15 +1265,7 @@ class ProfileModule extends DefaultMinisiteModule
 			foreach ($tags as $id => $tag_data)
 			{
 				$str .= '<li><h4 class="tagName">';
-				if ($this->config->friendly_urls)
-				{
-					$str .= '<a href="'.$this->site_url.$this->config->explore_slug.'/'.htmlspecialchars($tag_data['slug']).'">'.$tag_data['name'].'</a></h4>';
-				}
-				else
-				{
-					$str .= '<a href="'.$this->site_url.$this->config->explore_slug.'/?tag='.htmlspecialchars($tag_data['slug']).'">'.$tag_data['name'].'</a></h4>';
-				}
-				
+				$str .= '<a href="'.profile_construct_list_link(array('tag' => htmlspecialchars($tag_data['slug']))).'">'.$tag_data['name'].'</a></h4>';
 				if (!isset($tag_data['profiles'][$this->config->tag_section_relationship_names[$section]])) continue;
 				$profiles = $pc->get_profiles_by_affiliation($tag_data['profiles'][$this->config->tag_section_relationship_names[$section]]);
 				$profiles_by_affil = $pc->sort_profiles_by_user_affiliations($this->person, $profiles);
@@ -1323,14 +1283,7 @@ class ProfileModule extends DefaultMinisiteModule
 							$str .= '<li>';
 						else
 							$str .= '<li class="overflow">';
-						if ($this->config->friendly_urls)
-						{
-							$str .= '<a href="'.$this->site_url.$username.'">'.$profile['display_name'].'</a></li>'."\n";	
-						}
-						else
-						{
-							$str .= '<a href="'.$this->site_url.$this->config->profile_slug.'/?username='.$username.'">'.$profile['display_name'].'</a></li>'."\n";
-						}
+						$str .= '<a href="'. profile_construct_link(array('username' => $username)) .'">'.$profile['display_name'].'</a></li>'."\n";
 						$count++;
 					}
 					$str .= '</ul>';

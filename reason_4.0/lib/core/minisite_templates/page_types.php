@@ -2034,7 +2034,7 @@
         	'main_post' => 'profile/profile',
         ),
         'profile_explore' => array(
-        	'main_post' => 'profile/explore',
+        	'main_post' => 'profile/profile_explore',
         ),
         'profile_list' => array(
         	'main_post' => 'profile/profile_list',
