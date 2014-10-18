@@ -20,7 +20,7 @@ class ProfileConnector
 	 * Profile tag data is heavily cached, because it is expensive to recreate.
 	 * This value determines how often the cache is rebuilt/
 	 */
-	protected $cache_life = 1; //6 hours
+	protected $cache_life = 21600; //6 hours
 	
 	/** List of affiliations that your profiles support, in the format
 	 * directory_service_value => display_name
