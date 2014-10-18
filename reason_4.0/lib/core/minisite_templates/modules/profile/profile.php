@@ -1265,7 +1265,7 @@ class ProfileModule extends DefaultMinisiteModule
 			foreach ($tags as $id => $tag_data)
 			{
 				$str .= '<li><h4 class="tagName">';
-				$str .= '<a href="'.profile_construct_list_link(array('tag' => htmlspecialchars($tag_data['slug']))).'">'.$tag_data['name'].'</a></h4>';
+				$str .= '<a href="'.profile_construct_explore_link(array('tag' => htmlspecialchars($tag_data['slug']))).'">'.$tag_data['name'].'</a></h4>';
 				if (!isset($tag_data['profiles'][$this->config->tag_section_relationship_names[$section]])) continue;
 				$profiles = $pc->get_profiles_by_affiliation($tag_data['profiles'][$this->config->tag_section_relationship_names[$section]]);
 				$profiles_by_affil = $pc->sort_profiles_by_user_affiliations($this->person, $profiles);
