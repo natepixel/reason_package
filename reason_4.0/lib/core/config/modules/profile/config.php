@@ -46,11 +46,12 @@ class ProfileConfig
 	public $connector_class = 'ProfileConnector';
 
 	/**
-	 * Populate this with the Reason unique name of your profiles site.
+	 * Populate this with the Reason unique name of your profiles site for a small speed up,
+	 * otherwise it will get detected.
 	 *
 	 * @todo possible to ever allow multiples?
 	 */
-	public $profiles_site_unique_name = 'profiles';
+	public $profiles_site_unique_name = '';
 	
 	/**
 	 * Populate this with the page slug of your explore page on the profiles site.
@@ -85,9 +86,9 @@ class ProfileConfig
 	);
 	
 	/**
-	 * Indicates the profiles modules should redirect to profile list is no username was set.
+	 * Indicates the profiles modules should redirect to profile list module is no username was set.
 	 */
-	public $redirect_to_profile_list_if_no_username = true;
+	public $redirect_to_profile_list_if_no_username = false;
 	
 	/**
 	 * If true, we depend on an .htaccess file which provides friendly redirects.
@@ -342,4 +343,30 @@ class ProfileConfig
 			'ds_affiliation',
 			'ds_classyear',
 		);
+	
+	/**
+	 * Determine and setup defaults if not defined. Right now this only:
+	 *
+	 * - find a site that is running the profiles module to set profiles_site_unique_name if empty
+	 */	
+	function __construct()
+	{
+		if (empty($this->profiles_site_unique_name))
+		{
+			reason_include_once('classes/entity_selector.php');
+			
+			$es = new entity_selector();
+			$es->add_type(id_of('minisite_page'));
+			$es->limit_tables('page_node');
+			$es->limit_fields();
+			$es->add_relation('page_node.custom_page = "profile"');
+			$result = $es->run_one();
+			if (!empty($result))
+			{
+				$page = reset($result);
+				$site = $page->get_owner();
+				$this->profiles_site_unique_name = $site->get_value('unique_name');
+			}
+		}
+	}
 }

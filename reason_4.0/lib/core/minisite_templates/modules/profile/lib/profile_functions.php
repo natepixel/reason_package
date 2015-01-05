@@ -111,7 +111,6 @@ function profile_get_explore_slug()
 	return 'explore/';
 }
 
-
 /**
  * Return our config object
  */

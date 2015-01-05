@@ -1,6 +1,6 @@
 <?php
 /**
- * @package reason_local
+ * @package reason
  * @subpackage minisite_modules
  */
 
@@ -30,6 +30,7 @@ reason_include_once( 'config/modules/profile/config.php' );
  * @todo when called with nothing in the query string the module should do something meaningful - possibly just present the nav.
  *
  * @todo should we not use inline editing framework (editors are not typically site editors)
+ * @todo add basic profile list capability to this module
  *
  * @author Nathan White
  * @author Mark Heiman
@@ -160,17 +161,27 @@ class ProfileModule extends DefaultMinisiteModule
 	}
 
 	/**
-	 * Defaults to showing a 404 if no valid profile entity is available. You can override
-	 * to apply different logic.
+	 * Defaults to showing a 404 if no valid profile entity is available and the logged in user is not
+	 * not the profile requested.
 	 */
 	protected function should_show_404()
 	{
 		$p = $this->get_person();
-		if ($p->is_valid())
+		if ( (reason_check_authentication() == $p->get_username()) || ($p->is_valid() && $p->has_profile()))
 		{
-			if ($p->has_profile()) return false;
+			return false;
 		}
 		return true;
+	}
+	
+	/**
+	 * If user is logged in and user role isn't allowed to have a profile, return true.
+	 */
+	protected function not_authorized()
+	{
+		$p = $this->get_person();
+		if ( (reason_check_authentication() == $p->get_username()) && !$p->is_valid()) return true;
+		return false;
 	}
 	
 	/**
@@ -216,6 +227,8 @@ class ProfileModule extends DefaultMinisiteModule
 	
 	/**
 	 * Run the profile module.
+	 *
+	 * @todo should have a wrapper so HTML logic in modes is not repeated.
 	 */
 	function run()
 	{
@@ -236,6 +249,10 @@ class ProfileModule extends DefaultMinisiteModule
 		{
 			echo $this->get_not_found_html();
 		}
+		elseif ($this->not_authorized())
+		{
+			echo $this->get_not_authorized_html();
+		}
 		elseif ($this->temporarily_unavailable())
 		{
 			echo $this->get_temporarily_unavailable_html();
@@ -247,17 +264,34 @@ class ProfileModule extends DefaultMinisiteModule
 	}
 	
 	/**
-	  * By default, show the content of the page the module is running on. Obviously, you can
-	  * override this to do something else.
+	  * Show profile page entity content (if defined) or some default text.
+	  *
+	  * Also show profile page navigation.
+	  *
 	  */
 	protected function get_welcome_html()
 	{
 		$str = '';
-		$str .= '<div id="profilesWelcome">'."\n";
+		$str .= '<div id="profilesModule" class="'.$this->get_api_class_string().'">'."\n";
+		$str .= '<div id="mainProfileContent">'."\n";
+		
+		$str .= '<div id="profileInfo" class="section">' . "\n";
 		if ($content = $this->cur_page->get_value('content'))
 		{
 			$str .= $content;
 		}
+		else
+		{
+			$str .= '<h2>This is a welcome message</h2>';
+			$str .= '<p>What should I say?</p>';
+		}
+		$str .= '</div>'."\n";
+		
+		$str .= '</div>'."\n";
+		$str .= '<div id="secondaryProfileContent" class="noActiveProfile">'."\n";
+		$str .= $this->get_module_navigation();
+		$str .= $this->get_sign_in_block();
+		$str .= '</div>'."\n";
 		$str .= '</div>'."\n";
 		return $str;
 	}
@@ -279,8 +313,39 @@ class ProfileModule extends DefaultMinisiteModule
 	
 	protected function get_not_found_html()
 	{
-		$str  = '<div id="profilesNotFound">'."\n";
-		$str .= '<h2>Profile not found.</h2>'."\n";
+		$str = '';
+		$str .= '<div id="profilesModule" class="'.$this->get_api_class_string().'">'."\n";
+		$str .= '<div id="mainProfileContent">'."\n";
+		$str .= '<div id="profileInfo" class="section">' . "\n";
+		$str .= '<h2>Profile not found</h2>'."\n";
+		$str .= '<p>The profile you have selected could not be found.</p>';
+		$str .= '</div>'."\n";
+		$str .= '</div>'."\n";
+		$str .= '<div id="secondaryProfileContent" class="noActiveProfile">'."\n";
+		$str .= $this->get_module_navigation();
+		$str .= $this->get_sign_in_block();
+		$str .= '</div>'."\n";
+		$str .= '</div>'."\n";
+		return $str;
+	}
+	
+	/**
+	 * For logged in users without permission to have a profile
+	 */
+	protected function get_not_authorized_html()
+	{
+		$str = '';
+		$str .= '<div id="profilesModule" class="'.$this->get_api_class_string().'">'."\n";
+		$str .= '<div id="mainProfileContent">'."\n";
+		$str .= '<div id="profileInfo" class="section">' . "\n";
+		$str .= '<h2>Profile not allowed</h2>'."\n";
+		$str .= '<p>Your user type is not allowed to have a profile. Sorry!</p>';
+		$str .= '</div>'."\n";
+		$str .= '</div>'."\n";
+		$str .= '<div id="secondaryProfileContent" class="noActiveProfile">'."\n";
+		$str .= $this->get_module_navigation();
+		$str .= $this->get_sign_in_block();
+		$str .= '</div>'."\n";
 		$str .= '</div>'."\n";
 		return $str;
 	}
@@ -1161,6 +1226,9 @@ class ProfileModule extends DefaultMinisiteModule
 		return (isset($profile[$section]) && !carl_empty_html($profile[$section])) ? $profile[$section] : '';
 	}
 	
+	/**
+	 * Return the profile photo or a placeholder.
+	 */
 	protected function get_profile_photo_html($section = NULL)
 	{
 		$person = $this->get_person();
@@ -1168,6 +1236,10 @@ class ProfileModule extends DefaultMinisiteModule
 		if ($image)
 		{
 			return '<a href="'.htmlspecialchars($image['link']).'"><img src="'.htmlspecialchars($image['src']).'" width="200" height="200" alt="'.htmlspecialchars($image['alt']).'" /></a>'."\n";
+		}
+		else // use default 200px by 200px profile icon
+		{
+			return '<img src="'.REASON_HTTP_BASE_PATH.'modules/profiles/profile_icon.png" width="200" height="200" alt="Profile Photo Placeholder" />'."\n";
 		}
 	}
 	

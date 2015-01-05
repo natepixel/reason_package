@@ -1,6 +1,6 @@
 <?php
 /**
- * @package reason_local
+ * @package reason
  * @subpackage minisite_modules
  */
 
@@ -53,7 +53,7 @@ class ProfileConnectorModule extends DefaultMinisiteModule
 		
 	public function init( $args = array() )
 	{		
-		$this->config = new ProfileConfig();
+		$this->config = profile_get_config();
 		
 		if ($this->should_require_authentication()) reason_require_authentication();
 		

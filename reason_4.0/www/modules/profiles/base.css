@@ -56,11 +56,21 @@ THIS MODULE WORKS WELL WITH SIMPLICITY BLUE BUT OTHERWISE THE CSS NEEDS TWEAKS
 	float:left;
 	width:100%;
 }
+
 #secondaryProfileContent {
 	width:170px;
 	position:absolute;
 	top:280px;
 	left:0px;
+}
+
+#secondaryProfileContent.noActiveProfile {
+	top:0px;
+}
+
+#secondaryProfileContent.noActiveProfile #moduleNavigation ul li:first-child {
+	padding-top: 0px;
+	margin-top: 0px;
 }
 
 #profilesModule:after, #contactInfo:after, #interestTags:after, #profilesWelcome ul.actions:after {

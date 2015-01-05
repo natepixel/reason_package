@@ -85,8 +85,8 @@ class ProfileDisplayModule extends DefaultMinisiteModule
 	{
 		parent::init($args);
 
-		$this->config = new profileConfig();
-
+		$this->config = profile_get_config();
+		
 		if($head_items = $this->get_head_items())
 		{
 			$head_items->add_stylesheet(REASON_HTTP_BASE_PATH . 'modules/profiles/list.css');
@@ -185,6 +185,12 @@ class ProfileDisplayModule extends DefaultMinisiteModule
 					echo $html;
 			}
 		}
+		
+		// Do something if no profiles were found to display
+		if (empty($html))
+		{
+			echo '<p>There are no profiles to display.</p>';
+		}	
 	}
 	
 	/**

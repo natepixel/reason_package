@@ -5,6 +5,7 @@
  */
 
 reason_include_once( 'config/modules/profile/config.php' );
+reason_include_once( 'minisite_templates/modules/profile/lib/profile_functions.php' );
 
 /**
  * Profile Connector Class
@@ -51,7 +52,7 @@ class ProfileConnector
 	 */
 	function __construct($refresh_cache = false)
 	{
-		$this->config = new ProfileConfig();
+		$this->config = profile_get_config();
 		$this->load_all_caches($refresh_cache);
 	}
 	

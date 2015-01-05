@@ -1,6 +1,6 @@
 <?php
 /**
- * @package reason_local
+ * @package reason
  * @subpackage minisite_modules
  */
 
@@ -55,12 +55,12 @@ class imageProfileEditForm extends defaultProfileEditForm
 	{
 		echo '<h3>Profile Image</h3>';
 		echo '<p>Choose an image from your computer. Once it displays below, you may drag the selection square
-		to crop your image, making sure your head takes up most of the frame. <em>This image will
-		become your official portrait on Carleton\'s web site, so please choose appropriately.</em></p>';
-		//echo '<p><span class="smallText">Current image:</span><br />';
-		//echo '<img src="'.$image['src'].'" /></p>';
+		to crop your image, making sure your head takes up most of the frame.</p>';
 	}
 	
+	/**
+	 * @todo this should not depend on imagemagick.
+	 */
 	function run_error_checks()
 	{
 		if( !$this->_has_errors() && ($upload = $this->get_element('image')))

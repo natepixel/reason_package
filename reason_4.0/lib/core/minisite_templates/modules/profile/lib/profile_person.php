@@ -40,7 +40,7 @@ class profilePerson
 	 */
 	function __construct($key, $keytype = 'ds_username')
 	{		
-		$this->config = new ProfileConfig();
+		$this->config = profile_get_config();
 		if ($keytype == 'ds_username')
 		{
 			$this->username = $key;
