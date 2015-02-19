@@ -67,7 +67,7 @@ class profilePerson
 				$affiliations = $this->get_ds_value('ds_affiliation');
 				if (!empty($affiliations))
 				{
-					$this->is_valid = (count(array_intersect($this->config->affiliations_that_have_profiles, $affiliations)) > 0);
+					$this->is_valid = (count(array_intersect_key($this->config->affiliations_that_have_profiles, array_flip($affiliations))) > 0);
 				}
 			}
 			if (!isset($this->is_valid)) $this->is_valid = FALSE;
@@ -160,7 +160,7 @@ class profilePerson
 	 */
 	public function requires_authentication()
 	{
-		return ($affiliation = $this->get_first_ds_value('ds_affiliation')) ? in_array($affiliation, $this->config->affiliations_that_require_authentication) : FALSE;
+		return ($affiliation = $this->get_first_ds_value('ds_affiliation')) ? array_key_exists($affiliation, $this->config->affiliations_that_require_authentication) : FALSE;
 	}
 
 	/**
@@ -256,7 +256,7 @@ class profilePerson
 			}
 			else if ($guid = $this->get_first_ds_value('ds_guid'))
 			{
-				$es = new entity_selector(id_of($this->config->profiles_site_unique_name));
+				$es = new entity_selector(id_of($this->config->site_unique_name));
 				$es->add_type(id_of('profile_type'));
 				$es->add_relation('user_guid = ' . $guid);
 				if ($result = $es->run_one())

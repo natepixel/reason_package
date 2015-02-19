@@ -17,6 +17,7 @@ reason_include_once( 'minisite_templates/modules/default.php' );
 reason_include_once( 'classes/group_helper.php' );
 reason_include_once( 'function_libraries/url_utils.php' );
 reason_include_once( 'function_libraries/user_functions.php' );
+reason_include_once( 'minisite_templates/modules/profile/lib/profile_functions.php' );
 reason_include_once( 'config/modules/profile/config.php' );
 
 /**
@@ -27,20 +28,23 @@ reason_include_once( 'config/modules/profile/config.php' );
  * We map out which profile sections are included for each audience. For those in multiple audiences, we take an additive approach.
  * 
  * @todo current inline editing does not use activation parameters or check if it is active and thus will not play well with layouts where multiple modules support inline editing.
- * @todo when called with nothing in the query string the module should do something meaningful - possibly just present the nav.
  *
  * @todo should we not use inline editing framework (editors are not typically site editors)
  * @todo add basic profile list capability to this module
+ * @todo consider whether we can unify profile list and explore methods in this class
+ * @todo can profile_list and profile_explore "views" be combined into a single profile "display?"
  *
  * @author Nathan White
  * @author Mark Heiman
- */
+ */ 
 class ProfileModule extends DefaultMinisiteModule
 {	
 	public $cleanup_rules = array(
 		'username' => array('function' => 'check_against_regexp', 'extra_args' => array('/^[a-z0-9_]*$/i')),
 		'pose_as' => array('function' => 'check_against_regexp', 'extra_args' => array('/^[a-z0-9_]*$/i')),
 		'connect' => array( 'function' => 'turn_into_int' ),
+		'list' => array('function' => 'turn_into_int' ),
+		'explore' => array('function' => 'turn_into_int' ),
 		'contact' => array( 'function' => 'turn_into_string' ),
 		'module_api' => array( 'function' => 'turn_into_string' ),
 		'module_identifier' => array( 'function' => 'turn_into_string' ),
@@ -237,13 +241,22 @@ class ProfileModule extends DefaultMinisiteModule
 		{
 			if ($this->config->redirect_to_profile_list_if_no_username)
 			{
-				if ($link = $this->get_profile_list_link(NULL, FALSE))
+				if ($link = profile_construct_list_redirect)
 				{
 					header('Location: '.$link);
 					exit();
 				}
 			}
-			echo $this->get_welcome_html();
+			if ($this->get_view_mode() == 'list')
+			{
+				// run basic profile list
+				echo $this->get_profile_list_html();
+			}
+			elseif ($this->get_view_mode() == 'explore')
+			{
+				echo $this->get_profile_explore_html();
+			}
+			else echo $this->get_welcome_html();
 		}
 		elseif ($this->should_show_404())
 		{
@@ -381,7 +394,93 @@ class ProfileModule extends DefaultMinisiteModule
 		$str .= '</div>'."\n";
 		return $str;
 	}
+
+	/**
+	 * @return profile list controller object
+	 */
+	protected function get_profile_list_controller()
+	{
+		static $controller;
+		if (!isset($controller))
+		{
+			$controller_name = $this->config->list_controller;
+			if (!empty($controller_name))
+			{
+				reason_include_once('minisite_templates/modules/profile/lib/profile_list/controllers/' . $controller_name . '.php');
+				$controller_object_name = $GLOBALS[ '_profiles_module_list_controller' ][ $controller_name ];
+				$controller = new $controller_object_name;
+				$controller->config('site_id', $this->site_id);
+			}
+		}
+		return $controller;
+	}
 	
+	/**
+	 * @return profile explore controller object
+	 */
+	protected function get_profile_explore_controller()
+	{
+		static $controller;
+		if (!isset($controller))
+		{
+			$controller_name = $this->config->explore_controller;
+			if (!empty($controller_name))
+			{
+				reason_include_once('minisite_templates/modules/profile/lib/profile_explore/controllers/' . $controller_name . '.php');
+				$controller_object_name = $GLOBALS[ '_profiles_module_explore_controller' ][ $controller_name ];
+				$controller = new $controller_object_name;
+				$controller->config('site_id', $this->site_id);
+			}
+		}
+		return $controller;
+	}
+	
+	/**
+	  * This is where the page content gets assembled - if I'm loaded we have a view specified.
+	  */
+	protected function get_profile_list_html()
+	{
+		$str = '';
+		$str .= '<div id="profilesModule" class="'.$this->get_api_class_string().'">'."\n";
+		$str .= '<div id="mainProfileContent">'."\n";
+		$str .= '<div id="profileList" class="section">' . "\n";
+		
+		// pick controller, model, and view from the config - fallback on default controller.
+		$controller = $this->get_profile_list_controller();
+		$str .= $controller->run();
+		$str .= '</div>'."\n";
+		$str .= '</div>'."\n";
+		$str .= '<div id="secondaryProfileContent" class="noActiveProfile">'."\n";
+		$str .= $this->get_module_navigation();
+		$str .= $this->get_sign_in_block();
+		$str .= '</div>'."\n";
+		$str .= '</div>'."\n";
+		return $str;
+	}
+	
+	/**
+	  * This is where the page content gets assembled - if I'm loaded we have a view specified.
+	  */
+	protected function get_profile_explore_html()
+	{
+		$str = '';
+		$str .= '<div id="profilesModule" class="'.$this->get_api_class_string().'">'."\n";
+		$str .= '<div id="mainProfileContent">'."\n";
+		$str .= '<div id="profileExplore" class="section">' . "\n";
+		
+		// pick controller, model, and view from the config - fallback on default controller.
+		$controller = $this->get_profile_explore_controller();
+		$str .= $controller->run();
+		$str .= '</div>'."\n";
+		$str .= '</div>'."\n";
+		$str .= '<div id="secondaryProfileContent" class="noActiveProfile">'."\n";
+		$str .= $this->get_module_navigation();
+		$str .= $this->get_sign_in_block();
+		$str .= '</div>'."\n";
+		$str .= '</div>'."\n";
+		return $str;
+	}
+
 	protected function get_last_updated_section()
 	{
 		$person = $this->get_person();
@@ -720,7 +819,7 @@ class ProfileModule extends DefaultMinisiteModule
 	 * The contents of this are defined in config.php, and can be comprised of two elements:
 	 *
 	 * - html suitable for inclusion within a list item
-	 * - calls to class methods that return html suitable for inclusion within a list item (or empty)
+	 * - calls to class methods or profile functions that return html suitable for inclusion within a list item (or empty)
 	 *
 	 * The default settings shows "Profile list", "Pose as user" if on a user profile with privs
 	 */
@@ -734,6 +833,11 @@ class ProfileModule extends DefaultMinisiteModule
 				$item = ($v != NULL) ? call_user_func_array(array($this, $k), $v) : call_user_func(array($this, $k));
 				if ($item) $items[] = $item;
 			}
+			elseif (!is_int($k) && function_exists($k))
+			{
+				$item = ($v != NULL) ? call_user_func_array($k, $v) : call_user_func($k);
+				if ($item) $items[] = $item;
+			}
 			else $items[] = $v;
 		}
 		if (!empty($items))
@@ -742,48 +846,6 @@ class ProfileModule extends DefaultMinisiteModule
 			$str .= '<ul><li>' . implode('</li><li>', $items) . '</li></ul>';
 			$str .= '</div>';
 			return $str;
-		}
-	}
-
-	/**
-	 * Return a link to the profile list module on the site if it exists 
-	 */
-	protected function get_profile_list_link($link_title, $html = true)
-	{
-		$es = new entity_selector($this->site_id);
-		$es->limit_tables('page_node');
-		$es->limit_fields();
-		$es->add_type(id_of('minisite_page'));
-		$es->add_relation('page_node.custom_page = "profile_list"');
-		$result = $es->run_one();
-		if (!empty($result))
-		{
-			$keys = array_keys($result);
-			$id = reset($keys);
-			reason_include_once('function_libraries/url_utils.php');
-			$url = reason_get_page_url($id);
-			return ($html) ? '<a href="'.$url.'">'.$link_title.'</a>' : $url;
-		}
-	}
-	
-	/**
-	 * Return a link to the profile list module on the site if it exists 
-	 */
-	protected function get_profile_explore_link($link_title, $html = true)
-	{
-		$es = new entity_selector($this->site_id);
-		$es->limit_tables('page_node');
-		$es->limit_fields();
-		$es->add_type(id_of('minisite_page'));
-		$es->add_relation('page_node.custom_page = "profile_explore"');
-		$result = $es->run_one();
-		if (!empty($result))
-		{
-			$keys = array_keys($result);
-			$id = reset($keys);
-			reason_include_once('function_libraries/url_utils.php');
-			$url = reason_get_page_url($id);
-			return ($html) ? '<a href="'.$url.'">'.$link_title.'</a>' : $url;
 		}
 	}	
 	
@@ -906,17 +968,24 @@ class ProfileModule extends DefaultMinisiteModule
 	}
 	
 	/**
-	 * The profiles module supports three view modes:
+	 * The profiles module supports four view modes:
+	 * - list: for viewing list of profiles
 	 * - profile: for viewing an individual profile
 	 * - connect: for viewing the connections to an individual profile
 	 * - tag: for viewing the connections for a particular tag.
+	 *
+	 * @todo is tag implemented right now?
 	 */
 	function get_view_mode()
 	{
-		if (!empty($this->request['tag']))
-			return 'tag';
-		else if (!empty($this->request['connect']))
+		if (!empty($this->request['connect']))
 			return 'connect';
+		else if (!empty($this->request['list']))
+			return 'list';
+		else if (!empty($this->request['explore']))
+			return 'explore';
+		elseif (!empty($this->request['tag']))
+			return 'tag';
 		else
 			return 'profile';
 	}

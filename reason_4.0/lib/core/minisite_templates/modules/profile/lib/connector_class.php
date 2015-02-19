@@ -13,6 +13,8 @@ reason_include_once( 'minisite_templates/modules/profile/lib/profile_functions.p
  * This is a collection of methods for getting information about profiles and tags,
  * and for managing the tag cache that profile applications use for performance.
  *
+ * @todo move cache_life to config
+ *
  * @author Mark Heiman
  */
 class ProfileConnector
@@ -22,16 +24,6 @@ class ProfileConnector
 	 * This value determines how often the cache is rebuilt/
 	 */
 	protected $cache_life = 21600; //6 hours
-	
-	/** List of affiliations that your profiles support, in the format
-	 * directory_service_value => display_name
-	 */
-	public $affiliations = array(
-		'student' => 'Students',
-		'faculty' => 'Faculty',
-		'staff' => 'Staff',
-		'alum' => 'Alumni',
-		);
 	
 	/** 
 	 * Whether the master tag_cache has been rebuilt during this session.
@@ -53,7 +45,8 @@ class ProfileConnector
 	function __construct($refresh_cache = false)
 	{
 		$this->config = profile_get_config();
-		$this->load_all_caches($refresh_cache);
+		$this->affiliations = $this->config->affiliations_that_have_profiles;
+		$this->load_all_caches($refresh_cache);	
 	}
 	
 	/**
@@ -302,7 +295,7 @@ class ProfileConnector
 	function get_relations_for_tag($slug)
 	{
 		$relations = array();
-		$es = new entity_selector(id_of($this->config->profiles_site_unique_name));
+		$es = new entity_selector(id_of($this->config->site_unique_name));
 		$es->enable_multivalue_results();
 		$es->add_type(id_of('category_type'));
 		$es->add_relation('slug="'.mysql_real_escape_string($slug).'"');
@@ -334,7 +327,7 @@ class ProfileConnector
 	function get_pages_for_tag($slug)
 	{
 		$links = array();
-		$es = new entity_selector(id_of($this->config->profiles_site_unique_name));
+		$es = new entity_selector(id_of($this->config->site_unique_name));
 		$es->enable_multivalue_results();
 		$es->add_type(id_of('category_type'));
 		$es->add_relation('slug="'.mysql_real_escape_string($slug).'"');
@@ -369,7 +362,7 @@ class ProfileConnector
 		if (empty($ids)) return array();
 		
 		$records_by_id = array();
-		$es = new entity_selector(id_of($this->config->profiles_site_unique_name));
+		$es = new entity_selector(id_of($this->config->site_unique_name));
 		$es->add_type(id_of('profile_type'));
 		$es->add_relation(' entity.id in ('.join(',', $ids).')');
 		
@@ -406,7 +399,7 @@ class ProfileConnector
 		if (!$refresh && $profiles = $cache->fetch()) return $profiles;
 		
 		$ds = new directory_service('ldap_carleton');
-		$es = new entity_selector(id_of($this->config->profiles_site_unique_name));
+		$es = new entity_selector(id_of($this->config->site_unique_name));
 		$es->add_type(id_of('profile_type'));
 		$es->orderby = 'entity.creation_date ASC';
 		$count = 0;
@@ -720,7 +713,7 @@ class ProfileConnector
 		
 		foreach ($this->config->tag_section_relationship_names as $relationship)
 		{
-			$es = new entity_selector(id_of($this->config->profiles_site_unique_name));
+			$es = new entity_selector(id_of($this->config->site_unique_name));
 			$es->enable_multivalue_results();
 			$es->add_type(id_of('category_type'));
 			$es->add_right_relationship_field( $relationship , 'entity' , 'id' , 'profile_id',  false );
@@ -756,7 +749,7 @@ class ProfileConnector
 		}
 
 		// Get parent/child relationships
-		$es = new entity_selector(id_of($this->config->profiles_site_unique_name));
+		$es = new entity_selector(id_of($this->config->site_unique_name));
 		$es->enable_multivalue_results();
 		$es->add_type(id_of('category_type'));
 		$es->add_left_relationship_field( 'parent_category_to_category' , 'entity' , 'id' , 'child_id',  false );

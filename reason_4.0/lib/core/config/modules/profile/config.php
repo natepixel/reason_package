@@ -34,6 +34,19 @@ reason_include_once( 'minisite_templates/modules/profile/lib/connector_class.php
 class ProfileConfig
 {
 	/**
+	 * If you have multiple profile modules, this must be defined as the site unique name where the
+	 * profiles module you want to configure is running.
+	 *
+	 * @todo possible to ever allow multiples?
+	 */
+	public $site_unique_name = '';
+	
+	/**
+	 * If true, passing pose_as=xxxx in the URL will allow a site admin of the profile site to pose as another user.
+	 */
+	public $allow_posing = true;
+
+	/**
 	 * If you extend the profilePerson class, you need to register the classname of your 
 	 * new class here.
 	 */
@@ -46,41 +59,26 @@ class ProfileConfig
 	public $connector_class = 'ProfileConnector';
 
 	/**
-	 * Populate this with the Reason unique name of your profiles site for a small speed up,
-	 * otherwise it will get detected.
-	 *
-	 * @todo possible to ever allow multiples?
+	 * If not empty, basic listing of profiles on a site will be enabled in base module using controller file name.
+	 * If empty, profiles will look for an instance of the profile_list module on the site.
 	 */
-	public $profiles_site_unique_name = '';
+	public $list_controller = 'default';
 	
 	/**
-	 * Populate this with the page slug of your explore page on the profiles site.
-	 *
-	 * @todo this should be determined by a page type on the site likely ... not slugs - with default explore
+	 * If not empty, basic explore of profiles on a site will be enabled in base module using controller file name.
+	 * If empty, profiles will look for an instance of the profile_explore module on the site.
 	 */
-	public $explore_slug = 'explore';
-	
-	/**
-	 * Populate this with the page slug of your profile page on the profiles site.
-	 *
-	 * @todo this should be determined by a page type on the site likely ... not slugs - with default profile
-	 */
-	public $profile_slug = '/';		
-	
-	/**
-	 * If true, passing pose_as=xxxx in the URL will allow a site admin of the profile site to pose as another user.
-	 */
-	public $allow_posing = true;
+	public $explore_controller = 'default';
 	
 	/**
 	 * Contains profile navigation items - ordered array contents are one of two things:
 	 *
 	 * - HTML for a navigation item
-	 * - key / value pair where key is function name in profile.php, value is an array of arguments (OR NULL)
+	 * - key / value pair where key is class method in profile.php (or function in profile_functions.php), value is an array of arguments (OR NULL)
 	 */
 	public $navigation_items = array(
-		'get_profile_list_link' => array('Browse Profiles'),
-		'get_profile_explore_link' => array('Explore Profiles'),
+		'profile_get_list_link' => array('Browse Profiles'),
+		'profile_get_explore_link' => array('Explore Profiles'),
 		'get_my_profile_link' => NULL,
 		'pose_if_available' => NULL,
 	);
@@ -317,10 +315,15 @@ class ProfileConfig
 	public $primary_affiliation_for_section_ordering = 'faculty';	
 
 	/**
-	 * Set this to the list of directory service affiliations that should be permitted 
-	 * to set up profiles on your site.
+	 * Set this to the list of directory service affiliations (or audiences) that should
+	 * be able to create profiles and the display name to use for that affiliation.
 	 */
-	public $affiliations_that_have_profiles = array('student', 'faculty', 'staff', 'alum');
+	public $affiliations_that_have_profiles = array(
+		'student' => 'Student', 
+		'faculty' => 'Faculty', 
+		'staff' => 'Staff', 
+		'alum' => 'Alumni',
+	);
 	
 	/**
 	 * Set this to the list of directory service affiliations whose profiles should
@@ -347,11 +350,11 @@ class ProfileConfig
 	/**
 	 * Determine and setup defaults if not defined. Right now this only:
 	 *
-	 * - find a site that is running the profiles module to set profiles_site_unique_name if empty
+	 * - find a site that is running the profiles module to set site_unique_name if empty
 	 */	
 	function __construct()
 	{
-		if (empty($this->profiles_site_unique_name))
+		if (empty($this->site_unique_name))
 		{
 			reason_include_once('classes/entity_selector.php');
 			
@@ -365,7 +368,7 @@ class ProfileConfig
 			{
 				$page = reset($result);
 				$site = $page->get_owner();
-				$this->profiles_site_unique_name = $site->get_value('unique_name');
+				$this->site_unique_name = $site->get_value('unique_name');
 			}
 		}
 	}

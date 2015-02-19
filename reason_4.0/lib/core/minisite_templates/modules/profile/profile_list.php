@@ -8,7 +8,7 @@
   * include the base class and register the module with Reason
   */
 reason_include_once( 'minisite_templates/modules/default.php' );
-reason_include_once( 'config/modules/profile/config.php' );
+reason_include_once( 'minisite_templates/modules/profile/lib/profile_functions.php' );
 
 $GLOBALS[ '_module_class_names' ][ module_basename( __FILE__, '.php' ) ] = 'ProfileDisplayModule';
 
@@ -19,6 +19,7 @@ $GLOBALS[ '_module_class_names' ][ module_basename( __FILE__, '.php' ) ] = 'Prof
  * structure in your Reason instance, but most should work with just a basic profiles setup.
  *
  * @todo should config file be a page type param?
+ * @todo abstract me
  */
 class ProfileDisplayModule extends DefaultMinisiteModule
 {
@@ -340,14 +341,10 @@ class ProfileDisplayModule extends DefaultMinisiteModule
 	
 	/**
 	  * Find profiles that are owned or borrowed by the current site and add them to our collection.
-	  *
 	  */
 	protected function get_site_profiles()
 	{
-		$this->es = new entity_selector( $this->site_id );
-		$this->es->description = 'Selecting profiles on site';
-		$this->es->add_type( id_of('profile_type') );
-		$results = $this->es->run_one();
+		$results = profile_get_site_profile_entities($this->site_id);
 		foreach ($results as $id => $entity)
 		{
 			if (isset($this->profiles[$id])) continue;
