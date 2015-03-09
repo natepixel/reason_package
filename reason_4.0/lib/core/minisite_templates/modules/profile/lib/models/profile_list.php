@@ -5,7 +5,7 @@ reason_include_once( 'minisite_templates/modules/profile/lib/profile_functions.p
 
 //@todo does not have access to config with person_class yet.
 
-$GLOBALS[ '_profiles_module_list_model' ][ basename( __FILE__, '.php' ) ] = 'DefaultProfileListModel';
+$GLOBALS[ '_profiles_model' ][ basename( __FILE__, '.php' ) ] = 'DefaultProfileListModel';
 
 class DefaultProfileListModel extends ReasonMVCModel
 {

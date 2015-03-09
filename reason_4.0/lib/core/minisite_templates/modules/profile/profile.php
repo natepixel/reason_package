@@ -394,45 +394,24 @@ class ProfileModule extends DefaultMinisiteModule
 		$str .= '</div>'."\n";
 		return $str;
 	}
-
+	
 	/**
 	 * @return profile list controller object
 	 */
-	protected function get_profile_list_controller()
+	protected function get_controller($name)
 	{
 		static $controller;
-		if (!isset($controller))
+		if ($name && !isset($controller[$name]))
 		{
-			$controller_name = $this->config->list_controller;
-			if (!empty($controller_name))
+			if (!empty($name))
 			{
-				reason_include_once('minisite_templates/modules/profile/lib/profile_list/controllers/' . $controller_name . '.php');
-				$controller_object_name = $GLOBALS[ '_profiles_module_list_controller' ][ $controller_name ];
-				$controller = new $controller_object_name;
-				$controller->config('site_id', $this->site_id);
+				reason_include_once('minisite_templates/modules/profile/lib/controllers/' . $name . '.php');
+				$controller_object_name = $GLOBALS[ '_profiles_controller' ][ $name ];
+				$controller[$name] = new $controller_object_name;
+				$controller[$name]->config('site_id', $this->site_id);
 			}
 		}
-		return $controller;
-	}
-	
-	/**
-	 * @return profile explore controller object
-	 */
-	protected function get_profile_explore_controller()
-	{
-		static $controller;
-		if (!isset($controller))
-		{
-			$controller_name = $this->config->explore_controller;
-			if (!empty($controller_name))
-			{
-				reason_include_once('minisite_templates/modules/profile/lib/profile_explore/controllers/' . $controller_name . '.php');
-				$controller_object_name = $GLOBALS[ '_profiles_module_explore_controller' ][ $controller_name ];
-				$controller = new $controller_object_name;
-				$controller->config('site_id', $this->site_id);
-			}
-		}
-		return $controller;
+		return ($name) ? $controller[$name] : NULL;
 	}
 	
 	/**
@@ -446,7 +425,7 @@ class ProfileModule extends DefaultMinisiteModule
 		$str .= '<div id="profileList" class="section">' . "\n";
 		
 		// pick controller, model, and view from the config - fallback on default controller.
-		$controller = $this->get_profile_list_controller();
+		$controller = $this->get_controller($this->config->list_controller);
 		$str .= $controller->run();
 		$str .= '</div>'."\n";
 		$str .= '</div>'."\n";
@@ -469,7 +448,7 @@ class ProfileModule extends DefaultMinisiteModule
 		$str .= '<div id="profileExplore" class="section">' . "\n";
 		
 		// pick controller, model, and view from the config - fallback on default controller.
-		$controller = $this->get_profile_explore_controller();
+		$controller = $this->get_controller($this->config->explore_controller);
 		$str .= $controller->run();
 		$str .= '</div>'."\n";
 		$str .= '</div>'."\n";

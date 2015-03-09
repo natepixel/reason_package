@@ -62,13 +62,13 @@ class ProfileConfig
 	 * If not empty, basic listing of profiles on a site will be enabled in base module using controller file name.
 	 * If empty, profiles will look for an instance of the profile_list module on the site.
 	 */
-	public $list_controller = 'default';
+	public $list_controller = 'profile_list';
 	
 	/**
 	 * If not empty, basic explore of profiles on a site will be enabled in base module using controller file name.
 	 * If empty, profiles will look for an instance of the profile_explore module on the site.
 	 */
-	public $explore_controller = 'default';
+	public $explore_controller = 'profile_explore';
 	
 	/**
 	 * Contains profile navigation items - ordered array contents are one of two things:

@@ -2,7 +2,7 @@
 include_once( 'reason_header.php' );
 reason_include_once( 'classes/mvc.php' );
 
-$GLOBALS[ '_profiles_module_list_view' ][ basename( __FILE__, '.php' ) ] = 'DefaultProfileListView';
+$GLOBALS[ '_profiles_view' ][ basename( __FILE__, '.php' ) ] = 'DefaultProfileListView';
 
 class DefaultProfileListView extends ReasonMVCView
 {

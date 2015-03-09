@@ -2,7 +2,7 @@
 include_once( 'reason_header.php' );
 reason_include_once( 'classes/mvc.php' );
 
-$GLOBALS[ '_profiles_module_explore_view' ][ basename( __FILE__, '.php' ) ] = 'DefaultProfileExploreView';
+$GLOBALS[ '_profiles_view' ][ basename( __FILE__, '.php' ) ] = 'DefaultProfileExploreView';
 
 /**
  * This view expects the data to be an instance of a profile connector class.

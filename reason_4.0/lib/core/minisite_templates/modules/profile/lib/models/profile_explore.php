@@ -7,7 +7,7 @@ reason_include_once( 'minisite_templates/modules/profile/lib/profile_functions.p
  * Right now this just returns a profile connector class. It should instead BE that class possibly.
  */
  
-$GLOBALS[ '_profiles_module_explore_model' ][ basename( __FILE__, '.php' ) ] = 'DefaultProfileExploreModel';
+$GLOBALS[ '_profiles_model' ][ basename( __FILE__, '.php' ) ] = 'DefaultProfileExploreModel';
 
 class DefaultProfileExploreModel extends ReasonMVCModel
 {

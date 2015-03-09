@@ -2,13 +2,13 @@
 include_once( 'reason_header.php' );
 reason_include_once( 'classes/mvc.php' );
 
-$GLOBALS[ '_profiles_module_explore_controller' ][ basename( __FILE__, '.php' ) ] = 'DefaultProfileExploreController';
+$GLOBALS[ '_profiles_controller' ][ basename( __FILE__, '.php' ) ] = 'DefaultProfileExploreController';
 
 /** 
  * Include model and view
  */
-reason_include_once('minisite_templates/modules/profile/lib/profile_explore/models/default.php');
-reason_include_once('minisite_templates/modules/profile/lib/profile_explore/views/default.php');
+reason_include_once('minisite_templates/modules/profile/lib/models/profile_explore.php');
+reason_include_once('minisite_templates/modules/profile/lib/views/profile_explore.php');
 
 /**
  * The default uses a basic model and view and doesn't respond to any parameters.
